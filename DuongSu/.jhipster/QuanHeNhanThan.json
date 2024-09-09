@@ -1,0 +1,36 @@
+{
+  "annotations": {
+    "changelogDate": "20240902124136"
+  },
+  "applications": "*",
+  "clientRootFolder": "DuongSu",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "idQuanHe",
+      "fieldType": "Long",
+      "options": {
+        "id": true
+      }
+    },
+    {
+      "fieldName": "dienGiai",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "idQuanHeDoiUng",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "gioiTinh",
+      "fieldType": "GioiTinh",
+      "fieldValues": "Nam (Nam),Nu (Nữ)"
+    }
+  ],
+  "microserviceName": "DuongSu",
+  "name": "QuanHeNhanThan",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

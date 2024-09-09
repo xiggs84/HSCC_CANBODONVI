@@ -1,0 +1,192 @@
+entity TaiSanDuongSu {
+  idTaiSan Long
+  //  idDuongSu Long
+  trangThai Integer min(0) max(1)
+  ngayThaoTac LocalDate
+  idHopDong Long
+  idLoaiHopDong Long
+  idChungThuc Long
+}
+entity DuongSu {
+  @id
+  idDuongSu Long
+  tenDuongSu String
+  loaiDuongSu LoaiDuongSu
+  diaChi String
+  soDienThoai String
+  email String
+  fax String
+  website String
+  trangThai Integer min(0) max(1)
+  thongTinDs TextBlob
+  ngayThaoTac LocalDate
+  nguoiThaoTac Long
+  idDsGoc Long
+  idMaster String
+  idDonVi Long
+  strSearch String
+  loaiGiayTo LoaiGiayTo
+  soGiayTo String
+  ghiChu String
+  idLoaiNganChan Long
+  syncStatus Integer min(0) max(1)
+}
+//enum TinhTrang {
+//  Song ("Sống"),
+//  Chet ("Chết"),
+//  NganChan ("Ngăn chặn")
+//}
+//enum TinhTrangHonNhan {
+//  ChuaKetHon ("Chưa kết hôn"),
+//  KetHon ("Kết hôn"),
+//  LyHon ("Ly hôn"),
+//  Goa ("Goá"),
+//  XacNhanTinhTrangHonNhan ("Xác nhận tình trạng hôn nhân")
+//}
+enum LoaiGiayTo {
+  Cmnd ("Chứng minh nhân dân"),
+  Cccd ("Căn cước công dân"),
+  Cc ("Căn cước"),
+  Hc ("Hộ chiếu"),
+  K ("Giấy tờ hợp lệ khác")
+}
+enum GioiTinh{
+  Nam ("Nam"),
+  Nu ("Nữ")
+}
+enum LoaiDuongSu {
+  CaNhan ("Cá nhân"),
+  ToChuc ("Tổ chức"),
+  ToChucTinDung ("Tổ chức tín dụng")
+}
+entity CauHinhThongTinDuongSu {
+  @id
+  idCauHinh Long
+  noiDung String
+  javascript String
+  css String
+  idLoaiDs Long
+  idDonVi Long
+  trangThai Integer min(0) max(1)
+}
+entity QuanHeDuongSu {
+  @id
+  idQuanHe Long
+  //  idDuongSu Long
+  idDuongSuQh Long
+  thongTinQuanHe String
+  trangThai Integer min(0) max(1)
+}
+entity DuongSuTrungCmnd {
+  //  idDuongSu Long
+  tenDuongSu String
+  //  idLoaiDs Long
+  diaChi String
+  trangThai Integer min(0) max(1)
+  thongTinDs String
+  ngayThaoTac LocalDate
+  nguoiThaoTac Long
+  idDsGoc Long
+  //  idTinhTrang Long
+  idMaster String
+  idDonVi Long
+  strSearch String
+  soGiayTo String
+  idDuongSuMin Long
+  idMasterMin Long
+  idDuongSuMax Long
+  idMasterMax Long
+}
+entity DuongSuTrungCmndBak {
+  //  idDuongSu Long
+  tenDuongSu String
+  //  idLoaiDs Long
+  diaChi String
+  trangThai Integer min(0) max(1)
+  thongTinDs String
+  ngayThaoTac LocalDate
+  nguoiThaoTac Long
+  idDsGoc Long
+  //  idTinhTrang Long
+  idMaster String
+  idDonVi Long
+  strSearch String
+  soGiayTo String
+}
+entity DanhSachDuongSu {
+  //  idDuongSu Long
+  tenDuongSu String
+  //  idLoaiDs Long
+  diaChi String
+  trangThai Integer min(0) max(1)
+  ngayThaoTac LocalDate
+  nguoiThaoTac Long
+  idDsGoc Long
+  //  idTinhTrang Long
+  idMaster String
+  idDonVi Long
+  strSearch String
+  soGiayTo String
+  idLoaiNganChan Long
+}
+entity DmDuongSu {
+  @id
+  idDuongSu Long
+  tenDuongSu String
+  //  idLoaiDs Long
+  diaChi String
+  trangThai Integer min(0) max(1)
+  thongTinDs String
+  ngayThaoTac LocalDate
+  nguoiThaoTac Long
+  idDsGoc Long
+  //  idTinhTrang Long
+  idMaster String
+  idDonVi Long
+  strSearch String
+  soGiayTo String
+  idLoaiNganChan Long
+}
+entity QuanHeNhanThan {
+  @id
+  idQuanHe Long
+  dienGiai String
+  idQuanHeDoiUng Long
+  gioiTinh GioiTinh
+}
+entity QuanHeMaster {
+  idDuongSu Long
+  idDuongSuQh Long
+}
+
+entity ChiTietNganChan {
+  idDoiTuong Long
+  ngayThaoTac LocalDate
+  loaiDoiTuong Long
+  soHsCv String
+  soCc String
+  soVaoSo String
+  moTa String
+  ngayNganChan LocalDate
+  ngayBdNganChan LocalDate
+  ngayKtNganChan LocalDate
+  trangThai Long
+  nguoiThaoTac Long
+  loaiNganChan Long
+  ngayCongVan LocalDate
+}
+
+relationship OneToMany {
+  DuongSu to TaiSanDuongSu{idDuongSu},
+  DuongSu to QuanHeDuongSu{idDuongSu},
+  DuongSu to DanhSachDuongSu{idDuongSu},
+  DuongSu to DuongSuTrungCmnd{idDuongSu},
+  DuongSu to DuongSuTrungCmndBak{idDuongSu}
+}
+
+//relationship OneToOne {
+//
+//}
+
+dto * with mapstruct
+service * with serviceClass

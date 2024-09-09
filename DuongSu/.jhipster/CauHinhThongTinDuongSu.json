@@ -1,0 +1,50 @@
+{
+  "annotations": {
+    "changelogDate": "20240902124127"
+  },
+  "applications": "*",
+  "clientRootFolder": "DuongSu",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "idCauHinh",
+      "fieldType": "Long",
+      "options": {
+        "id": true
+      }
+    },
+    {
+      "fieldName": "noiDung",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "javascript",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "css",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "idLoaiDs",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "idDonVi",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "trangThai",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min", "max"],
+      "fieldValidateRulesMax": "1",
+      "fieldValidateRulesMin": "0"
+    }
+  ],
+  "microserviceName": "DuongSu",
+  "name": "CauHinhThongTinDuongSu",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

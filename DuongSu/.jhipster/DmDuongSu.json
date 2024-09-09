@@ -1,0 +1,74 @@
+{
+  "annotations": {
+    "changelogDate": "20240902124130"
+  },
+  "applications": "*",
+  "clientRootFolder": "DuongSu",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "idDuongSu",
+      "fieldType": "Long",
+      "options": {
+        "id": true
+      }
+    },
+    {
+      "fieldName": "tenDuongSu",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "diaChi",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "trangThai",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min", "max"],
+      "fieldValidateRulesMax": "1",
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "thongTinDs",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "ngayThaoTac",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "nguoiThaoTac",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "idDsGoc",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "idMaster",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "idDonVi",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "strSearch",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "soGiayTo",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "idLoaiNganChan",
+      "fieldType": "Long"
+    }
+  ],
+  "microserviceName": "DuongSu",
+  "name": "DmDuongSu",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

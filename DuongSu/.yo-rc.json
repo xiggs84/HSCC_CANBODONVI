@@ -1,0 +1,36 @@
+{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "authenticationType": "jwt",
+    "baseName": "DuongSu",
+    "buildTool": "gradle",
+    "creationTimestamp": 1725280870653,
+    "devDatabaseType": "h2Disk",
+    "entities": [
+      "CauHinhThongTinDuongSu",
+      "ChiTietNganChan",
+      "DanhSachDuongSu",
+      "DmDuongSu",
+      "DuongSu",
+      "DuongSuTrungCmnd",
+      "DuongSuTrungCmndBak",
+      "QuanHeDuongSu",
+      "QuanHeMaster",
+      "QuanHeNhanThan",
+      "TaiSanDuongSu"
+    ],
+    "jhipsterVersion": "8.7.0",
+    "jwtSecretKey": "MmNiOTU0MWIwZGUyMTU3ZGI3MWYwZTRiNjJmMGIwZjRhMThiNTU5Nzg3MjM3MDRjY2Y0NjAxM2VjOWM5ZmY0YjFhNDM1OTdjZTE5OTg0MjVmYWYwMzlhMTRmMGNmYTQwYmZlMTEwMGRiZGI2ODkwOWE0NjMxNmZmN2RhMGIxOTk=",
+    "languages": ["en"],
+    "lastLiquibaseTimestamp": 1725280897000,
+    "monorepository": true,
+    "nativeLanguage": "en",
+    "packageFolder": "vn/vnpt",
+    "packageName": "vn.vnpt",
+    "prodDatabaseType": "postgresql",
+    "serverPort": "8082",
+    "skipClient": true,
+    "skipCommitHook": true,
+    "skipUserManagement": true
+  }
+}

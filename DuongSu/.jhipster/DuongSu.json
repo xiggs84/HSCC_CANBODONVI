@@ -1,0 +1,148 @@
+{
+  "annotations": {
+    "changelogDate": "20240902124131"
+  },
+  "applications": "*",
+  "clientRootFolder": "DuongSu",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "idDuongSu",
+      "fieldType": "Long",
+      "options": {
+        "id": true
+      }
+    },
+    {
+      "fieldName": "tenDuongSu",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "loaiDuongSu",
+      "fieldType": "LoaiDuongSu",
+      "fieldValues": "CaNhan (Cá nhân),ToChuc (Tổ chức),ToChucTinDung (Tổ chức tín dụng)"
+    },
+    {
+      "fieldName": "diaChi",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "soDienThoai",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "email",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "fax",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "website",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "trangThai",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min", "max"],
+      "fieldValidateRulesMax": "1",
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "thongTinDs",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "ngayThaoTac",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "nguoiThaoTac",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "idDsGoc",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "idMaster",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "idDonVi",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "strSearch",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "loaiGiayTo",
+      "fieldType": "LoaiGiayTo",
+      "fieldValues": "Cmnd (Chứng minh nhân dân),Cccd (Căn cước công dân),Cc (Căn cước),Hc (Hộ chiếu),K (Giấy tờ hợp lệ khác)"
+    },
+    {
+      "fieldName": "soGiayTo",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "ghiChu",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "idLoaiNganChan",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "syncStatus",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min", "max"],
+      "fieldValidateRulesMax": "1",
+      "fieldValidateRulesMin": "0"
+    }
+  ],
+  "microserviceName": "DuongSu",
+  "name": "DuongSu",
+  "relationships": [
+    {
+      "otherEntityName": "taiSanDuongSu",
+      "otherEntityRelationshipName": "idDuongSu",
+      "relationshipName": "taiSanDuongSu",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "quanHeDuongSu",
+      "otherEntityRelationshipName": "idDuongSu",
+      "relationshipName": "quanHeDuongSu",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "danhSachDuongSu",
+      "otherEntityRelationshipName": "idDuongSu",
+      "relationshipName": "danhSachDuongSu",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "duongSuTrungCmnd",
+      "otherEntityRelationshipName": "idDuongSu",
+      "relationshipName": "duongSuTrungCmnd",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "duongSuTrungCmndBak",
+      "otherEntityRelationshipName": "idDuongSu",
+      "relationshipName": "duongSuTrungCmndBak",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

@@ -1,0 +1,45 @@
+{
+  "annotations": {
+    "changelogDate": "20240902124134"
+  },
+  "applications": "*",
+  "clientRootFolder": "DuongSu",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "idQuanHe",
+      "fieldType": "Long",
+      "options": {
+        "id": true
+      }
+    },
+    {
+      "fieldName": "idDuongSuQh",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "thongTinQuanHe",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "trangThai",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min", "max"],
+      "fieldValidateRulesMax": "1",
+      "fieldValidateRulesMin": "0"
+    }
+  ],
+  "microserviceName": "DuongSu",
+  "name": "QuanHeDuongSu",
+  "relationships": [
+    {
+      "otherEntityName": "duongSu",
+      "relationshipName": "idDuongSu",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}
