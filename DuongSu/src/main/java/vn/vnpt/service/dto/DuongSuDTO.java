@@ -81,9 +81,9 @@ public class DuongSuDTO implements Serializable {
         return loaiDuongSu;
     }
 
-    public void setLoaiDuongSu(String loaiDuongSu) {
-        this.loaiDuongSu = LoaiDuongSu.fromString(loaiDuongSu);
-    }    
+    public void setLoaiDuongSu(LoaiDuongSu loaiDuongSu) {
+        this.loaiDuongSu = loaiDuongSu;
+    }
 
     public String getDiaChi() {
         return diaChi;
