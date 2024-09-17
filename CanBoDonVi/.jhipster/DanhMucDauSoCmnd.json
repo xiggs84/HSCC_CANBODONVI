@@ -1,0 +1,35 @@
+{
+  "annotations": {
+    "changelogDate": "20240917100751"
+  },
+  "applications": "*",
+  "clientRootFolder": "CanBoDonVi",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "idDauSo",
+      "fieldType": "Long",
+      "options": {
+        "id": true
+      }
+    },
+    {
+      "fieldName": "dauSo",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "tinhThanh",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "idLoai",
+      "fieldType": "Long"
+    }
+  ],
+  "microserviceName": "CanBoDonVi",
+  "name": "DanhMucDauSoCmnd",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

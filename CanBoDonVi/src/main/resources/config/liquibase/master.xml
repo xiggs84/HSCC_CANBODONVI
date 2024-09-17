@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <property name="now" value="now()" dbms="h2"/>
+    <property name="floatType" value="float4" dbms="h2"/>
+    <property name="uuidType" value="uuid" dbms="h2"/>
+    <property name="datetimeType" value="datetime(6)" dbms="h2"/>
+    <property name="clobType" value="longvarchar" dbms="h2"/>
+    <property name="blobType" value="blob" dbms="h2"/>
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+    <property name="floatType" value="float4" dbms="postgresql"/>
+    <property name="clobType" value="clob" dbms="postgresql"/>
+    <property name="blobType" value="blob" dbms="postgresql"/>
+    <property name="uuidType" value="uuid" dbms="postgresql"/>
+    <property name="datetimeType" value="datetime" dbms="postgresql"/>
+
+    <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240917100747_added_entity_CanBoQuyen.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240917100748_added_entity_CapQuanLy.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240917100749_added_entity_DanhMucCanBo.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240917100750_added_entity_DanhMucCapQuanLy.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240917100751_added_entity_DanhMucDauSoCmnd.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240917100752_added_entity_DanhMucDonVi.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240917100753_added_entity_DanhMucHuyen.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240917100754_added_entity_DanhMucQuocGia.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240917100755_added_entity_DanhMucTinh.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240917100756_added_entity_DanhMucXa.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240917100757_added_entity_DmHuyenTmp.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240917100758_added_entity_DmNoiCapGpdkx.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240917100759_added_entity_DmTinhTmp.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240917100800_added_entity_DmXaTmp.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240917100801_added_entity_DonViScanQr.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240917100802_added_entity_LoaiDonVi.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240917100803_added_entity_MenuQuyen.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240917100804_added_entity_NhiemVu.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240917100805_added_entity_NoiCapGttt.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240917100806_added_entity_Quyen.xml" relativeToChangelogFile="false"/>
+    <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20240917100752_added_entity_constraints_DanhMucDonVi.xml" relativeToChangelogFile="false"/>
+    <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+    <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
+</databaseChangeLog>

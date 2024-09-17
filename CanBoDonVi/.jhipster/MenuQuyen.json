@@ -1,0 +1,20 @@
+{
+  "annotations": {
+    "changelogDate": "20240917100803"
+  },
+  "applications": "*",
+  "clientRootFolder": "CanBoDonVi",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "listMenu",
+      "fieldType": "String"
+    }
+  ],
+  "microserviceName": "CanBoDonVi",
+  "name": "MenuQuyen",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

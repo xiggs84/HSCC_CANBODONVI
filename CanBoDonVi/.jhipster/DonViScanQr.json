@@ -1,0 +1,31 @@
+{
+  "annotations": {
+    "changelogDate": "20240917100801"
+  },
+  "applications": "*",
+  "clientRootFolder": "CanBoDonVi",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "idLuotQuet",
+      "fieldType": "Long",
+      "options": {
+        "id": true
+      }
+    },
+    {
+      "fieldName": "idCongDan",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "ngayThaoTac",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "microserviceName": "CanBoDonVi",
+  "name": "DonViScanQr",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

@@ -1,0 +1,215 @@
+entity DanhMucCanBo {
+    @id
+    idCanBo Long
+    tenCanBo String
+    diaChi String
+    namSinh LocalDate
+    email String
+    soDienThoai String
+    soCmnd String
+    //    idDonVi Long
+    tenDangNhap String
+    matKhau String
+    trangThai Long
+    clientId String
+    clientSecret String
+    usernameKyso String
+    passwordKyso String
+}
+
+entity CanBoQuyen {
+    //    idDonVi Long
+}
+
+entity MenuQuyen {
+    //    idQuyen Long
+    //    idDonVi Long
+    listMenu String
+}
+
+entity Quyen {
+    @id
+    idQuyen Long
+    tenQuyen String
+}
+entity DanhMucCapQuanLy {
+    @id
+    idCapQl Long
+    dienGiai String
+}
+
+entity DanhMucDonVi {
+  @id
+    idDonVi Long
+    tenDonVi String
+    diaChi String
+    nguoiDaiDien String
+    soDienThoai String
+    idDonViQl Long
+    ngayKhaiBao LocalDate
+    trangThai Long
+    soNha String
+    maSoThue String
+    hoaDonDt Integer
+    maDonViIgate String
+    maCoQuanIgate String
+    kySo Long
+    qrScan Long
+    verifyIdCard Long
+    isVerifyFace Long
+    isElastic Long
+    apikeyCccd String
+    apikeyFace String
+    verifyCodeCccd String
+    usernameElastic String
+    passwordElastic String
+    idNhiemVu String
+    idLoaiDv String
+    idCapQl String
+}
+
+entity NhiemVu {
+  @id
+  idNhiemVu String
+  tenNhiemVu String
+}
+
+entity LoaiDonVi {
+  @id
+  idLoaiDv String
+  tenLoaiDv String
+}
+
+entity CapQuanLy {
+  @id
+  idCapQl String
+  tenCapQl String
+}
+
+entity DanhMucTinh {
+  @id
+  maTinh String
+  tenTinh String
+}
+
+entity DanhMucHuyen {
+  @id
+  maHuyen String
+  tenHuyen String
+  maTinh String
+}
+
+entity DanhMucXa {
+  @id
+  maXa String
+  tenXa String
+  maHuyen String
+}
+
+// entity DanhMucTinh {
+//     @id
+//     maTinh Long
+//     tenTinh String
+// }
+// entity DanhMucHuyen {
+//     @id
+//     maHuyen Long
+//     tenHuyen String
+//     maTinh Long
+// }
+
+// entity DanhMucXa {
+//     @id
+//     maXa Long
+//     tenXa String
+//     maHuyen Long
+// }
+entity DanhMucDauSoCmnd {
+    @id
+    idDauSo Long
+    dauSo String
+    tinhThanh String
+    idLoai Long
+}
+entity DonViScanQr {
+    @id
+    idLuotQuet Long
+    //    idDonVi Long
+    idCongDan Long
+    ngayThaoTac LocalDate
+}
+entity DmTinhTmp {
+    @id
+    maTinh Long
+    tenTinh String
+}
+
+entity DmHuyenTmp {
+    @id
+    maHuyen Long
+    tenHuyen String
+}
+
+entity DmXaTmp {
+    @id
+    maXa Long
+    tenXa String
+}
+entity DanhMucQuocGia {
+    @id
+    idQuocGia Long
+    tenQuocGia String
+    tenTiengAnh String
+}
+entity NoiCapGttt {
+    @id
+    idNoiCap Long
+    dienGiai String
+    //    idDonVi Long
+    trangThai Long
+}
+entity DmNoiCapGpdkx {
+    @id
+    idNoiCap Long
+    dienGiai String
+    //    idDonVi Long
+    trangThai Long
+}
+
+relationship OneToMany {
+//    DanhMucTinh{maTinh} to DanhMucHuyen
+//    DanhMucHuyen{maHuyen} to DanhMucXa
+    NhiemVu{idNhiemVu} to DanhMucDonVi
+    LoaiDonVi{idLoaiDv} to DanhMucDonVi
+    CapQuanLy{idCapQl} to DanhMucDonVi
+}
+
+//CanBo
+// relationship OneToMany {
+//     DanhMucCanBo to CanBoQuyen{idCanBo}
+//     Quyen to CanBoQuyen{idQuyen}
+//     DanhMucDonVi to CanBoQuyen{idDonVi}
+//     Quyen to MenuQuyen{idQuyen}
+// }
+//DonVi
+// relationship OneToMany {
+//     DanhMucTinh{huyens} to DanhMucHuyen{tinh(maTinh)},
+//     DanhMucHuyen{xas} to DanhMucXa{huyen(maHuyen)},
+//     DmTinhTmp to DmHuyenTmp{maTinh},
+//     DmHuyenTmp to DmXaTmp{maHuyen},
+//     DanhMucDonVi to DonViScanQr{idDonVi},
+//     DanhMucDonVi to NoiCapGttt{idDonVi},
+//     DanhMucDonVi to DmNoiCapGpdkx{idDonVi}
+// }
+//CanBoDonVi
+// relationship OneToMany {
+//     DanhMucDonVi to MenuQuyen{idDonVi}
+//     DanhMucDonVi to DanhMucCanBo{idDonVi}
+//     DanhMucLoaiDonVi to DanhMucDonVi{loaiDonVi},
+//     DanhMucTinh to DanhMucDonVi{maTinh},
+//     DanhMucHuyen to DanhMucDonVi{maHuyen},
+//     DanhMucXa to DanhMucDonVi{maXa}
+// }
+
+dto * with mapstruct
+service * with serviceClass

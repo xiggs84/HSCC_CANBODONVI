@@ -1,0 +1,34 @@
+{
+  "annotations": {
+    "changelogDate": "20240917100748"
+  },
+  "applications": "*",
+  "clientRootFolder": "CanBoDonVi",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "idCapQl",
+      "fieldType": "String",
+      "options": {
+        "id": true
+      }
+    },
+    {
+      "fieldName": "tenCapQl",
+      "fieldType": "String"
+    }
+  ],
+  "microserviceName": "CanBoDonVi",
+  "name": "CapQuanLy",
+  "relationships": [
+    {
+      "otherEntityName": "danhMucDonVi",
+      "relationshipName": "idCapQl",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

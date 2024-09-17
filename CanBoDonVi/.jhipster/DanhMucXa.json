@@ -1,0 +1,31 @@
+{
+  "annotations": {
+    "changelogDate": "20240917100756"
+  },
+  "applications": "*",
+  "clientRootFolder": "CanBoDonVi",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "maXa",
+      "fieldType": "String",
+      "options": {
+        "id": true
+      }
+    },
+    {
+      "fieldName": "tenXa",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "maHuyen",
+      "fieldType": "String"
+    }
+  ],
+  "microserviceName": "CanBoDonVi",
+  "name": "DanhMucXa",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

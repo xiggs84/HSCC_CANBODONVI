@@ -1,0 +1,12 @@
+application {
+  config {
+    baseName CanBoDonVi
+    applicationType microservice
+    serverPort 8083
+    buildTool gradle
+    packageName vn.vnpt
+    authenticationType jwt
+    prodDatabaseType postgresql
+    devDatabaseType h2Disk
+  }
+}

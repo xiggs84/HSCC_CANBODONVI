@@ -1,0 +1,27 @@
+{
+  "annotations": {
+    "changelogDate": "20240917100750"
+  },
+  "applications": "*",
+  "clientRootFolder": "CanBoDonVi",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "idCapQl",
+      "fieldType": "Long",
+      "options": {
+        "id": true
+      }
+    },
+    {
+      "fieldName": "dienGiai",
+      "fieldType": "String"
+    }
+  ],
+  "microserviceName": "CanBoDonVi",
+  "name": "DanhMucCapQuanLy",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

@@ -1,0 +1,27 @@
+{
+  "annotations": {
+    "changelogDate": "20240917100759"
+  },
+  "applications": "*",
+  "clientRootFolder": "CanBoDonVi",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "maTinh",
+      "fieldType": "Long",
+      "options": {
+        "id": true
+      }
+    },
+    {
+      "fieldName": "tenTinh",
+      "fieldType": "String"
+    }
+  ],
+  "microserviceName": "CanBoDonVi",
+  "name": "DmTinhTmp",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

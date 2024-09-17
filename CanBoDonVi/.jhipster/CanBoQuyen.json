@@ -1,0 +1,15 @@
+{
+  "annotations": {
+    "changelogDate": "20240917100747"
+  },
+  "applications": "*",
+  "clientRootFolder": "CanBoDonVi",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [],
+  "microserviceName": "CanBoDonVi",
+  "name": "CanBoQuyen",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}
