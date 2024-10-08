@@ -9,4 +9,4 @@ import vn.vnpt.domain.LoaiDonVi;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface LoaiDonViRepository extends JpaRepository<LoaiDonVi, String> {}
+public interface LoaiDonViRepository extends JpaRepository<LoaiDonVi, String>, JpaSpecificationExecutor<LoaiDonVi> {}

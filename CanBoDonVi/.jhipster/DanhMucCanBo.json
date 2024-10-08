@@ -67,9 +67,11 @@
       "fieldType": "String"
     }
   ],
+  "jpaMetamodelFiltering": true,
   "microserviceName": "CanBoDonVi",
   "name": "DanhMucCanBo",
+  "pagination": "pagination",
   "relationships": [],
   "searchEngine": "no",
-  "service": "serviceClass"
+  "service": "serviceImpl"
 }

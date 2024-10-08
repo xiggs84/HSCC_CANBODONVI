@@ -9,4 +9,4 @@ import vn.vnpt.domain.DmTinhTmp;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface DmTinhTmpRepository extends JpaRepository<DmTinhTmp, Long> {}
+public interface DmTinhTmpRepository extends JpaRepository<DmTinhTmp, Long>, JpaSpecificationExecutor<DmTinhTmp> {}

@@ -167,6 +167,110 @@ class CapQuanLyResourceIT {
 
     @Test
     @Transactional
+    void getCapQuanLiesByIdFiltering() throws Exception {
+        // Initialize the database
+        insertedCapQuanLy = capQuanLyRepository.saveAndFlush(capQuanLy);
+
+        String id = capQuanLy.getIdCapQl();
+
+        defaultCapQuanLyFiltering("idCapQl.equals=" + id, "idCapQl.notEquals=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllCapQuanLiesByTenCapQlIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedCapQuanLy = capQuanLyRepository.saveAndFlush(capQuanLy);
+
+        // Get all the capQuanLyList where tenCapQl equals to
+        defaultCapQuanLyFiltering("tenCapQl.equals=" + DEFAULT_TEN_CAP_QL, "tenCapQl.equals=" + UPDATED_TEN_CAP_QL);
+    }
+
+    @Test
+    @Transactional
+    void getAllCapQuanLiesByTenCapQlIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedCapQuanLy = capQuanLyRepository.saveAndFlush(capQuanLy);
+
+        // Get all the capQuanLyList where tenCapQl in
+        defaultCapQuanLyFiltering("tenCapQl.in=" + DEFAULT_TEN_CAP_QL + "," + UPDATED_TEN_CAP_QL, "tenCapQl.in=" + UPDATED_TEN_CAP_QL);
+    }
+
+    @Test
+    @Transactional
+    void getAllCapQuanLiesByTenCapQlIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedCapQuanLy = capQuanLyRepository.saveAndFlush(capQuanLy);
+
+        // Get all the capQuanLyList where tenCapQl is not null
+        defaultCapQuanLyFiltering("tenCapQl.specified=true", "tenCapQl.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllCapQuanLiesByTenCapQlContainsSomething() throws Exception {
+        // Initialize the database
+        insertedCapQuanLy = capQuanLyRepository.saveAndFlush(capQuanLy);
+
+        // Get all the capQuanLyList where tenCapQl contains
+        defaultCapQuanLyFiltering("tenCapQl.contains=" + DEFAULT_TEN_CAP_QL, "tenCapQl.contains=" + UPDATED_TEN_CAP_QL);
+    }
+
+    @Test
+    @Transactional
+    void getAllCapQuanLiesByTenCapQlNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedCapQuanLy = capQuanLyRepository.saveAndFlush(capQuanLy);
+
+        // Get all the capQuanLyList where tenCapQl does not contain
+        defaultCapQuanLyFiltering("tenCapQl.doesNotContain=" + UPDATED_TEN_CAP_QL, "tenCapQl.doesNotContain=" + DEFAULT_TEN_CAP_QL);
+    }
+
+    private void defaultCapQuanLyFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
+        defaultCapQuanLyShouldBeFound(shouldBeFound);
+        defaultCapQuanLyShouldNotBeFound(shouldNotBeFound);
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultCapQuanLyShouldBeFound(String filter) throws Exception {
+        restCapQuanLyMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=idCapQl,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].idCapQl").value(hasItem(capQuanLy.getIdCapQl())))
+            .andExpect(jsonPath("$.[*].tenCapQl").value(hasItem(DEFAULT_TEN_CAP_QL)));
+
+        // Check, that the count call also returns 1
+        restCapQuanLyMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=idCapQl,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultCapQuanLyShouldNotBeFound(String filter) throws Exception {
+        restCapQuanLyMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=idCapQl,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restCapQuanLyMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=idCapQl,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
+    }
+
+    @Test
+    @Transactional
     void getNonExistingCapQuanLy() throws Exception {
         // Get the capQuanLy
         restCapQuanLyMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());

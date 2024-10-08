@@ -27,9 +27,11 @@
       "fieldType": "Long"
     }
   ],
+  "jpaMetamodelFiltering": true,
   "microserviceName": "CanBoDonVi",
   "name": "DanhMucDauSoCmnd",
+  "pagination": "pagination",
   "relationships": [],
   "searchEngine": "no",
-  "service": "serviceClass"
+  "service": "serviceImpl"
 }

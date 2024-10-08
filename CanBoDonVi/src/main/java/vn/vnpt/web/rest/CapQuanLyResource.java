@@ -8,12 +8,19 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 import vn.vnpt.repository.CapQuanLyRepository;
+import vn.vnpt.service.CapQuanLyQueryService;
 import vn.vnpt.service.CapQuanLyService;
+import vn.vnpt.service.criteria.CapQuanLyCriteria;
 import vn.vnpt.service.dto.CapQuanLyDTO;
 import vn.vnpt.web.rest.errors.BadRequestAlertException;
 
@@ -35,9 +42,16 @@ public class CapQuanLyResource {
 
     private final CapQuanLyRepository capQuanLyRepository;
 
-    public CapQuanLyResource(CapQuanLyService capQuanLyService, CapQuanLyRepository capQuanLyRepository) {
+    private final CapQuanLyQueryService capQuanLyQueryService;
+
+    public CapQuanLyResource(
+        CapQuanLyService capQuanLyService,
+        CapQuanLyRepository capQuanLyRepository,
+        CapQuanLyQueryService capQuanLyQueryService
+    ) {
         this.capQuanLyService = capQuanLyService;
         this.capQuanLyRepository = capQuanLyRepository;
+        this.capQuanLyQueryService = capQuanLyQueryService;
     }
 
     /**
@@ -131,12 +145,32 @@ public class CapQuanLyResource {
     /**
      * {@code GET  /cap-quan-lies} : get all the capQuanLies.
      *
+     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of capQuanLies in body.
      */
     @GetMapping("")
-    public List<CapQuanLyDTO> getAllCapQuanLies() {
-        LOG.debug("REST request to get all CapQuanLies");
-        return capQuanLyService.findAll();
+    public ResponseEntity<List<CapQuanLyDTO>> getAllCapQuanLies(
+        CapQuanLyCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        LOG.debug("REST request to get CapQuanLies by criteria: {}", criteria);
+
+        Page<CapQuanLyDTO> page = capQuanLyQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /cap-quan-lies/count} : count all the capQuanLies.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countCapQuanLies(CapQuanLyCriteria criteria) {
+        LOG.debug("REST request to count CapQuanLies by criteria: {}", criteria);
+        return ResponseEntity.ok().body(capQuanLyQueryService.countByCriteria(criteria));
     }
 
     /**

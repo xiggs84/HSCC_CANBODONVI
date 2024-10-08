@@ -9,4 +9,4 @@ import vn.vnpt.domain.MenuQuyen;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface MenuQuyenRepository extends JpaRepository<MenuQuyen, Long> {}
+public interface MenuQuyenRepository extends JpaRepository<MenuQuyen, Long>, JpaSpecificationExecutor<MenuQuyen> {}

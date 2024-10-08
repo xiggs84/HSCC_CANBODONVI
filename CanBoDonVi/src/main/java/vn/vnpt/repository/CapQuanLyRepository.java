@@ -9,4 +9,4 @@ import vn.vnpt.domain.CapQuanLy;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface CapQuanLyRepository extends JpaRepository<CapQuanLy, String> {}
+public interface CapQuanLyRepository extends JpaRepository<CapQuanLy, String>, JpaSpecificationExecutor<CapQuanLy> {}

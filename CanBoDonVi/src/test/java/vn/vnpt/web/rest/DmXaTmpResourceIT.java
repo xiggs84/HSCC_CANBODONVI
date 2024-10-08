@@ -169,6 +169,114 @@ class DmXaTmpResourceIT {
 
     @Test
     @Transactional
+    void getDmXaTmpsByIdFiltering() throws Exception {
+        // Initialize the database
+        insertedDmXaTmp = dmXaTmpRepository.saveAndFlush(dmXaTmp);
+
+        Long id = dmXaTmp.getMaXa();
+
+        defaultDmXaTmpFiltering("maXa.equals=" + id, "maXa.notEquals=" + id);
+
+        defaultDmXaTmpFiltering("maXa.greaterThanOrEqual=" + id, "maXa.greaterThan=" + id);
+
+        defaultDmXaTmpFiltering("maXa.lessThanOrEqual=" + id, "maXa.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllDmXaTmpsByTenXaIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedDmXaTmp = dmXaTmpRepository.saveAndFlush(dmXaTmp);
+
+        // Get all the dmXaTmpList where tenXa equals to
+        defaultDmXaTmpFiltering("tenXa.equals=" + DEFAULT_TEN_XA, "tenXa.equals=" + UPDATED_TEN_XA);
+    }
+
+    @Test
+    @Transactional
+    void getAllDmXaTmpsByTenXaIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedDmXaTmp = dmXaTmpRepository.saveAndFlush(dmXaTmp);
+
+        // Get all the dmXaTmpList where tenXa in
+        defaultDmXaTmpFiltering("tenXa.in=" + DEFAULT_TEN_XA + "," + UPDATED_TEN_XA, "tenXa.in=" + UPDATED_TEN_XA);
+    }
+
+    @Test
+    @Transactional
+    void getAllDmXaTmpsByTenXaIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedDmXaTmp = dmXaTmpRepository.saveAndFlush(dmXaTmp);
+
+        // Get all the dmXaTmpList where tenXa is not null
+        defaultDmXaTmpFiltering("tenXa.specified=true", "tenXa.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDmXaTmpsByTenXaContainsSomething() throws Exception {
+        // Initialize the database
+        insertedDmXaTmp = dmXaTmpRepository.saveAndFlush(dmXaTmp);
+
+        // Get all the dmXaTmpList where tenXa contains
+        defaultDmXaTmpFiltering("tenXa.contains=" + DEFAULT_TEN_XA, "tenXa.contains=" + UPDATED_TEN_XA);
+    }
+
+    @Test
+    @Transactional
+    void getAllDmXaTmpsByTenXaNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedDmXaTmp = dmXaTmpRepository.saveAndFlush(dmXaTmp);
+
+        // Get all the dmXaTmpList where tenXa does not contain
+        defaultDmXaTmpFiltering("tenXa.doesNotContain=" + UPDATED_TEN_XA, "tenXa.doesNotContain=" + DEFAULT_TEN_XA);
+    }
+
+    private void defaultDmXaTmpFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
+        defaultDmXaTmpShouldBeFound(shouldBeFound);
+        defaultDmXaTmpShouldNotBeFound(shouldNotBeFound);
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultDmXaTmpShouldBeFound(String filter) throws Exception {
+        restDmXaTmpMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=maXa,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].maXa").value(hasItem(dmXaTmp.getMaXa().intValue())))
+            .andExpect(jsonPath("$.[*].tenXa").value(hasItem(DEFAULT_TEN_XA)));
+
+        // Check, that the count call also returns 1
+        restDmXaTmpMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=maXa,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultDmXaTmpShouldNotBeFound(String filter) throws Exception {
+        restDmXaTmpMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=maXa,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restDmXaTmpMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=maXa,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
+    }
+
+    @Test
+    @Transactional
     void getNonExistingDmXaTmp() throws Exception {
         // Get the dmXaTmp
         restDmXaTmpMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());

@@ -8,12 +8,19 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 import vn.vnpt.repository.DonViScanQrRepository;
+import vn.vnpt.service.DonViScanQrQueryService;
 import vn.vnpt.service.DonViScanQrService;
+import vn.vnpt.service.criteria.DonViScanQrCriteria;
 import vn.vnpt.service.dto.DonViScanQrDTO;
 import vn.vnpt.web.rest.errors.BadRequestAlertException;
 
@@ -35,9 +42,16 @@ public class DonViScanQrResource {
 
     private final DonViScanQrRepository donViScanQrRepository;
 
-    public DonViScanQrResource(DonViScanQrService donViScanQrService, DonViScanQrRepository donViScanQrRepository) {
+    private final DonViScanQrQueryService donViScanQrQueryService;
+
+    public DonViScanQrResource(
+        DonViScanQrService donViScanQrService,
+        DonViScanQrRepository donViScanQrRepository,
+        DonViScanQrQueryService donViScanQrQueryService
+    ) {
         this.donViScanQrService = donViScanQrService;
         this.donViScanQrRepository = donViScanQrRepository;
+        this.donViScanQrQueryService = donViScanQrQueryService;
     }
 
     /**
@@ -131,12 +145,32 @@ public class DonViScanQrResource {
     /**
      * {@code GET  /don-vi-scan-qrs} : get all the donViScanQrs.
      *
+     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of donViScanQrs in body.
      */
     @GetMapping("")
-    public List<DonViScanQrDTO> getAllDonViScanQrs() {
-        LOG.debug("REST request to get all DonViScanQrs");
-        return donViScanQrService.findAll();
+    public ResponseEntity<List<DonViScanQrDTO>> getAllDonViScanQrs(
+        DonViScanQrCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        LOG.debug("REST request to get DonViScanQrs by criteria: {}", criteria);
+
+        Page<DonViScanQrDTO> page = donViScanQrQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /don-vi-scan-qrs/count} : count all the donViScanQrs.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countDonViScanQrs(DonViScanQrCriteria criteria) {
+        LOG.debug("REST request to count DonViScanQrs by criteria: {}", criteria);
+        return ResponseEntity.ok().body(donViScanQrQueryService.countByCriteria(criteria));
     }
 
     /**

@@ -167,6 +167,113 @@ class NhiemVuResourceIT {
 
     @Test
     @Transactional
+    void getNhiemVusByIdFiltering() throws Exception {
+        // Initialize the database
+        insertedNhiemVu = nhiemVuRepository.saveAndFlush(nhiemVu);
+
+        String id = nhiemVu.getIdNhiemVu();
+
+        defaultNhiemVuFiltering("idNhiemVu.equals=" + id, "idNhiemVu.notEquals=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllNhiemVusByTenNhiemVuIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedNhiemVu = nhiemVuRepository.saveAndFlush(nhiemVu);
+
+        // Get all the nhiemVuList where tenNhiemVu equals to
+        defaultNhiemVuFiltering("tenNhiemVu.equals=" + DEFAULT_TEN_NHIEM_VU, "tenNhiemVu.equals=" + UPDATED_TEN_NHIEM_VU);
+    }
+
+    @Test
+    @Transactional
+    void getAllNhiemVusByTenNhiemVuIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedNhiemVu = nhiemVuRepository.saveAndFlush(nhiemVu);
+
+        // Get all the nhiemVuList where tenNhiemVu in
+        defaultNhiemVuFiltering(
+            "tenNhiemVu.in=" + DEFAULT_TEN_NHIEM_VU + "," + UPDATED_TEN_NHIEM_VU,
+            "tenNhiemVu.in=" + UPDATED_TEN_NHIEM_VU
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllNhiemVusByTenNhiemVuIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedNhiemVu = nhiemVuRepository.saveAndFlush(nhiemVu);
+
+        // Get all the nhiemVuList where tenNhiemVu is not null
+        defaultNhiemVuFiltering("tenNhiemVu.specified=true", "tenNhiemVu.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllNhiemVusByTenNhiemVuContainsSomething() throws Exception {
+        // Initialize the database
+        insertedNhiemVu = nhiemVuRepository.saveAndFlush(nhiemVu);
+
+        // Get all the nhiemVuList where tenNhiemVu contains
+        defaultNhiemVuFiltering("tenNhiemVu.contains=" + DEFAULT_TEN_NHIEM_VU, "tenNhiemVu.contains=" + UPDATED_TEN_NHIEM_VU);
+    }
+
+    @Test
+    @Transactional
+    void getAllNhiemVusByTenNhiemVuNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedNhiemVu = nhiemVuRepository.saveAndFlush(nhiemVu);
+
+        // Get all the nhiemVuList where tenNhiemVu does not contain
+        defaultNhiemVuFiltering("tenNhiemVu.doesNotContain=" + UPDATED_TEN_NHIEM_VU, "tenNhiemVu.doesNotContain=" + DEFAULT_TEN_NHIEM_VU);
+    }
+
+    private void defaultNhiemVuFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
+        defaultNhiemVuShouldBeFound(shouldBeFound);
+        defaultNhiemVuShouldNotBeFound(shouldNotBeFound);
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultNhiemVuShouldBeFound(String filter) throws Exception {
+        restNhiemVuMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=idNhiemVu,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].idNhiemVu").value(hasItem(nhiemVu.getIdNhiemVu())))
+            .andExpect(jsonPath("$.[*].tenNhiemVu").value(hasItem(DEFAULT_TEN_NHIEM_VU)));
+
+        // Check, that the count call also returns 1
+        restNhiemVuMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=idNhiemVu,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultNhiemVuShouldNotBeFound(String filter) throws Exception {
+        restNhiemVuMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=idNhiemVu,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restNhiemVuMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=idNhiemVu,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
+    }
+
+    @Test
+    @Transactional
     void getNonExistingNhiemVu() throws Exception {
         // Get the nhiemVu
         restNhiemVuMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());

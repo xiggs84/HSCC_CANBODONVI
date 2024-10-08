@@ -6,7 +6,7 @@ entity DanhMucCanBo {
     namSinh LocalDate
     email String
     soDienThoai String
-    soCmnd String
+    soGiayToTuyThan String
     //    idDonVi Long
     tenDangNhap String
     matKhau String
@@ -106,24 +106,6 @@ entity DanhMucXa {
   maHuyen String
 }
 
-// entity DanhMucTinh {
-//     @id
-//     maTinh Long
-//     tenTinh String
-// }
-// entity DanhMucHuyen {
-//     @id
-//     maHuyen Long
-//     tenHuyen String
-//     maTinh Long
-// }
-
-// entity DanhMucXa {
-//     @id
-//     maXa Long
-//     tenXa String
-//     maHuyen Long
-// }
 entity DanhMucDauSoCmnd {
     @id
     idDauSo Long
@@ -211,5 +193,6 @@ relationship OneToMany {
 //     DanhMucXa to DanhMucDonVi{maXa}
 // }
 
-dto * with mapstruct
-service * with serviceClass
+use mapstruct, serviceImpl for *
+use pagination for *
+filter *

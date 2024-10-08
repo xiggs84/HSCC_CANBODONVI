@@ -8,12 +8,19 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 import vn.vnpt.repository.DmHuyenTmpRepository;
+import vn.vnpt.service.DmHuyenTmpQueryService;
 import vn.vnpt.service.DmHuyenTmpService;
+import vn.vnpt.service.criteria.DmHuyenTmpCriteria;
 import vn.vnpt.service.dto.DmHuyenTmpDTO;
 import vn.vnpt.web.rest.errors.BadRequestAlertException;
 
@@ -35,9 +42,16 @@ public class DmHuyenTmpResource {
 
     private final DmHuyenTmpRepository dmHuyenTmpRepository;
 
-    public DmHuyenTmpResource(DmHuyenTmpService dmHuyenTmpService, DmHuyenTmpRepository dmHuyenTmpRepository) {
+    private final DmHuyenTmpQueryService dmHuyenTmpQueryService;
+
+    public DmHuyenTmpResource(
+        DmHuyenTmpService dmHuyenTmpService,
+        DmHuyenTmpRepository dmHuyenTmpRepository,
+        DmHuyenTmpQueryService dmHuyenTmpQueryService
+    ) {
         this.dmHuyenTmpService = dmHuyenTmpService;
         this.dmHuyenTmpRepository = dmHuyenTmpRepository;
+        this.dmHuyenTmpQueryService = dmHuyenTmpQueryService;
     }
 
     /**
@@ -131,12 +145,32 @@ public class DmHuyenTmpResource {
     /**
      * {@code GET  /dm-huyen-tmps} : get all the dmHuyenTmps.
      *
+     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of dmHuyenTmps in body.
      */
     @GetMapping("")
-    public List<DmHuyenTmpDTO> getAllDmHuyenTmps() {
-        LOG.debug("REST request to get all DmHuyenTmps");
-        return dmHuyenTmpService.findAll();
+    public ResponseEntity<List<DmHuyenTmpDTO>> getAllDmHuyenTmps(
+        DmHuyenTmpCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        LOG.debug("REST request to get DmHuyenTmps by criteria: {}", criteria);
+
+        Page<DmHuyenTmpDTO> page = dmHuyenTmpQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /dm-huyen-tmps/count} : count all the dmHuyenTmps.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countDmHuyenTmps(DmHuyenTmpCriteria criteria) {
+        LOG.debug("REST request to count DmHuyenTmps by criteria: {}", criteria);
+        return ResponseEntity.ok().body(dmHuyenTmpQueryService.countByCriteria(criteria));
     }
 
     /**

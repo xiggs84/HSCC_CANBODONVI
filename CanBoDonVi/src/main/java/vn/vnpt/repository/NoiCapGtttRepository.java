@@ -9,4 +9,4 @@ import vn.vnpt.domain.NoiCapGttt;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface NoiCapGtttRepository extends JpaRepository<NoiCapGttt, Long> {}
+public interface NoiCapGtttRepository extends JpaRepository<NoiCapGttt, Long>, JpaSpecificationExecutor<NoiCapGttt> {}

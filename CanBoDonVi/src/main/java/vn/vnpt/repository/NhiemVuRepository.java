@@ -9,4 +9,4 @@ import vn.vnpt.domain.NhiemVu;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface NhiemVuRepository extends JpaRepository<NhiemVu, String> {}
+public interface NhiemVuRepository extends JpaRepository<NhiemVu, String>, JpaSpecificationExecutor<NhiemVu> {}

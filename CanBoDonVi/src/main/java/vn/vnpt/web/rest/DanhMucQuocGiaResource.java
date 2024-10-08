@@ -8,12 +8,19 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 import vn.vnpt.repository.DanhMucQuocGiaRepository;
+import vn.vnpt.service.DanhMucQuocGiaQueryService;
 import vn.vnpt.service.DanhMucQuocGiaService;
+import vn.vnpt.service.criteria.DanhMucQuocGiaCriteria;
 import vn.vnpt.service.dto.DanhMucQuocGiaDTO;
 import vn.vnpt.web.rest.errors.BadRequestAlertException;
 
@@ -35,9 +42,16 @@ public class DanhMucQuocGiaResource {
 
     private final DanhMucQuocGiaRepository danhMucQuocGiaRepository;
 
-    public DanhMucQuocGiaResource(DanhMucQuocGiaService danhMucQuocGiaService, DanhMucQuocGiaRepository danhMucQuocGiaRepository) {
+    private final DanhMucQuocGiaQueryService danhMucQuocGiaQueryService;
+
+    public DanhMucQuocGiaResource(
+        DanhMucQuocGiaService danhMucQuocGiaService,
+        DanhMucQuocGiaRepository danhMucQuocGiaRepository,
+        DanhMucQuocGiaQueryService danhMucQuocGiaQueryService
+    ) {
         this.danhMucQuocGiaService = danhMucQuocGiaService;
         this.danhMucQuocGiaRepository = danhMucQuocGiaRepository;
+        this.danhMucQuocGiaQueryService = danhMucQuocGiaQueryService;
     }
 
     /**
@@ -132,12 +146,32 @@ public class DanhMucQuocGiaResource {
     /**
      * {@code GET  /danh-muc-quoc-gias} : get all the danhMucQuocGias.
      *
+     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of danhMucQuocGias in body.
      */
     @GetMapping("")
-    public List<DanhMucQuocGiaDTO> getAllDanhMucQuocGias() {
-        LOG.debug("REST request to get all DanhMucQuocGias");
-        return danhMucQuocGiaService.findAll();
+    public ResponseEntity<List<DanhMucQuocGiaDTO>> getAllDanhMucQuocGias(
+        DanhMucQuocGiaCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        LOG.debug("REST request to get DanhMucQuocGias by criteria: {}", criteria);
+
+        Page<DanhMucQuocGiaDTO> page = danhMucQuocGiaQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /danh-muc-quoc-gias/count} : count all the danhMucQuocGias.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countDanhMucQuocGias(DanhMucQuocGiaCriteria criteria) {
+        LOG.debug("REST request to count DanhMucQuocGias by criteria: {}", criteria);
+        return ResponseEntity.ok().body(danhMucQuocGiaQueryService.countByCriteria(criteria));
     }
 
     /**

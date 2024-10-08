@@ -169,6 +169,114 @@ class DmHuyenTmpResourceIT {
 
     @Test
     @Transactional
+    void getDmHuyenTmpsByIdFiltering() throws Exception {
+        // Initialize the database
+        insertedDmHuyenTmp = dmHuyenTmpRepository.saveAndFlush(dmHuyenTmp);
+
+        Long id = dmHuyenTmp.getMaHuyen();
+
+        defaultDmHuyenTmpFiltering("maHuyen.equals=" + id, "maHuyen.notEquals=" + id);
+
+        defaultDmHuyenTmpFiltering("maHuyen.greaterThanOrEqual=" + id, "maHuyen.greaterThan=" + id);
+
+        defaultDmHuyenTmpFiltering("maHuyen.lessThanOrEqual=" + id, "maHuyen.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllDmHuyenTmpsByTenHuyenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedDmHuyenTmp = dmHuyenTmpRepository.saveAndFlush(dmHuyenTmp);
+
+        // Get all the dmHuyenTmpList where tenHuyen equals to
+        defaultDmHuyenTmpFiltering("tenHuyen.equals=" + DEFAULT_TEN_HUYEN, "tenHuyen.equals=" + UPDATED_TEN_HUYEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllDmHuyenTmpsByTenHuyenIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedDmHuyenTmp = dmHuyenTmpRepository.saveAndFlush(dmHuyenTmp);
+
+        // Get all the dmHuyenTmpList where tenHuyen in
+        defaultDmHuyenTmpFiltering("tenHuyen.in=" + DEFAULT_TEN_HUYEN + "," + UPDATED_TEN_HUYEN, "tenHuyen.in=" + UPDATED_TEN_HUYEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllDmHuyenTmpsByTenHuyenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedDmHuyenTmp = dmHuyenTmpRepository.saveAndFlush(dmHuyenTmp);
+
+        // Get all the dmHuyenTmpList where tenHuyen is not null
+        defaultDmHuyenTmpFiltering("tenHuyen.specified=true", "tenHuyen.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDmHuyenTmpsByTenHuyenContainsSomething() throws Exception {
+        // Initialize the database
+        insertedDmHuyenTmp = dmHuyenTmpRepository.saveAndFlush(dmHuyenTmp);
+
+        // Get all the dmHuyenTmpList where tenHuyen contains
+        defaultDmHuyenTmpFiltering("tenHuyen.contains=" + DEFAULT_TEN_HUYEN, "tenHuyen.contains=" + UPDATED_TEN_HUYEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllDmHuyenTmpsByTenHuyenNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedDmHuyenTmp = dmHuyenTmpRepository.saveAndFlush(dmHuyenTmp);
+
+        // Get all the dmHuyenTmpList where tenHuyen does not contain
+        defaultDmHuyenTmpFiltering("tenHuyen.doesNotContain=" + UPDATED_TEN_HUYEN, "tenHuyen.doesNotContain=" + DEFAULT_TEN_HUYEN);
+    }
+
+    private void defaultDmHuyenTmpFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
+        defaultDmHuyenTmpShouldBeFound(shouldBeFound);
+        defaultDmHuyenTmpShouldNotBeFound(shouldNotBeFound);
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultDmHuyenTmpShouldBeFound(String filter) throws Exception {
+        restDmHuyenTmpMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=maHuyen,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].maHuyen").value(hasItem(dmHuyenTmp.getMaHuyen().intValue())))
+            .andExpect(jsonPath("$.[*].tenHuyen").value(hasItem(DEFAULT_TEN_HUYEN)));
+
+        // Check, that the count call also returns 1
+        restDmHuyenTmpMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=maHuyen,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultDmHuyenTmpShouldNotBeFound(String filter) throws Exception {
+        restDmHuyenTmpMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=maHuyen,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restDmHuyenTmpMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=maHuyen,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
+    }
+
+    @Test
+    @Transactional
     void getNonExistingDmHuyenTmp() throws Exception {
         // Get the dmHuyenTmp
         restDmHuyenTmpMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());

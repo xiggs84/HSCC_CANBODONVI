@@ -174,6 +174,177 @@ class DanhMucQuocGiaResourceIT {
 
     @Test
     @Transactional
+    void getDanhMucQuocGiasByIdFiltering() throws Exception {
+        // Initialize the database
+        insertedDanhMucQuocGia = danhMucQuocGiaRepository.saveAndFlush(danhMucQuocGia);
+
+        Long id = danhMucQuocGia.getIdQuocGia();
+
+        defaultDanhMucQuocGiaFiltering("idQuocGia.equals=" + id, "idQuocGia.notEquals=" + id);
+
+        defaultDanhMucQuocGiaFiltering("idQuocGia.greaterThanOrEqual=" + id, "idQuocGia.greaterThan=" + id);
+
+        defaultDanhMucQuocGiaFiltering("idQuocGia.lessThanOrEqual=" + id, "idQuocGia.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucQuocGiasByTenQuocGiaIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucQuocGia = danhMucQuocGiaRepository.saveAndFlush(danhMucQuocGia);
+
+        // Get all the danhMucQuocGiaList where tenQuocGia equals to
+        defaultDanhMucQuocGiaFiltering("tenQuocGia.equals=" + DEFAULT_TEN_QUOC_GIA, "tenQuocGia.equals=" + UPDATED_TEN_QUOC_GIA);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucQuocGiasByTenQuocGiaIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedDanhMucQuocGia = danhMucQuocGiaRepository.saveAndFlush(danhMucQuocGia);
+
+        // Get all the danhMucQuocGiaList where tenQuocGia in
+        defaultDanhMucQuocGiaFiltering(
+            "tenQuocGia.in=" + DEFAULT_TEN_QUOC_GIA + "," + UPDATED_TEN_QUOC_GIA,
+            "tenQuocGia.in=" + UPDATED_TEN_QUOC_GIA
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucQuocGiasByTenQuocGiaIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedDanhMucQuocGia = danhMucQuocGiaRepository.saveAndFlush(danhMucQuocGia);
+
+        // Get all the danhMucQuocGiaList where tenQuocGia is not null
+        defaultDanhMucQuocGiaFiltering("tenQuocGia.specified=true", "tenQuocGia.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucQuocGiasByTenQuocGiaContainsSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucQuocGia = danhMucQuocGiaRepository.saveAndFlush(danhMucQuocGia);
+
+        // Get all the danhMucQuocGiaList where tenQuocGia contains
+        defaultDanhMucQuocGiaFiltering("tenQuocGia.contains=" + DEFAULT_TEN_QUOC_GIA, "tenQuocGia.contains=" + UPDATED_TEN_QUOC_GIA);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucQuocGiasByTenQuocGiaNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucQuocGia = danhMucQuocGiaRepository.saveAndFlush(danhMucQuocGia);
+
+        // Get all the danhMucQuocGiaList where tenQuocGia does not contain
+        defaultDanhMucQuocGiaFiltering(
+            "tenQuocGia.doesNotContain=" + UPDATED_TEN_QUOC_GIA,
+            "tenQuocGia.doesNotContain=" + DEFAULT_TEN_QUOC_GIA
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucQuocGiasByTenTiengAnhIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucQuocGia = danhMucQuocGiaRepository.saveAndFlush(danhMucQuocGia);
+
+        // Get all the danhMucQuocGiaList where tenTiengAnh equals to
+        defaultDanhMucQuocGiaFiltering("tenTiengAnh.equals=" + DEFAULT_TEN_TIENG_ANH, "tenTiengAnh.equals=" + UPDATED_TEN_TIENG_ANH);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucQuocGiasByTenTiengAnhIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedDanhMucQuocGia = danhMucQuocGiaRepository.saveAndFlush(danhMucQuocGia);
+
+        // Get all the danhMucQuocGiaList where tenTiengAnh in
+        defaultDanhMucQuocGiaFiltering(
+            "tenTiengAnh.in=" + DEFAULT_TEN_TIENG_ANH + "," + UPDATED_TEN_TIENG_ANH,
+            "tenTiengAnh.in=" + UPDATED_TEN_TIENG_ANH
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucQuocGiasByTenTiengAnhIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedDanhMucQuocGia = danhMucQuocGiaRepository.saveAndFlush(danhMucQuocGia);
+
+        // Get all the danhMucQuocGiaList where tenTiengAnh is not null
+        defaultDanhMucQuocGiaFiltering("tenTiengAnh.specified=true", "tenTiengAnh.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucQuocGiasByTenTiengAnhContainsSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucQuocGia = danhMucQuocGiaRepository.saveAndFlush(danhMucQuocGia);
+
+        // Get all the danhMucQuocGiaList where tenTiengAnh contains
+        defaultDanhMucQuocGiaFiltering("tenTiengAnh.contains=" + DEFAULT_TEN_TIENG_ANH, "tenTiengAnh.contains=" + UPDATED_TEN_TIENG_ANH);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucQuocGiasByTenTiengAnhNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucQuocGia = danhMucQuocGiaRepository.saveAndFlush(danhMucQuocGia);
+
+        // Get all the danhMucQuocGiaList where tenTiengAnh does not contain
+        defaultDanhMucQuocGiaFiltering(
+            "tenTiengAnh.doesNotContain=" + UPDATED_TEN_TIENG_ANH,
+            "tenTiengAnh.doesNotContain=" + DEFAULT_TEN_TIENG_ANH
+        );
+    }
+
+    private void defaultDanhMucQuocGiaFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
+        defaultDanhMucQuocGiaShouldBeFound(shouldBeFound);
+        defaultDanhMucQuocGiaShouldNotBeFound(shouldNotBeFound);
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultDanhMucQuocGiaShouldBeFound(String filter) throws Exception {
+        restDanhMucQuocGiaMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=idQuocGia,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].idQuocGia").value(hasItem(danhMucQuocGia.getIdQuocGia().intValue())))
+            .andExpect(jsonPath("$.[*].tenQuocGia").value(hasItem(DEFAULT_TEN_QUOC_GIA)))
+            .andExpect(jsonPath("$.[*].tenTiengAnh").value(hasItem(DEFAULT_TEN_TIENG_ANH)));
+
+        // Check, that the count call also returns 1
+        restDanhMucQuocGiaMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=idQuocGia,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultDanhMucQuocGiaShouldNotBeFound(String filter) throws Exception {
+        restDanhMucQuocGiaMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=idQuocGia,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restDanhMucQuocGiaMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=idQuocGia,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
+    }
+
+    @Test
+    @Transactional
     void getNonExistingDanhMucQuocGia() throws Exception {
         // Get the danhMucQuocGia
         restDanhMucQuocGiaMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());

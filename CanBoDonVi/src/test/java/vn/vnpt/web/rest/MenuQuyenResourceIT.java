@@ -169,6 +169,114 @@ class MenuQuyenResourceIT {
 
     @Test
     @Transactional
+    void getMenuQuyensByIdFiltering() throws Exception {
+        // Initialize the database
+        insertedMenuQuyen = menuQuyenRepository.saveAndFlush(menuQuyen);
+
+        Long id = menuQuyen.getId();
+
+        defaultMenuQuyenFiltering("id.equals=" + id, "id.notEquals=" + id);
+
+        defaultMenuQuyenFiltering("id.greaterThanOrEqual=" + id, "id.greaterThan=" + id);
+
+        defaultMenuQuyenFiltering("id.lessThanOrEqual=" + id, "id.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllMenuQuyensByListMenuIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedMenuQuyen = menuQuyenRepository.saveAndFlush(menuQuyen);
+
+        // Get all the menuQuyenList where listMenu equals to
+        defaultMenuQuyenFiltering("listMenu.equals=" + DEFAULT_LIST_MENU, "listMenu.equals=" + UPDATED_LIST_MENU);
+    }
+
+    @Test
+    @Transactional
+    void getAllMenuQuyensByListMenuIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedMenuQuyen = menuQuyenRepository.saveAndFlush(menuQuyen);
+
+        // Get all the menuQuyenList where listMenu in
+        defaultMenuQuyenFiltering("listMenu.in=" + DEFAULT_LIST_MENU + "," + UPDATED_LIST_MENU, "listMenu.in=" + UPDATED_LIST_MENU);
+    }
+
+    @Test
+    @Transactional
+    void getAllMenuQuyensByListMenuIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedMenuQuyen = menuQuyenRepository.saveAndFlush(menuQuyen);
+
+        // Get all the menuQuyenList where listMenu is not null
+        defaultMenuQuyenFiltering("listMenu.specified=true", "listMenu.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllMenuQuyensByListMenuContainsSomething() throws Exception {
+        // Initialize the database
+        insertedMenuQuyen = menuQuyenRepository.saveAndFlush(menuQuyen);
+
+        // Get all the menuQuyenList where listMenu contains
+        defaultMenuQuyenFiltering("listMenu.contains=" + DEFAULT_LIST_MENU, "listMenu.contains=" + UPDATED_LIST_MENU);
+    }
+
+    @Test
+    @Transactional
+    void getAllMenuQuyensByListMenuNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedMenuQuyen = menuQuyenRepository.saveAndFlush(menuQuyen);
+
+        // Get all the menuQuyenList where listMenu does not contain
+        defaultMenuQuyenFiltering("listMenu.doesNotContain=" + UPDATED_LIST_MENU, "listMenu.doesNotContain=" + DEFAULT_LIST_MENU);
+    }
+
+    private void defaultMenuQuyenFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
+        defaultMenuQuyenShouldBeFound(shouldBeFound);
+        defaultMenuQuyenShouldNotBeFound(shouldNotBeFound);
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultMenuQuyenShouldBeFound(String filter) throws Exception {
+        restMenuQuyenMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(menuQuyen.getId().intValue())))
+            .andExpect(jsonPath("$.[*].listMenu").value(hasItem(DEFAULT_LIST_MENU)));
+
+        // Check, that the count call also returns 1
+        restMenuQuyenMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultMenuQuyenShouldNotBeFound(String filter) throws Exception {
+        restMenuQuyenMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restMenuQuyenMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
+    }
+
+    @Test
+    @Transactional
     void getNonExistingMenuQuyen() throws Exception {
         // Get the menuQuyen
         restMenuQuyenMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());

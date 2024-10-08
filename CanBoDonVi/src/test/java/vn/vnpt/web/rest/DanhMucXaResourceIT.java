@@ -172,6 +172,161 @@ class DanhMucXaResourceIT {
 
     @Test
     @Transactional
+    void getDanhMucXasByIdFiltering() throws Exception {
+        // Initialize the database
+        insertedDanhMucXa = danhMucXaRepository.saveAndFlush(danhMucXa);
+
+        String id = danhMucXa.getMaXa();
+
+        defaultDanhMucXaFiltering("maXa.equals=" + id, "maXa.notEquals=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucXasByTenXaIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucXa = danhMucXaRepository.saveAndFlush(danhMucXa);
+
+        // Get all the danhMucXaList where tenXa equals to
+        defaultDanhMucXaFiltering("tenXa.equals=" + DEFAULT_TEN_XA, "tenXa.equals=" + UPDATED_TEN_XA);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucXasByTenXaIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedDanhMucXa = danhMucXaRepository.saveAndFlush(danhMucXa);
+
+        // Get all the danhMucXaList where tenXa in
+        defaultDanhMucXaFiltering("tenXa.in=" + DEFAULT_TEN_XA + "," + UPDATED_TEN_XA, "tenXa.in=" + UPDATED_TEN_XA);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucXasByTenXaIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedDanhMucXa = danhMucXaRepository.saveAndFlush(danhMucXa);
+
+        // Get all the danhMucXaList where tenXa is not null
+        defaultDanhMucXaFiltering("tenXa.specified=true", "tenXa.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucXasByTenXaContainsSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucXa = danhMucXaRepository.saveAndFlush(danhMucXa);
+
+        // Get all the danhMucXaList where tenXa contains
+        defaultDanhMucXaFiltering("tenXa.contains=" + DEFAULT_TEN_XA, "tenXa.contains=" + UPDATED_TEN_XA);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucXasByTenXaNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucXa = danhMucXaRepository.saveAndFlush(danhMucXa);
+
+        // Get all the danhMucXaList where tenXa does not contain
+        defaultDanhMucXaFiltering("tenXa.doesNotContain=" + UPDATED_TEN_XA, "tenXa.doesNotContain=" + DEFAULT_TEN_XA);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucXasByMaHuyenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucXa = danhMucXaRepository.saveAndFlush(danhMucXa);
+
+        // Get all the danhMucXaList where maHuyen equals to
+        defaultDanhMucXaFiltering("maHuyen.equals=" + DEFAULT_MA_HUYEN, "maHuyen.equals=" + UPDATED_MA_HUYEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucXasByMaHuyenIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedDanhMucXa = danhMucXaRepository.saveAndFlush(danhMucXa);
+
+        // Get all the danhMucXaList where maHuyen in
+        defaultDanhMucXaFiltering("maHuyen.in=" + DEFAULT_MA_HUYEN + "," + UPDATED_MA_HUYEN, "maHuyen.in=" + UPDATED_MA_HUYEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucXasByMaHuyenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedDanhMucXa = danhMucXaRepository.saveAndFlush(danhMucXa);
+
+        // Get all the danhMucXaList where maHuyen is not null
+        defaultDanhMucXaFiltering("maHuyen.specified=true", "maHuyen.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucXasByMaHuyenContainsSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucXa = danhMucXaRepository.saveAndFlush(danhMucXa);
+
+        // Get all the danhMucXaList where maHuyen contains
+        defaultDanhMucXaFiltering("maHuyen.contains=" + DEFAULT_MA_HUYEN, "maHuyen.contains=" + UPDATED_MA_HUYEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucXasByMaHuyenNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucXa = danhMucXaRepository.saveAndFlush(danhMucXa);
+
+        // Get all the danhMucXaList where maHuyen does not contain
+        defaultDanhMucXaFiltering("maHuyen.doesNotContain=" + UPDATED_MA_HUYEN, "maHuyen.doesNotContain=" + DEFAULT_MA_HUYEN);
+    }
+
+    private void defaultDanhMucXaFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
+        defaultDanhMucXaShouldBeFound(shouldBeFound);
+        defaultDanhMucXaShouldNotBeFound(shouldNotBeFound);
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultDanhMucXaShouldBeFound(String filter) throws Exception {
+        restDanhMucXaMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=maXa,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].maXa").value(hasItem(danhMucXa.getMaXa())))
+            .andExpect(jsonPath("$.[*].tenXa").value(hasItem(DEFAULT_TEN_XA)))
+            .andExpect(jsonPath("$.[*].maHuyen").value(hasItem(DEFAULT_MA_HUYEN)));
+
+        // Check, that the count call also returns 1
+        restDanhMucXaMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=maXa,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultDanhMucXaShouldNotBeFound(String filter) throws Exception {
+        restDanhMucXaMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=maXa,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restDanhMucXaMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=maXa,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
+    }
+
+    @Test
+    @Transactional
     void getNonExistingDanhMucXa() throws Exception {
         // Get the danhMucXa
         restDanhMucXaMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());

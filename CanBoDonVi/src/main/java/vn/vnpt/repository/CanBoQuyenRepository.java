@@ -9,4 +9,4 @@ import vn.vnpt.domain.CanBoQuyen;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface CanBoQuyenRepository extends JpaRepository<CanBoQuyen, Long> {}
+public interface CanBoQuyenRepository extends JpaRepository<CanBoQuyen, Long>, JpaSpecificationExecutor<CanBoQuyen> {}

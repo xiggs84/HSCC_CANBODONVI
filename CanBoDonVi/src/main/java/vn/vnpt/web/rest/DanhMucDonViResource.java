@@ -8,12 +8,19 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 import vn.vnpt.repository.DanhMucDonViRepository;
+import vn.vnpt.service.DanhMucDonViQueryService;
 import vn.vnpt.service.DanhMucDonViService;
+import vn.vnpt.service.criteria.DanhMucDonViCriteria;
 import vn.vnpt.service.dto.DanhMucDonViDTO;
 import vn.vnpt.web.rest.errors.BadRequestAlertException;
 
@@ -35,9 +42,16 @@ public class DanhMucDonViResource {
 
     private final DanhMucDonViRepository danhMucDonViRepository;
 
-    public DanhMucDonViResource(DanhMucDonViService danhMucDonViService, DanhMucDonViRepository danhMucDonViRepository) {
+    private final DanhMucDonViQueryService danhMucDonViQueryService;
+
+    public DanhMucDonViResource(
+        DanhMucDonViService danhMucDonViService,
+        DanhMucDonViRepository danhMucDonViRepository,
+        DanhMucDonViQueryService danhMucDonViQueryService
+    ) {
         this.danhMucDonViService = danhMucDonViService;
         this.danhMucDonViRepository = danhMucDonViRepository;
+        this.danhMucDonViQueryService = danhMucDonViQueryService;
     }
 
     /**
@@ -131,12 +145,32 @@ public class DanhMucDonViResource {
     /**
      * {@code GET  /danh-muc-don-vis} : get all the danhMucDonVis.
      *
+     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of danhMucDonVis in body.
      */
     @GetMapping("")
-    public List<DanhMucDonViDTO> getAllDanhMucDonVis() {
-        LOG.debug("REST request to get all DanhMucDonVis");
-        return danhMucDonViService.findAll();
+    public ResponseEntity<List<DanhMucDonViDTO>> getAllDanhMucDonVis(
+        DanhMucDonViCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        LOG.debug("REST request to get DanhMucDonVis by criteria: {}", criteria);
+
+        Page<DanhMucDonViDTO> page = danhMucDonViQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /danh-muc-don-vis/count} : count all the danhMucDonVis.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countDanhMucDonVis(DanhMucDonViCriteria criteria) {
+        LOG.debug("REST request to count DanhMucDonVis by criteria: {}", criteria);
+        return ResponseEntity.ok().body(danhMucDonViQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -165,11 +199,5 @@ public class DanhMucDonViResource {
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
-    }
-
-    @GetMapping("/by-ten")
-    public List<DanhMucDonViDTO> getDanhMucDonViByTenDonVi(@RequestParam("tenDonVi") String tenDonVi) {
-        LOG.debug("REST request to get DanhMucDonVis by tenDonVi : {}", tenDonVi);
-        return danhMucDonViService.findByTenDonVi(tenDonVi);
     }
 }

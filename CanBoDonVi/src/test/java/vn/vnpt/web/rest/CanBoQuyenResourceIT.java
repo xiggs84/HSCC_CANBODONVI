@@ -158,6 +158,63 @@ class CanBoQuyenResourceIT {
 
     @Test
     @Transactional
+    void getCanBoQuyensByIdFiltering() throws Exception {
+        // Initialize the database
+        insertedCanBoQuyen = canBoQuyenRepository.saveAndFlush(canBoQuyen);
+
+        Long id = canBoQuyen.getId();
+
+        defaultCanBoQuyenFiltering("id.equals=" + id, "id.notEquals=" + id);
+
+        defaultCanBoQuyenFiltering("id.greaterThanOrEqual=" + id, "id.greaterThan=" + id);
+
+        defaultCanBoQuyenFiltering("id.lessThanOrEqual=" + id, "id.lessThan=" + id);
+    }
+
+    private void defaultCanBoQuyenFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
+        defaultCanBoQuyenShouldBeFound(shouldBeFound);
+        defaultCanBoQuyenShouldNotBeFound(shouldNotBeFound);
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultCanBoQuyenShouldBeFound(String filter) throws Exception {
+        restCanBoQuyenMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(canBoQuyen.getId().intValue())));
+
+        // Check, that the count call also returns 1
+        restCanBoQuyenMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultCanBoQuyenShouldNotBeFound(String filter) throws Exception {
+        restCanBoQuyenMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restCanBoQuyenMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
+    }
+
+    @Test
+    @Transactional
     void getNonExistingCanBoQuyen() throws Exception {
         // Get the canBoQuyen
         restCanBoQuyenMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());

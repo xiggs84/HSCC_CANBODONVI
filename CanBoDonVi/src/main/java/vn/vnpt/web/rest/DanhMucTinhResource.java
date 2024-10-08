@@ -8,12 +8,19 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 import vn.vnpt.repository.DanhMucTinhRepository;
+import vn.vnpt.service.DanhMucTinhQueryService;
 import vn.vnpt.service.DanhMucTinhService;
+import vn.vnpt.service.criteria.DanhMucTinhCriteria;
 import vn.vnpt.service.dto.DanhMucTinhDTO;
 import vn.vnpt.web.rest.errors.BadRequestAlertException;
 
@@ -35,9 +42,16 @@ public class DanhMucTinhResource {
 
     private final DanhMucTinhRepository danhMucTinhRepository;
 
-    public DanhMucTinhResource(DanhMucTinhService danhMucTinhService, DanhMucTinhRepository danhMucTinhRepository) {
+    private final DanhMucTinhQueryService danhMucTinhQueryService;
+
+    public DanhMucTinhResource(
+        DanhMucTinhService danhMucTinhService,
+        DanhMucTinhRepository danhMucTinhRepository,
+        DanhMucTinhQueryService danhMucTinhQueryService
+    ) {
         this.danhMucTinhService = danhMucTinhService;
         this.danhMucTinhRepository = danhMucTinhRepository;
+        this.danhMucTinhQueryService = danhMucTinhQueryService;
     }
 
     /**
@@ -131,12 +145,32 @@ public class DanhMucTinhResource {
     /**
      * {@code GET  /danh-muc-tinhs} : get all the danhMucTinhs.
      *
+     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of danhMucTinhs in body.
      */
     @GetMapping("")
-    public List<DanhMucTinhDTO> getAllDanhMucTinhs() {
-        LOG.debug("REST request to get all DanhMucTinhs");
-        return danhMucTinhService.findAll();
+    public ResponseEntity<List<DanhMucTinhDTO>> getAllDanhMucTinhs(
+        DanhMucTinhCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        LOG.debug("REST request to get DanhMucTinhs by criteria: {}", criteria);
+
+        Page<DanhMucTinhDTO> page = danhMucTinhQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /danh-muc-tinhs/count} : count all the danhMucTinhs.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countDanhMucTinhs(DanhMucTinhCriteria criteria) {
+        LOG.debug("REST request to count DanhMucTinhs by criteria: {}", criteria);
+        return ResponseEntity.ok().body(danhMucTinhQueryService.countByCriteria(criteria));
     }
 
     /**

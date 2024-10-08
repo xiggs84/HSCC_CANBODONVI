@@ -9,4 +9,4 @@ import vn.vnpt.domain.DanhMucCapQuanLy;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface DanhMucCapQuanLyRepository extends JpaRepository<DanhMucCapQuanLy, Long> {}
+public interface DanhMucCapQuanLyRepository extends JpaRepository<DanhMucCapQuanLy, Long>, JpaSpecificationExecutor<DanhMucCapQuanLy> {}

@@ -8,12 +8,19 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 import vn.vnpt.repository.NoiCapGtttRepository;
+import vn.vnpt.service.NoiCapGtttQueryService;
 import vn.vnpt.service.NoiCapGtttService;
+import vn.vnpt.service.criteria.NoiCapGtttCriteria;
 import vn.vnpt.service.dto.NoiCapGtttDTO;
 import vn.vnpt.web.rest.errors.BadRequestAlertException;
 
@@ -35,9 +42,16 @@ public class NoiCapGtttResource {
 
     private final NoiCapGtttRepository noiCapGtttRepository;
 
-    public NoiCapGtttResource(NoiCapGtttService noiCapGtttService, NoiCapGtttRepository noiCapGtttRepository) {
+    private final NoiCapGtttQueryService noiCapGtttQueryService;
+
+    public NoiCapGtttResource(
+        NoiCapGtttService noiCapGtttService,
+        NoiCapGtttRepository noiCapGtttRepository,
+        NoiCapGtttQueryService noiCapGtttQueryService
+    ) {
         this.noiCapGtttService = noiCapGtttService;
         this.noiCapGtttRepository = noiCapGtttRepository;
+        this.noiCapGtttQueryService = noiCapGtttQueryService;
     }
 
     /**
@@ -131,12 +145,32 @@ public class NoiCapGtttResource {
     /**
      * {@code GET  /noi-cap-gttts} : get all the noiCapGttts.
      *
+     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of noiCapGttts in body.
      */
     @GetMapping("")
-    public List<NoiCapGtttDTO> getAllNoiCapGttts() {
-        LOG.debug("REST request to get all NoiCapGttts");
-        return noiCapGtttService.findAll();
+    public ResponseEntity<List<NoiCapGtttDTO>> getAllNoiCapGttts(
+        NoiCapGtttCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        LOG.debug("REST request to get NoiCapGttts by criteria: {}", criteria);
+
+        Page<NoiCapGtttDTO> page = noiCapGtttQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /noi-cap-gttts/count} : count all the noiCapGttts.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countNoiCapGttts(NoiCapGtttCriteria criteria) {
+        LOG.debug("REST request to count NoiCapGttts by criteria: {}", criteria);
+        return ResponseEntity.ok().body(noiCapGtttQueryService.countByCriteria(criteria));
     }
 
     /**

@@ -8,12 +8,19 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 import vn.vnpt.repository.DanhMucHuyenRepository;
+import vn.vnpt.service.DanhMucHuyenQueryService;
 import vn.vnpt.service.DanhMucHuyenService;
+import vn.vnpt.service.criteria.DanhMucHuyenCriteria;
 import vn.vnpt.service.dto.DanhMucHuyenDTO;
 import vn.vnpt.web.rest.errors.BadRequestAlertException;
 
@@ -35,9 +42,16 @@ public class DanhMucHuyenResource {
 
     private final DanhMucHuyenRepository danhMucHuyenRepository;
 
-    public DanhMucHuyenResource(DanhMucHuyenService danhMucHuyenService, DanhMucHuyenRepository danhMucHuyenRepository) {
+    private final DanhMucHuyenQueryService danhMucHuyenQueryService;
+
+    public DanhMucHuyenResource(
+        DanhMucHuyenService danhMucHuyenService,
+        DanhMucHuyenRepository danhMucHuyenRepository,
+        DanhMucHuyenQueryService danhMucHuyenQueryService
+    ) {
         this.danhMucHuyenService = danhMucHuyenService;
         this.danhMucHuyenRepository = danhMucHuyenRepository;
+        this.danhMucHuyenQueryService = danhMucHuyenQueryService;
     }
 
     /**
@@ -131,12 +145,32 @@ public class DanhMucHuyenResource {
     /**
      * {@code GET  /danh-muc-huyens} : get all the danhMucHuyens.
      *
+     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of danhMucHuyens in body.
      */
     @GetMapping("")
-    public List<DanhMucHuyenDTO> getAllDanhMucHuyens() {
-        LOG.debug("REST request to get all DanhMucHuyens");
-        return danhMucHuyenService.findAll();
+    public ResponseEntity<List<DanhMucHuyenDTO>> getAllDanhMucHuyens(
+        DanhMucHuyenCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        LOG.debug("REST request to get DanhMucHuyens by criteria: {}", criteria);
+
+        Page<DanhMucHuyenDTO> page = danhMucHuyenQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /danh-muc-huyens/count} : count all the danhMucHuyens.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countDanhMucHuyens(DanhMucHuyenCriteria criteria) {
+        LOG.debug("REST request to count DanhMucHuyens by criteria: {}", criteria);
+        return ResponseEntity.ok().body(danhMucHuyenQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -163,10 +197,5 @@ public class DanhMucHuyenResource {
         LOG.debug("REST request to delete DanhMucHuyen : {}", id);
         danhMucHuyenService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id)).build();
-    }
-
-    @GetMapping("/by-ma-tinh/{maTinh}")
-    public List<DanhMucHuyenDTO> getQuanHuyenByTinh(@PathVariable String maTinh) {
-        return danhMucHuyenService.findByMaTinh(maTinh);
     }
 }

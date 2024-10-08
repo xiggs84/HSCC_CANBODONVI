@@ -39,6 +39,7 @@ class NoiCapGtttResourceIT {
 
     private static final Long DEFAULT_TRANG_THAI = 1L;
     private static final Long UPDATED_TRANG_THAI = 2L;
+    private static final Long SMALLER_TRANG_THAI = 1L - 1L;
 
     private static final String ENTITY_API_URL = "/api/noi-cap-gttts";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{idNoiCap}";
@@ -170,6 +171,188 @@ class NoiCapGtttResourceIT {
             .andExpect(jsonPath("$.idNoiCap").value(noiCapGttt.getIdNoiCap().intValue()))
             .andExpect(jsonPath("$.dienGiai").value(DEFAULT_DIEN_GIAI))
             .andExpect(jsonPath("$.trangThai").value(DEFAULT_TRANG_THAI.intValue()));
+    }
+
+    @Test
+    @Transactional
+    void getNoiCapGtttsByIdFiltering() throws Exception {
+        // Initialize the database
+        insertedNoiCapGttt = noiCapGtttRepository.saveAndFlush(noiCapGttt);
+
+        Long id = noiCapGttt.getIdNoiCap();
+
+        defaultNoiCapGtttFiltering("idNoiCap.equals=" + id, "idNoiCap.notEquals=" + id);
+
+        defaultNoiCapGtttFiltering("idNoiCap.greaterThanOrEqual=" + id, "idNoiCap.greaterThan=" + id);
+
+        defaultNoiCapGtttFiltering("idNoiCap.lessThanOrEqual=" + id, "idNoiCap.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllNoiCapGtttsByDienGiaiIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedNoiCapGttt = noiCapGtttRepository.saveAndFlush(noiCapGttt);
+
+        // Get all the noiCapGtttList where dienGiai equals to
+        defaultNoiCapGtttFiltering("dienGiai.equals=" + DEFAULT_DIEN_GIAI, "dienGiai.equals=" + UPDATED_DIEN_GIAI);
+    }
+
+    @Test
+    @Transactional
+    void getAllNoiCapGtttsByDienGiaiIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedNoiCapGttt = noiCapGtttRepository.saveAndFlush(noiCapGttt);
+
+        // Get all the noiCapGtttList where dienGiai in
+        defaultNoiCapGtttFiltering("dienGiai.in=" + DEFAULT_DIEN_GIAI + "," + UPDATED_DIEN_GIAI, "dienGiai.in=" + UPDATED_DIEN_GIAI);
+    }
+
+    @Test
+    @Transactional
+    void getAllNoiCapGtttsByDienGiaiIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedNoiCapGttt = noiCapGtttRepository.saveAndFlush(noiCapGttt);
+
+        // Get all the noiCapGtttList where dienGiai is not null
+        defaultNoiCapGtttFiltering("dienGiai.specified=true", "dienGiai.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllNoiCapGtttsByDienGiaiContainsSomething() throws Exception {
+        // Initialize the database
+        insertedNoiCapGttt = noiCapGtttRepository.saveAndFlush(noiCapGttt);
+
+        // Get all the noiCapGtttList where dienGiai contains
+        defaultNoiCapGtttFiltering("dienGiai.contains=" + DEFAULT_DIEN_GIAI, "dienGiai.contains=" + UPDATED_DIEN_GIAI);
+    }
+
+    @Test
+    @Transactional
+    void getAllNoiCapGtttsByDienGiaiNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedNoiCapGttt = noiCapGtttRepository.saveAndFlush(noiCapGttt);
+
+        // Get all the noiCapGtttList where dienGiai does not contain
+        defaultNoiCapGtttFiltering("dienGiai.doesNotContain=" + UPDATED_DIEN_GIAI, "dienGiai.doesNotContain=" + DEFAULT_DIEN_GIAI);
+    }
+
+    @Test
+    @Transactional
+    void getAllNoiCapGtttsByTrangThaiIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedNoiCapGttt = noiCapGtttRepository.saveAndFlush(noiCapGttt);
+
+        // Get all the noiCapGtttList where trangThai equals to
+        defaultNoiCapGtttFiltering("trangThai.equals=" + DEFAULT_TRANG_THAI, "trangThai.equals=" + UPDATED_TRANG_THAI);
+    }
+
+    @Test
+    @Transactional
+    void getAllNoiCapGtttsByTrangThaiIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedNoiCapGttt = noiCapGtttRepository.saveAndFlush(noiCapGttt);
+
+        // Get all the noiCapGtttList where trangThai in
+        defaultNoiCapGtttFiltering("trangThai.in=" + DEFAULT_TRANG_THAI + "," + UPDATED_TRANG_THAI, "trangThai.in=" + UPDATED_TRANG_THAI);
+    }
+
+    @Test
+    @Transactional
+    void getAllNoiCapGtttsByTrangThaiIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedNoiCapGttt = noiCapGtttRepository.saveAndFlush(noiCapGttt);
+
+        // Get all the noiCapGtttList where trangThai is not null
+        defaultNoiCapGtttFiltering("trangThai.specified=true", "trangThai.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllNoiCapGtttsByTrangThaiIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedNoiCapGttt = noiCapGtttRepository.saveAndFlush(noiCapGttt);
+
+        // Get all the noiCapGtttList where trangThai is greater than or equal to
+        defaultNoiCapGtttFiltering(
+            "trangThai.greaterThanOrEqual=" + DEFAULT_TRANG_THAI,
+            "trangThai.greaterThanOrEqual=" + UPDATED_TRANG_THAI
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllNoiCapGtttsByTrangThaiIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedNoiCapGttt = noiCapGtttRepository.saveAndFlush(noiCapGttt);
+
+        // Get all the noiCapGtttList where trangThai is less than or equal to
+        defaultNoiCapGtttFiltering("trangThai.lessThanOrEqual=" + DEFAULT_TRANG_THAI, "trangThai.lessThanOrEqual=" + SMALLER_TRANG_THAI);
+    }
+
+    @Test
+    @Transactional
+    void getAllNoiCapGtttsByTrangThaiIsLessThanSomething() throws Exception {
+        // Initialize the database
+        insertedNoiCapGttt = noiCapGtttRepository.saveAndFlush(noiCapGttt);
+
+        // Get all the noiCapGtttList where trangThai is less than
+        defaultNoiCapGtttFiltering("trangThai.lessThan=" + UPDATED_TRANG_THAI, "trangThai.lessThan=" + DEFAULT_TRANG_THAI);
+    }
+
+    @Test
+    @Transactional
+    void getAllNoiCapGtttsByTrangThaiIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        insertedNoiCapGttt = noiCapGtttRepository.saveAndFlush(noiCapGttt);
+
+        // Get all the noiCapGtttList where trangThai is greater than
+        defaultNoiCapGtttFiltering("trangThai.greaterThan=" + SMALLER_TRANG_THAI, "trangThai.greaterThan=" + DEFAULT_TRANG_THAI);
+    }
+
+    private void defaultNoiCapGtttFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
+        defaultNoiCapGtttShouldBeFound(shouldBeFound);
+        defaultNoiCapGtttShouldNotBeFound(shouldNotBeFound);
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultNoiCapGtttShouldBeFound(String filter) throws Exception {
+        restNoiCapGtttMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=idNoiCap,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].idNoiCap").value(hasItem(noiCapGttt.getIdNoiCap().intValue())))
+            .andExpect(jsonPath("$.[*].dienGiai").value(hasItem(DEFAULT_DIEN_GIAI)))
+            .andExpect(jsonPath("$.[*].trangThai").value(hasItem(DEFAULT_TRANG_THAI.intValue())));
+
+        // Check, that the count call also returns 1
+        restNoiCapGtttMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=idNoiCap,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultNoiCapGtttShouldNotBeFound(String filter) throws Exception {
+        restNoiCapGtttMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=idNoiCap,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restNoiCapGtttMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=idNoiCap,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
     }
 
     @Test

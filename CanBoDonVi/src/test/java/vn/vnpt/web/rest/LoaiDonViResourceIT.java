@@ -167,6 +167,110 @@ class LoaiDonViResourceIT {
 
     @Test
     @Transactional
+    void getLoaiDonVisByIdFiltering() throws Exception {
+        // Initialize the database
+        insertedLoaiDonVi = loaiDonViRepository.saveAndFlush(loaiDonVi);
+
+        String id = loaiDonVi.getIdLoaiDv();
+
+        defaultLoaiDonViFiltering("idLoaiDv.equals=" + id, "idLoaiDv.notEquals=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllLoaiDonVisByTenLoaiDvIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedLoaiDonVi = loaiDonViRepository.saveAndFlush(loaiDonVi);
+
+        // Get all the loaiDonViList where tenLoaiDv equals to
+        defaultLoaiDonViFiltering("tenLoaiDv.equals=" + DEFAULT_TEN_LOAI_DV, "tenLoaiDv.equals=" + UPDATED_TEN_LOAI_DV);
+    }
+
+    @Test
+    @Transactional
+    void getAllLoaiDonVisByTenLoaiDvIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedLoaiDonVi = loaiDonViRepository.saveAndFlush(loaiDonVi);
+
+        // Get all the loaiDonViList where tenLoaiDv in
+        defaultLoaiDonViFiltering("tenLoaiDv.in=" + DEFAULT_TEN_LOAI_DV + "," + UPDATED_TEN_LOAI_DV, "tenLoaiDv.in=" + UPDATED_TEN_LOAI_DV);
+    }
+
+    @Test
+    @Transactional
+    void getAllLoaiDonVisByTenLoaiDvIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedLoaiDonVi = loaiDonViRepository.saveAndFlush(loaiDonVi);
+
+        // Get all the loaiDonViList where tenLoaiDv is not null
+        defaultLoaiDonViFiltering("tenLoaiDv.specified=true", "tenLoaiDv.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllLoaiDonVisByTenLoaiDvContainsSomething() throws Exception {
+        // Initialize the database
+        insertedLoaiDonVi = loaiDonViRepository.saveAndFlush(loaiDonVi);
+
+        // Get all the loaiDonViList where tenLoaiDv contains
+        defaultLoaiDonViFiltering("tenLoaiDv.contains=" + DEFAULT_TEN_LOAI_DV, "tenLoaiDv.contains=" + UPDATED_TEN_LOAI_DV);
+    }
+
+    @Test
+    @Transactional
+    void getAllLoaiDonVisByTenLoaiDvNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedLoaiDonVi = loaiDonViRepository.saveAndFlush(loaiDonVi);
+
+        // Get all the loaiDonViList where tenLoaiDv does not contain
+        defaultLoaiDonViFiltering("tenLoaiDv.doesNotContain=" + UPDATED_TEN_LOAI_DV, "tenLoaiDv.doesNotContain=" + DEFAULT_TEN_LOAI_DV);
+    }
+
+    private void defaultLoaiDonViFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
+        defaultLoaiDonViShouldBeFound(shouldBeFound);
+        defaultLoaiDonViShouldNotBeFound(shouldNotBeFound);
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultLoaiDonViShouldBeFound(String filter) throws Exception {
+        restLoaiDonViMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=idLoaiDv,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].idLoaiDv").value(hasItem(loaiDonVi.getIdLoaiDv())))
+            .andExpect(jsonPath("$.[*].tenLoaiDv").value(hasItem(DEFAULT_TEN_LOAI_DV)));
+
+        // Check, that the count call also returns 1
+        restLoaiDonViMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=idLoaiDv,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultLoaiDonViShouldNotBeFound(String filter) throws Exception {
+        restLoaiDonViMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=idLoaiDv,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restLoaiDonViMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=idLoaiDv,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
+    }
+
+    @Test
+    @Transactional
     void getNonExistingLoaiDonVi() throws Exception {
         // Get the loaiDonVi
         restLoaiDonViMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());

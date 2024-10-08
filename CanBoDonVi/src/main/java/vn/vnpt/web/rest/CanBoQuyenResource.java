@@ -7,12 +7,19 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 import vn.vnpt.repository.CanBoQuyenRepository;
+import vn.vnpt.service.CanBoQuyenQueryService;
 import vn.vnpt.service.CanBoQuyenService;
+import vn.vnpt.service.criteria.CanBoQuyenCriteria;
 import vn.vnpt.service.dto.CanBoQuyenDTO;
 import vn.vnpt.web.rest.errors.BadRequestAlertException;
 
@@ -34,9 +41,16 @@ public class CanBoQuyenResource {
 
     private final CanBoQuyenRepository canBoQuyenRepository;
 
-    public CanBoQuyenResource(CanBoQuyenService canBoQuyenService, CanBoQuyenRepository canBoQuyenRepository) {
+    private final CanBoQuyenQueryService canBoQuyenQueryService;
+
+    public CanBoQuyenResource(
+        CanBoQuyenService canBoQuyenService,
+        CanBoQuyenRepository canBoQuyenRepository,
+        CanBoQuyenQueryService canBoQuyenQueryService
+    ) {
         this.canBoQuyenService = canBoQuyenService;
         this.canBoQuyenRepository = canBoQuyenRepository;
+        this.canBoQuyenQueryService = canBoQuyenQueryService;
     }
 
     /**
@@ -61,12 +75,32 @@ public class CanBoQuyenResource {
     /**
      * {@code GET  /can-bo-quyens} : get all the canBoQuyens.
      *
+     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of canBoQuyens in body.
      */
     @GetMapping("")
-    public List<CanBoQuyenDTO> getAllCanBoQuyens() {
-        LOG.debug("REST request to get all CanBoQuyens");
-        return canBoQuyenService.findAll();
+    public ResponseEntity<List<CanBoQuyenDTO>> getAllCanBoQuyens(
+        CanBoQuyenCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        LOG.debug("REST request to get CanBoQuyens by criteria: {}", criteria);
+
+        Page<CanBoQuyenDTO> page = canBoQuyenQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /can-bo-quyens/count} : count all the canBoQuyens.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countCanBoQuyens(CanBoQuyenCriteria criteria) {
+        LOG.debug("REST request to count CanBoQuyens by criteria: {}", criteria);
+        return ResponseEntity.ok().body(canBoQuyenQueryService.countByCriteria(criteria));
     }
 
     /**

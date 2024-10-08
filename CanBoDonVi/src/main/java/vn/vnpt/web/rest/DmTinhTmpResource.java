@@ -8,12 +8,19 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 import vn.vnpt.repository.DmTinhTmpRepository;
+import vn.vnpt.service.DmTinhTmpQueryService;
 import vn.vnpt.service.DmTinhTmpService;
+import vn.vnpt.service.criteria.DmTinhTmpCriteria;
 import vn.vnpt.service.dto.DmTinhTmpDTO;
 import vn.vnpt.web.rest.errors.BadRequestAlertException;
 
@@ -35,9 +42,16 @@ public class DmTinhTmpResource {
 
     private final DmTinhTmpRepository dmTinhTmpRepository;
 
-    public DmTinhTmpResource(DmTinhTmpService dmTinhTmpService, DmTinhTmpRepository dmTinhTmpRepository) {
+    private final DmTinhTmpQueryService dmTinhTmpQueryService;
+
+    public DmTinhTmpResource(
+        DmTinhTmpService dmTinhTmpService,
+        DmTinhTmpRepository dmTinhTmpRepository,
+        DmTinhTmpQueryService dmTinhTmpQueryService
+    ) {
         this.dmTinhTmpService = dmTinhTmpService;
         this.dmTinhTmpRepository = dmTinhTmpRepository;
+        this.dmTinhTmpQueryService = dmTinhTmpQueryService;
     }
 
     /**
@@ -131,12 +145,32 @@ public class DmTinhTmpResource {
     /**
      * {@code GET  /dm-tinh-tmps} : get all the dmTinhTmps.
      *
+     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of dmTinhTmps in body.
      */
     @GetMapping("")
-    public List<DmTinhTmpDTO> getAllDmTinhTmps() {
-        LOG.debug("REST request to get all DmTinhTmps");
-        return dmTinhTmpService.findAll();
+    public ResponseEntity<List<DmTinhTmpDTO>> getAllDmTinhTmps(
+        DmTinhTmpCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        LOG.debug("REST request to get DmTinhTmps by criteria: {}", criteria);
+
+        Page<DmTinhTmpDTO> page = dmTinhTmpQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /dm-tinh-tmps/count} : count all the dmTinhTmps.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countDmTinhTmps(DmTinhTmpCriteria criteria) {
+        LOG.debug("REST request to count DmTinhTmps by criteria: {}", criteria);
+        return ResponseEntity.ok().body(dmTinhTmpQueryService.countByCriteria(criteria));
     }
 
     /**

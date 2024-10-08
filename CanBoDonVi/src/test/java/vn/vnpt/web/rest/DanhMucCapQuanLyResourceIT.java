@@ -169,6 +169,114 @@ class DanhMucCapQuanLyResourceIT {
 
     @Test
     @Transactional
+    void getDanhMucCapQuanLiesByIdFiltering() throws Exception {
+        // Initialize the database
+        insertedDanhMucCapQuanLy = danhMucCapQuanLyRepository.saveAndFlush(danhMucCapQuanLy);
+
+        Long id = danhMucCapQuanLy.getIdCapQl();
+
+        defaultDanhMucCapQuanLyFiltering("idCapQl.equals=" + id, "idCapQl.notEquals=" + id);
+
+        defaultDanhMucCapQuanLyFiltering("idCapQl.greaterThanOrEqual=" + id, "idCapQl.greaterThan=" + id);
+
+        defaultDanhMucCapQuanLyFiltering("idCapQl.lessThanOrEqual=" + id, "idCapQl.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucCapQuanLiesByDienGiaiIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucCapQuanLy = danhMucCapQuanLyRepository.saveAndFlush(danhMucCapQuanLy);
+
+        // Get all the danhMucCapQuanLyList where dienGiai equals to
+        defaultDanhMucCapQuanLyFiltering("dienGiai.equals=" + DEFAULT_DIEN_GIAI, "dienGiai.equals=" + UPDATED_DIEN_GIAI);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucCapQuanLiesByDienGiaiIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedDanhMucCapQuanLy = danhMucCapQuanLyRepository.saveAndFlush(danhMucCapQuanLy);
+
+        // Get all the danhMucCapQuanLyList where dienGiai in
+        defaultDanhMucCapQuanLyFiltering("dienGiai.in=" + DEFAULT_DIEN_GIAI + "," + UPDATED_DIEN_GIAI, "dienGiai.in=" + UPDATED_DIEN_GIAI);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucCapQuanLiesByDienGiaiIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedDanhMucCapQuanLy = danhMucCapQuanLyRepository.saveAndFlush(danhMucCapQuanLy);
+
+        // Get all the danhMucCapQuanLyList where dienGiai is not null
+        defaultDanhMucCapQuanLyFiltering("dienGiai.specified=true", "dienGiai.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucCapQuanLiesByDienGiaiContainsSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucCapQuanLy = danhMucCapQuanLyRepository.saveAndFlush(danhMucCapQuanLy);
+
+        // Get all the danhMucCapQuanLyList where dienGiai contains
+        defaultDanhMucCapQuanLyFiltering("dienGiai.contains=" + DEFAULT_DIEN_GIAI, "dienGiai.contains=" + UPDATED_DIEN_GIAI);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucCapQuanLiesByDienGiaiNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucCapQuanLy = danhMucCapQuanLyRepository.saveAndFlush(danhMucCapQuanLy);
+
+        // Get all the danhMucCapQuanLyList where dienGiai does not contain
+        defaultDanhMucCapQuanLyFiltering("dienGiai.doesNotContain=" + UPDATED_DIEN_GIAI, "dienGiai.doesNotContain=" + DEFAULT_DIEN_GIAI);
+    }
+
+    private void defaultDanhMucCapQuanLyFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
+        defaultDanhMucCapQuanLyShouldBeFound(shouldBeFound);
+        defaultDanhMucCapQuanLyShouldNotBeFound(shouldNotBeFound);
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultDanhMucCapQuanLyShouldBeFound(String filter) throws Exception {
+        restDanhMucCapQuanLyMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=idCapQl,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].idCapQl").value(hasItem(danhMucCapQuanLy.getIdCapQl().intValue())))
+            .andExpect(jsonPath("$.[*].dienGiai").value(hasItem(DEFAULT_DIEN_GIAI)));
+
+        // Check, that the count call also returns 1
+        restDanhMucCapQuanLyMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=idCapQl,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultDanhMucCapQuanLyShouldNotBeFound(String filter) throws Exception {
+        restDanhMucCapQuanLyMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=idCapQl,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restDanhMucCapQuanLyMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=idCapQl,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
+    }
+
+    @Test
+    @Transactional
     void getNonExistingDanhMucCapQuanLy() throws Exception {
         // Get the danhMucCapQuanLy
         restDanhMucCapQuanLyMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());

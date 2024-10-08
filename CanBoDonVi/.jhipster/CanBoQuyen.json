@@ -7,9 +7,11 @@
   "databaseType": "sql",
   "dto": "mapstruct",
   "fields": [],
+  "jpaMetamodelFiltering": true,
   "microserviceName": "CanBoDonVi",
   "name": "CanBoQuyen",
+  "pagination": "pagination",
   "relationships": [],
   "searchEngine": "no",
-  "service": "serviceClass"
+  "service": "serviceImpl"
 }

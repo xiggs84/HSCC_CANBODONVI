@@ -42,6 +42,7 @@ class DanhMucDauSoCmndResourceIT {
 
     private static final Long DEFAULT_ID_LOAI = 1L;
     private static final Long UPDATED_ID_LOAI = 2L;
+    private static final Long SMALLER_ID_LOAI = 1L - 1L;
 
     private static final String ENTITY_API_URL = "/api/danh-muc-dau-so-cmnds";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{idDauSo}";
@@ -175,6 +176,242 @@ class DanhMucDauSoCmndResourceIT {
             .andExpect(jsonPath("$.dauSo").value(DEFAULT_DAU_SO))
             .andExpect(jsonPath("$.tinhThanh").value(DEFAULT_TINH_THANH))
             .andExpect(jsonPath("$.idLoai").value(DEFAULT_ID_LOAI.intValue()));
+    }
+
+    @Test
+    @Transactional
+    void getDanhMucDauSoCmndsByIdFiltering() throws Exception {
+        // Initialize the database
+        insertedDanhMucDauSoCmnd = danhMucDauSoCmndRepository.saveAndFlush(danhMucDauSoCmnd);
+
+        Long id = danhMucDauSoCmnd.getIdDauSo();
+
+        defaultDanhMucDauSoCmndFiltering("idDauSo.equals=" + id, "idDauSo.notEquals=" + id);
+
+        defaultDanhMucDauSoCmndFiltering("idDauSo.greaterThanOrEqual=" + id, "idDauSo.greaterThan=" + id);
+
+        defaultDanhMucDauSoCmndFiltering("idDauSo.lessThanOrEqual=" + id, "idDauSo.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucDauSoCmndsByDauSoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucDauSoCmnd = danhMucDauSoCmndRepository.saveAndFlush(danhMucDauSoCmnd);
+
+        // Get all the danhMucDauSoCmndList where dauSo equals to
+        defaultDanhMucDauSoCmndFiltering("dauSo.equals=" + DEFAULT_DAU_SO, "dauSo.equals=" + UPDATED_DAU_SO);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucDauSoCmndsByDauSoIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedDanhMucDauSoCmnd = danhMucDauSoCmndRepository.saveAndFlush(danhMucDauSoCmnd);
+
+        // Get all the danhMucDauSoCmndList where dauSo in
+        defaultDanhMucDauSoCmndFiltering("dauSo.in=" + DEFAULT_DAU_SO + "," + UPDATED_DAU_SO, "dauSo.in=" + UPDATED_DAU_SO);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucDauSoCmndsByDauSoIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedDanhMucDauSoCmnd = danhMucDauSoCmndRepository.saveAndFlush(danhMucDauSoCmnd);
+
+        // Get all the danhMucDauSoCmndList where dauSo is not null
+        defaultDanhMucDauSoCmndFiltering("dauSo.specified=true", "dauSo.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucDauSoCmndsByDauSoContainsSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucDauSoCmnd = danhMucDauSoCmndRepository.saveAndFlush(danhMucDauSoCmnd);
+
+        // Get all the danhMucDauSoCmndList where dauSo contains
+        defaultDanhMucDauSoCmndFiltering("dauSo.contains=" + DEFAULT_DAU_SO, "dauSo.contains=" + UPDATED_DAU_SO);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucDauSoCmndsByDauSoNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucDauSoCmnd = danhMucDauSoCmndRepository.saveAndFlush(danhMucDauSoCmnd);
+
+        // Get all the danhMucDauSoCmndList where dauSo does not contain
+        defaultDanhMucDauSoCmndFiltering("dauSo.doesNotContain=" + UPDATED_DAU_SO, "dauSo.doesNotContain=" + DEFAULT_DAU_SO);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucDauSoCmndsByTinhThanhIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucDauSoCmnd = danhMucDauSoCmndRepository.saveAndFlush(danhMucDauSoCmnd);
+
+        // Get all the danhMucDauSoCmndList where tinhThanh equals to
+        defaultDanhMucDauSoCmndFiltering("tinhThanh.equals=" + DEFAULT_TINH_THANH, "tinhThanh.equals=" + UPDATED_TINH_THANH);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucDauSoCmndsByTinhThanhIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedDanhMucDauSoCmnd = danhMucDauSoCmndRepository.saveAndFlush(danhMucDauSoCmnd);
+
+        // Get all the danhMucDauSoCmndList where tinhThanh in
+        defaultDanhMucDauSoCmndFiltering(
+            "tinhThanh.in=" + DEFAULT_TINH_THANH + "," + UPDATED_TINH_THANH,
+            "tinhThanh.in=" + UPDATED_TINH_THANH
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucDauSoCmndsByTinhThanhIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedDanhMucDauSoCmnd = danhMucDauSoCmndRepository.saveAndFlush(danhMucDauSoCmnd);
+
+        // Get all the danhMucDauSoCmndList where tinhThanh is not null
+        defaultDanhMucDauSoCmndFiltering("tinhThanh.specified=true", "tinhThanh.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucDauSoCmndsByTinhThanhContainsSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucDauSoCmnd = danhMucDauSoCmndRepository.saveAndFlush(danhMucDauSoCmnd);
+
+        // Get all the danhMucDauSoCmndList where tinhThanh contains
+        defaultDanhMucDauSoCmndFiltering("tinhThanh.contains=" + DEFAULT_TINH_THANH, "tinhThanh.contains=" + UPDATED_TINH_THANH);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucDauSoCmndsByTinhThanhNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucDauSoCmnd = danhMucDauSoCmndRepository.saveAndFlush(danhMucDauSoCmnd);
+
+        // Get all the danhMucDauSoCmndList where tinhThanh does not contain
+        defaultDanhMucDauSoCmndFiltering(
+            "tinhThanh.doesNotContain=" + UPDATED_TINH_THANH,
+            "tinhThanh.doesNotContain=" + DEFAULT_TINH_THANH
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucDauSoCmndsByIdLoaiIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucDauSoCmnd = danhMucDauSoCmndRepository.saveAndFlush(danhMucDauSoCmnd);
+
+        // Get all the danhMucDauSoCmndList where idLoai equals to
+        defaultDanhMucDauSoCmndFiltering("idLoai.equals=" + DEFAULT_ID_LOAI, "idLoai.equals=" + UPDATED_ID_LOAI);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucDauSoCmndsByIdLoaiIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedDanhMucDauSoCmnd = danhMucDauSoCmndRepository.saveAndFlush(danhMucDauSoCmnd);
+
+        // Get all the danhMucDauSoCmndList where idLoai in
+        defaultDanhMucDauSoCmndFiltering("idLoai.in=" + DEFAULT_ID_LOAI + "," + UPDATED_ID_LOAI, "idLoai.in=" + UPDATED_ID_LOAI);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucDauSoCmndsByIdLoaiIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedDanhMucDauSoCmnd = danhMucDauSoCmndRepository.saveAndFlush(danhMucDauSoCmnd);
+
+        // Get all the danhMucDauSoCmndList where idLoai is not null
+        defaultDanhMucDauSoCmndFiltering("idLoai.specified=true", "idLoai.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucDauSoCmndsByIdLoaiIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucDauSoCmnd = danhMucDauSoCmndRepository.saveAndFlush(danhMucDauSoCmnd);
+
+        // Get all the danhMucDauSoCmndList where idLoai is greater than or equal to
+        defaultDanhMucDauSoCmndFiltering("idLoai.greaterThanOrEqual=" + DEFAULT_ID_LOAI, "idLoai.greaterThanOrEqual=" + UPDATED_ID_LOAI);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucDauSoCmndsByIdLoaiIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucDauSoCmnd = danhMucDauSoCmndRepository.saveAndFlush(danhMucDauSoCmnd);
+
+        // Get all the danhMucDauSoCmndList where idLoai is less than or equal to
+        defaultDanhMucDauSoCmndFiltering("idLoai.lessThanOrEqual=" + DEFAULT_ID_LOAI, "idLoai.lessThanOrEqual=" + SMALLER_ID_LOAI);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucDauSoCmndsByIdLoaiIsLessThanSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucDauSoCmnd = danhMucDauSoCmndRepository.saveAndFlush(danhMucDauSoCmnd);
+
+        // Get all the danhMucDauSoCmndList where idLoai is less than
+        defaultDanhMucDauSoCmndFiltering("idLoai.lessThan=" + UPDATED_ID_LOAI, "idLoai.lessThan=" + DEFAULT_ID_LOAI);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucDauSoCmndsByIdLoaiIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucDauSoCmnd = danhMucDauSoCmndRepository.saveAndFlush(danhMucDauSoCmnd);
+
+        // Get all the danhMucDauSoCmndList where idLoai is greater than
+        defaultDanhMucDauSoCmndFiltering("idLoai.greaterThan=" + SMALLER_ID_LOAI, "idLoai.greaterThan=" + DEFAULT_ID_LOAI);
+    }
+
+    private void defaultDanhMucDauSoCmndFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
+        defaultDanhMucDauSoCmndShouldBeFound(shouldBeFound);
+        defaultDanhMucDauSoCmndShouldNotBeFound(shouldNotBeFound);
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultDanhMucDauSoCmndShouldBeFound(String filter) throws Exception {
+        restDanhMucDauSoCmndMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=idDauSo,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].idDauSo").value(hasItem(danhMucDauSoCmnd.getIdDauSo().intValue())))
+            .andExpect(jsonPath("$.[*].dauSo").value(hasItem(DEFAULT_DAU_SO)))
+            .andExpect(jsonPath("$.[*].tinhThanh").value(hasItem(DEFAULT_TINH_THANH)))
+            .andExpect(jsonPath("$.[*].idLoai").value(hasItem(DEFAULT_ID_LOAI.intValue())));
+
+        // Check, that the count call also returns 1
+        restDanhMucDauSoCmndMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=idDauSo,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultDanhMucDauSoCmndShouldNotBeFound(String filter) throws Exception {
+        restDanhMucDauSoCmndMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=idDauSo,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restDanhMucDauSoCmndMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=idDauSo,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
     }
 
     @Test

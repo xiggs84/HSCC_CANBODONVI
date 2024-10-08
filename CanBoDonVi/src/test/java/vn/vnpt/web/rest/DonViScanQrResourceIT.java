@@ -38,9 +38,11 @@ class DonViScanQrResourceIT {
 
     private static final Long DEFAULT_ID_CONG_DAN = 1L;
     private static final Long UPDATED_ID_CONG_DAN = 2L;
+    private static final Long SMALLER_ID_CONG_DAN = 1L - 1L;
 
     private static final LocalDate DEFAULT_NGAY_THAO_TAC = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_NGAY_THAO_TAC = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_NGAY_THAO_TAC = LocalDate.ofEpochDay(-1L);
 
     private static final String ENTITY_API_URL = "/api/don-vi-scan-qrs";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{idLuotQuet}";
@@ -172,6 +174,220 @@ class DonViScanQrResourceIT {
             .andExpect(jsonPath("$.idLuotQuet").value(donViScanQr.getIdLuotQuet().intValue()))
             .andExpect(jsonPath("$.idCongDan").value(DEFAULT_ID_CONG_DAN.intValue()))
             .andExpect(jsonPath("$.ngayThaoTac").value(DEFAULT_NGAY_THAO_TAC.toString()));
+    }
+
+    @Test
+    @Transactional
+    void getDonViScanQrsByIdFiltering() throws Exception {
+        // Initialize the database
+        insertedDonViScanQr = donViScanQrRepository.saveAndFlush(donViScanQr);
+
+        Long id = donViScanQr.getIdLuotQuet();
+
+        defaultDonViScanQrFiltering("idLuotQuet.equals=" + id, "idLuotQuet.notEquals=" + id);
+
+        defaultDonViScanQrFiltering("idLuotQuet.greaterThanOrEqual=" + id, "idLuotQuet.greaterThan=" + id);
+
+        defaultDonViScanQrFiltering("idLuotQuet.lessThanOrEqual=" + id, "idLuotQuet.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllDonViScanQrsByIdCongDanIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedDonViScanQr = donViScanQrRepository.saveAndFlush(donViScanQr);
+
+        // Get all the donViScanQrList where idCongDan equals to
+        defaultDonViScanQrFiltering("idCongDan.equals=" + DEFAULT_ID_CONG_DAN, "idCongDan.equals=" + UPDATED_ID_CONG_DAN);
+    }
+
+    @Test
+    @Transactional
+    void getAllDonViScanQrsByIdCongDanIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedDonViScanQr = donViScanQrRepository.saveAndFlush(donViScanQr);
+
+        // Get all the donViScanQrList where idCongDan in
+        defaultDonViScanQrFiltering(
+            "idCongDan.in=" + DEFAULT_ID_CONG_DAN + "," + UPDATED_ID_CONG_DAN,
+            "idCongDan.in=" + UPDATED_ID_CONG_DAN
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllDonViScanQrsByIdCongDanIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedDonViScanQr = donViScanQrRepository.saveAndFlush(donViScanQr);
+
+        // Get all the donViScanQrList where idCongDan is not null
+        defaultDonViScanQrFiltering("idCongDan.specified=true", "idCongDan.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDonViScanQrsByIdCongDanIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedDonViScanQr = donViScanQrRepository.saveAndFlush(donViScanQr);
+
+        // Get all the donViScanQrList where idCongDan is greater than or equal to
+        defaultDonViScanQrFiltering(
+            "idCongDan.greaterThanOrEqual=" + DEFAULT_ID_CONG_DAN,
+            "idCongDan.greaterThanOrEqual=" + UPDATED_ID_CONG_DAN
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllDonViScanQrsByIdCongDanIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedDonViScanQr = donViScanQrRepository.saveAndFlush(donViScanQr);
+
+        // Get all the donViScanQrList where idCongDan is less than or equal to
+        defaultDonViScanQrFiltering("idCongDan.lessThanOrEqual=" + DEFAULT_ID_CONG_DAN, "idCongDan.lessThanOrEqual=" + SMALLER_ID_CONG_DAN);
+    }
+
+    @Test
+    @Transactional
+    void getAllDonViScanQrsByIdCongDanIsLessThanSomething() throws Exception {
+        // Initialize the database
+        insertedDonViScanQr = donViScanQrRepository.saveAndFlush(donViScanQr);
+
+        // Get all the donViScanQrList where idCongDan is less than
+        defaultDonViScanQrFiltering("idCongDan.lessThan=" + UPDATED_ID_CONG_DAN, "idCongDan.lessThan=" + DEFAULT_ID_CONG_DAN);
+    }
+
+    @Test
+    @Transactional
+    void getAllDonViScanQrsByIdCongDanIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        insertedDonViScanQr = donViScanQrRepository.saveAndFlush(donViScanQr);
+
+        // Get all the donViScanQrList where idCongDan is greater than
+        defaultDonViScanQrFiltering("idCongDan.greaterThan=" + SMALLER_ID_CONG_DAN, "idCongDan.greaterThan=" + DEFAULT_ID_CONG_DAN);
+    }
+
+    @Test
+    @Transactional
+    void getAllDonViScanQrsByNgayThaoTacIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedDonViScanQr = donViScanQrRepository.saveAndFlush(donViScanQr);
+
+        // Get all the donViScanQrList where ngayThaoTac equals to
+        defaultDonViScanQrFiltering("ngayThaoTac.equals=" + DEFAULT_NGAY_THAO_TAC, "ngayThaoTac.equals=" + UPDATED_NGAY_THAO_TAC);
+    }
+
+    @Test
+    @Transactional
+    void getAllDonViScanQrsByNgayThaoTacIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedDonViScanQr = donViScanQrRepository.saveAndFlush(donViScanQr);
+
+        // Get all the donViScanQrList where ngayThaoTac in
+        defaultDonViScanQrFiltering(
+            "ngayThaoTac.in=" + DEFAULT_NGAY_THAO_TAC + "," + UPDATED_NGAY_THAO_TAC,
+            "ngayThaoTac.in=" + UPDATED_NGAY_THAO_TAC
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllDonViScanQrsByNgayThaoTacIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedDonViScanQr = donViScanQrRepository.saveAndFlush(donViScanQr);
+
+        // Get all the donViScanQrList where ngayThaoTac is not null
+        defaultDonViScanQrFiltering("ngayThaoTac.specified=true", "ngayThaoTac.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDonViScanQrsByNgayThaoTacIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedDonViScanQr = donViScanQrRepository.saveAndFlush(donViScanQr);
+
+        // Get all the donViScanQrList where ngayThaoTac is greater than or equal to
+        defaultDonViScanQrFiltering(
+            "ngayThaoTac.greaterThanOrEqual=" + DEFAULT_NGAY_THAO_TAC,
+            "ngayThaoTac.greaterThanOrEqual=" + UPDATED_NGAY_THAO_TAC
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllDonViScanQrsByNgayThaoTacIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedDonViScanQr = donViScanQrRepository.saveAndFlush(donViScanQr);
+
+        // Get all the donViScanQrList where ngayThaoTac is less than or equal to
+        defaultDonViScanQrFiltering(
+            "ngayThaoTac.lessThanOrEqual=" + DEFAULT_NGAY_THAO_TAC,
+            "ngayThaoTac.lessThanOrEqual=" + SMALLER_NGAY_THAO_TAC
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllDonViScanQrsByNgayThaoTacIsLessThanSomething() throws Exception {
+        // Initialize the database
+        insertedDonViScanQr = donViScanQrRepository.saveAndFlush(donViScanQr);
+
+        // Get all the donViScanQrList where ngayThaoTac is less than
+        defaultDonViScanQrFiltering("ngayThaoTac.lessThan=" + UPDATED_NGAY_THAO_TAC, "ngayThaoTac.lessThan=" + DEFAULT_NGAY_THAO_TAC);
+    }
+
+    @Test
+    @Transactional
+    void getAllDonViScanQrsByNgayThaoTacIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        insertedDonViScanQr = donViScanQrRepository.saveAndFlush(donViScanQr);
+
+        // Get all the donViScanQrList where ngayThaoTac is greater than
+        defaultDonViScanQrFiltering("ngayThaoTac.greaterThan=" + SMALLER_NGAY_THAO_TAC, "ngayThaoTac.greaterThan=" + DEFAULT_NGAY_THAO_TAC);
+    }
+
+    private void defaultDonViScanQrFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
+        defaultDonViScanQrShouldBeFound(shouldBeFound);
+        defaultDonViScanQrShouldNotBeFound(shouldNotBeFound);
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultDonViScanQrShouldBeFound(String filter) throws Exception {
+        restDonViScanQrMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=idLuotQuet,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].idLuotQuet").value(hasItem(donViScanQr.getIdLuotQuet().intValue())))
+            .andExpect(jsonPath("$.[*].idCongDan").value(hasItem(DEFAULT_ID_CONG_DAN.intValue())))
+            .andExpect(jsonPath("$.[*].ngayThaoTac").value(hasItem(DEFAULT_NGAY_THAO_TAC.toString())));
+
+        // Check, that the count call also returns 1
+        restDonViScanQrMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=idLuotQuet,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultDonViScanQrShouldNotBeFound(String filter) throws Exception {
+        restDonViScanQrMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=idLuotQuet,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restDonViScanQrMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=idLuotQuet,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
     }
 
     @Test

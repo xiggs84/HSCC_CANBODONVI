@@ -167,6 +167,110 @@ class DanhMucTinhResourceIT {
 
     @Test
     @Transactional
+    void getDanhMucTinhsByIdFiltering() throws Exception {
+        // Initialize the database
+        insertedDanhMucTinh = danhMucTinhRepository.saveAndFlush(danhMucTinh);
+
+        String id = danhMucTinh.getMaTinh();
+
+        defaultDanhMucTinhFiltering("maTinh.equals=" + id, "maTinh.notEquals=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucTinhsByTenTinhIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucTinh = danhMucTinhRepository.saveAndFlush(danhMucTinh);
+
+        // Get all the danhMucTinhList where tenTinh equals to
+        defaultDanhMucTinhFiltering("tenTinh.equals=" + DEFAULT_TEN_TINH, "tenTinh.equals=" + UPDATED_TEN_TINH);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucTinhsByTenTinhIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedDanhMucTinh = danhMucTinhRepository.saveAndFlush(danhMucTinh);
+
+        // Get all the danhMucTinhList where tenTinh in
+        defaultDanhMucTinhFiltering("tenTinh.in=" + DEFAULT_TEN_TINH + "," + UPDATED_TEN_TINH, "tenTinh.in=" + UPDATED_TEN_TINH);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucTinhsByTenTinhIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedDanhMucTinh = danhMucTinhRepository.saveAndFlush(danhMucTinh);
+
+        // Get all the danhMucTinhList where tenTinh is not null
+        defaultDanhMucTinhFiltering("tenTinh.specified=true", "tenTinh.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucTinhsByTenTinhContainsSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucTinh = danhMucTinhRepository.saveAndFlush(danhMucTinh);
+
+        // Get all the danhMucTinhList where tenTinh contains
+        defaultDanhMucTinhFiltering("tenTinh.contains=" + DEFAULT_TEN_TINH, "tenTinh.contains=" + UPDATED_TEN_TINH);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucTinhsByTenTinhNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucTinh = danhMucTinhRepository.saveAndFlush(danhMucTinh);
+
+        // Get all the danhMucTinhList where tenTinh does not contain
+        defaultDanhMucTinhFiltering("tenTinh.doesNotContain=" + UPDATED_TEN_TINH, "tenTinh.doesNotContain=" + DEFAULT_TEN_TINH);
+    }
+
+    private void defaultDanhMucTinhFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
+        defaultDanhMucTinhShouldBeFound(shouldBeFound);
+        defaultDanhMucTinhShouldNotBeFound(shouldNotBeFound);
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultDanhMucTinhShouldBeFound(String filter) throws Exception {
+        restDanhMucTinhMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=maTinh,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].maTinh").value(hasItem(danhMucTinh.getMaTinh())))
+            .andExpect(jsonPath("$.[*].tenTinh").value(hasItem(DEFAULT_TEN_TINH)));
+
+        // Check, that the count call also returns 1
+        restDanhMucTinhMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=maTinh,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultDanhMucTinhShouldNotBeFound(String filter) throws Exception {
+        restDanhMucTinhMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=maTinh,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restDanhMucTinhMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=maTinh,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
+    }
+
+    @Test
+    @Transactional
     void getNonExistingDanhMucTinh() throws Exception {
         // Get the danhMucTinh
         restDanhMucTinhMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());

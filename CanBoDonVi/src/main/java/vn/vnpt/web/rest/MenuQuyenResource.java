@@ -8,12 +8,19 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 import vn.vnpt.repository.MenuQuyenRepository;
+import vn.vnpt.service.MenuQuyenQueryService;
 import vn.vnpt.service.MenuQuyenService;
+import vn.vnpt.service.criteria.MenuQuyenCriteria;
 import vn.vnpt.service.dto.MenuQuyenDTO;
 import vn.vnpt.web.rest.errors.BadRequestAlertException;
 
@@ -35,9 +42,16 @@ public class MenuQuyenResource {
 
     private final MenuQuyenRepository menuQuyenRepository;
 
-    public MenuQuyenResource(MenuQuyenService menuQuyenService, MenuQuyenRepository menuQuyenRepository) {
+    private final MenuQuyenQueryService menuQuyenQueryService;
+
+    public MenuQuyenResource(
+        MenuQuyenService menuQuyenService,
+        MenuQuyenRepository menuQuyenRepository,
+        MenuQuyenQueryService menuQuyenQueryService
+    ) {
         this.menuQuyenService = menuQuyenService;
         this.menuQuyenRepository = menuQuyenRepository;
+        this.menuQuyenQueryService = menuQuyenQueryService;
     }
 
     /**
@@ -131,12 +145,32 @@ public class MenuQuyenResource {
     /**
      * {@code GET  /menu-quyens} : get all the menuQuyens.
      *
+     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of menuQuyens in body.
      */
     @GetMapping("")
-    public List<MenuQuyenDTO> getAllMenuQuyens() {
-        LOG.debug("REST request to get all MenuQuyens");
-        return menuQuyenService.findAll();
+    public ResponseEntity<List<MenuQuyenDTO>> getAllMenuQuyens(
+        MenuQuyenCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        LOG.debug("REST request to get MenuQuyens by criteria: {}", criteria);
+
+        Page<MenuQuyenDTO> page = menuQuyenQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /menu-quyens/count} : count all the menuQuyens.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countMenuQuyens(MenuQuyenCriteria criteria) {
+        LOG.debug("REST request to count MenuQuyens by criteria: {}", criteria);
+        return ResponseEntity.ok().body(menuQuyenQueryService.countByCriteria(criteria));
     }
 
     /**

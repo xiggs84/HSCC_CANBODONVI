@@ -9,4 +9,4 @@ import vn.vnpt.domain.DmXaTmp;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface DmXaTmpRepository extends JpaRepository<DmXaTmp, Long> {}
+public interface DmXaTmpRepository extends JpaRepository<DmXaTmp, Long>, JpaSpecificationExecutor<DmXaTmp> {}

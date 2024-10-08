@@ -169,6 +169,114 @@ class QuyenResourceIT {
 
     @Test
     @Transactional
+    void getQuyensByIdFiltering() throws Exception {
+        // Initialize the database
+        insertedQuyen = quyenRepository.saveAndFlush(quyen);
+
+        Long id = quyen.getIdQuyen();
+
+        defaultQuyenFiltering("idQuyen.equals=" + id, "idQuyen.notEquals=" + id);
+
+        defaultQuyenFiltering("idQuyen.greaterThanOrEqual=" + id, "idQuyen.greaterThan=" + id);
+
+        defaultQuyenFiltering("idQuyen.lessThanOrEqual=" + id, "idQuyen.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllQuyensByTenQuyenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedQuyen = quyenRepository.saveAndFlush(quyen);
+
+        // Get all the quyenList where tenQuyen equals to
+        defaultQuyenFiltering("tenQuyen.equals=" + DEFAULT_TEN_QUYEN, "tenQuyen.equals=" + UPDATED_TEN_QUYEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllQuyensByTenQuyenIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedQuyen = quyenRepository.saveAndFlush(quyen);
+
+        // Get all the quyenList where tenQuyen in
+        defaultQuyenFiltering("tenQuyen.in=" + DEFAULT_TEN_QUYEN + "," + UPDATED_TEN_QUYEN, "tenQuyen.in=" + UPDATED_TEN_QUYEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllQuyensByTenQuyenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedQuyen = quyenRepository.saveAndFlush(quyen);
+
+        // Get all the quyenList where tenQuyen is not null
+        defaultQuyenFiltering("tenQuyen.specified=true", "tenQuyen.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllQuyensByTenQuyenContainsSomething() throws Exception {
+        // Initialize the database
+        insertedQuyen = quyenRepository.saveAndFlush(quyen);
+
+        // Get all the quyenList where tenQuyen contains
+        defaultQuyenFiltering("tenQuyen.contains=" + DEFAULT_TEN_QUYEN, "tenQuyen.contains=" + UPDATED_TEN_QUYEN);
+    }
+
+    @Test
+    @Transactional
+    void getAllQuyensByTenQuyenNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedQuyen = quyenRepository.saveAndFlush(quyen);
+
+        // Get all the quyenList where tenQuyen does not contain
+        defaultQuyenFiltering("tenQuyen.doesNotContain=" + UPDATED_TEN_QUYEN, "tenQuyen.doesNotContain=" + DEFAULT_TEN_QUYEN);
+    }
+
+    private void defaultQuyenFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
+        defaultQuyenShouldBeFound(shouldBeFound);
+        defaultQuyenShouldNotBeFound(shouldNotBeFound);
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultQuyenShouldBeFound(String filter) throws Exception {
+        restQuyenMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=idQuyen,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].idQuyen").value(hasItem(quyen.getIdQuyen().intValue())))
+            .andExpect(jsonPath("$.[*].tenQuyen").value(hasItem(DEFAULT_TEN_QUYEN)));
+
+        // Check, that the count call also returns 1
+        restQuyenMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=idQuyen,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultQuyenShouldNotBeFound(String filter) throws Exception {
+        restQuyenMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=idQuyen,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restQuyenMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=idQuyen,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
+    }
+
+    @Test
+    @Transactional
     void getNonExistingQuyen() throws Exception {
         // Get the quyen
         restQuyenMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());

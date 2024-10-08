@@ -8,12 +8,19 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 import vn.vnpt.repository.DanhMucXaRepository;
+import vn.vnpt.service.DanhMucXaQueryService;
 import vn.vnpt.service.DanhMucXaService;
+import vn.vnpt.service.criteria.DanhMucXaCriteria;
 import vn.vnpt.service.dto.DanhMucXaDTO;
 import vn.vnpt.web.rest.errors.BadRequestAlertException;
 
@@ -35,9 +42,16 @@ public class DanhMucXaResource {
 
     private final DanhMucXaRepository danhMucXaRepository;
 
-    public DanhMucXaResource(DanhMucXaService danhMucXaService, DanhMucXaRepository danhMucXaRepository) {
+    private final DanhMucXaQueryService danhMucXaQueryService;
+
+    public DanhMucXaResource(
+        DanhMucXaService danhMucXaService,
+        DanhMucXaRepository danhMucXaRepository,
+        DanhMucXaQueryService danhMucXaQueryService
+    ) {
         this.danhMucXaService = danhMucXaService;
         this.danhMucXaRepository = danhMucXaRepository;
+        this.danhMucXaQueryService = danhMucXaQueryService;
     }
 
     /**
@@ -131,12 +145,32 @@ public class DanhMucXaResource {
     /**
      * {@code GET  /danh-muc-xas} : get all the danhMucXas.
      *
+     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of danhMucXas in body.
      */
     @GetMapping("")
-    public List<DanhMucXaDTO> getAllDanhMucXas() {
-        LOG.debug("REST request to get all DanhMucXas");
-        return danhMucXaService.findAll();
+    public ResponseEntity<List<DanhMucXaDTO>> getAllDanhMucXas(
+        DanhMucXaCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        LOG.debug("REST request to get DanhMucXas by criteria: {}", criteria);
+
+        Page<DanhMucXaDTO> page = danhMucXaQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /danh-muc-xas/count} : count all the danhMucXas.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countDanhMucXas(DanhMucXaCriteria criteria) {
+        LOG.debug("REST request to count DanhMucXas by criteria: {}", criteria);
+        return ResponseEntity.ok().body(danhMucXaQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -163,10 +197,5 @@ public class DanhMucXaResource {
         LOG.debug("REST request to delete DanhMucXa : {}", id);
         danhMucXaService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id)).build();
-    }
-
-    @GetMapping("/by-ma-huyen/{maHuyen}")
-    public List<DanhMucXaDTO> getXaPhuongByHuyen(@PathVariable String maHuyen) {
-        return danhMucXaService.findByMaHuyen(maHuyen);
     }
 }

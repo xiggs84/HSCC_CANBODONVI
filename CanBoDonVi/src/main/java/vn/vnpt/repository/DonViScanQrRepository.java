@@ -9,4 +9,4 @@ import vn.vnpt.domain.DonViScanQr;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface DonViScanQrRepository extends JpaRepository<DonViScanQr, Long> {}
+public interface DonViScanQrRepository extends JpaRepository<DonViScanQr, Long>, JpaSpecificationExecutor<DonViScanQr> {}

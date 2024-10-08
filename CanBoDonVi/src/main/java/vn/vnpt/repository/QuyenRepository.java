@@ -9,4 +9,4 @@ import vn.vnpt.domain.Quyen;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface QuyenRepository extends JpaRepository<Quyen, Long> {}
+public interface QuyenRepository extends JpaRepository<Quyen, Long>, JpaSpecificationExecutor<Quyen> {}

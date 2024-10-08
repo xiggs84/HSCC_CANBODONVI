@@ -9,4 +9,4 @@ import vn.vnpt.domain.DmNoiCapGpdkx;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface DmNoiCapGpdkxRepository extends JpaRepository<DmNoiCapGpdkx, Long> {}
+public interface DmNoiCapGpdkxRepository extends JpaRepository<DmNoiCapGpdkx, Long>, JpaSpecificationExecutor<DmNoiCapGpdkx> {}

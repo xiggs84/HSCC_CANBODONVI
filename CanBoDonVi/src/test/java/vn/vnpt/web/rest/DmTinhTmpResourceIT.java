@@ -169,6 +169,114 @@ class DmTinhTmpResourceIT {
 
     @Test
     @Transactional
+    void getDmTinhTmpsByIdFiltering() throws Exception {
+        // Initialize the database
+        insertedDmTinhTmp = dmTinhTmpRepository.saveAndFlush(dmTinhTmp);
+
+        Long id = dmTinhTmp.getMaTinh();
+
+        defaultDmTinhTmpFiltering("maTinh.equals=" + id, "maTinh.notEquals=" + id);
+
+        defaultDmTinhTmpFiltering("maTinh.greaterThanOrEqual=" + id, "maTinh.greaterThan=" + id);
+
+        defaultDmTinhTmpFiltering("maTinh.lessThanOrEqual=" + id, "maTinh.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllDmTinhTmpsByTenTinhIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedDmTinhTmp = dmTinhTmpRepository.saveAndFlush(dmTinhTmp);
+
+        // Get all the dmTinhTmpList where tenTinh equals to
+        defaultDmTinhTmpFiltering("tenTinh.equals=" + DEFAULT_TEN_TINH, "tenTinh.equals=" + UPDATED_TEN_TINH);
+    }
+
+    @Test
+    @Transactional
+    void getAllDmTinhTmpsByTenTinhIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedDmTinhTmp = dmTinhTmpRepository.saveAndFlush(dmTinhTmp);
+
+        // Get all the dmTinhTmpList where tenTinh in
+        defaultDmTinhTmpFiltering("tenTinh.in=" + DEFAULT_TEN_TINH + "," + UPDATED_TEN_TINH, "tenTinh.in=" + UPDATED_TEN_TINH);
+    }
+
+    @Test
+    @Transactional
+    void getAllDmTinhTmpsByTenTinhIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedDmTinhTmp = dmTinhTmpRepository.saveAndFlush(dmTinhTmp);
+
+        // Get all the dmTinhTmpList where tenTinh is not null
+        defaultDmTinhTmpFiltering("tenTinh.specified=true", "tenTinh.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDmTinhTmpsByTenTinhContainsSomething() throws Exception {
+        // Initialize the database
+        insertedDmTinhTmp = dmTinhTmpRepository.saveAndFlush(dmTinhTmp);
+
+        // Get all the dmTinhTmpList where tenTinh contains
+        defaultDmTinhTmpFiltering("tenTinh.contains=" + DEFAULT_TEN_TINH, "tenTinh.contains=" + UPDATED_TEN_TINH);
+    }
+
+    @Test
+    @Transactional
+    void getAllDmTinhTmpsByTenTinhNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedDmTinhTmp = dmTinhTmpRepository.saveAndFlush(dmTinhTmp);
+
+        // Get all the dmTinhTmpList where tenTinh does not contain
+        defaultDmTinhTmpFiltering("tenTinh.doesNotContain=" + UPDATED_TEN_TINH, "tenTinh.doesNotContain=" + DEFAULT_TEN_TINH);
+    }
+
+    private void defaultDmTinhTmpFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
+        defaultDmTinhTmpShouldBeFound(shouldBeFound);
+        defaultDmTinhTmpShouldNotBeFound(shouldNotBeFound);
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultDmTinhTmpShouldBeFound(String filter) throws Exception {
+        restDmTinhTmpMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=maTinh,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].maTinh").value(hasItem(dmTinhTmp.getMaTinh().intValue())))
+            .andExpect(jsonPath("$.[*].tenTinh").value(hasItem(DEFAULT_TEN_TINH)));
+
+        // Check, that the count call also returns 1
+        restDmTinhTmpMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=maTinh,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultDmTinhTmpShouldNotBeFound(String filter) throws Exception {
+        restDmTinhTmpMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=maTinh,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restDmTinhTmpMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=maTinh,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
+    }
+
+    @Test
+    @Transactional
     void getNonExistingDmTinhTmp() throws Exception {
         // Get the dmTinhTmp
         restDmTinhTmpMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
