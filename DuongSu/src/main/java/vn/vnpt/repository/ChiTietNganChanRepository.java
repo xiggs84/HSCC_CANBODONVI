@@ -9,4 +9,4 @@ import vn.vnpt.domain.ChiTietNganChan;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ChiTietNganChanRepository extends JpaRepository<ChiTietNganChan, Long> {}
+public interface ChiTietNganChanRepository extends JpaRepository<ChiTietNganChan, Long>, JpaSpecificationExecutor<ChiTietNganChan> {}

@@ -1,5 +1,6 @@
 package vn.vnpt.service.dto;
 
+import jakarta.persistence.Lob;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -14,13 +15,14 @@ public class QuanHeDuongSuDTO implements Serializable {
 
     private Long idDuongSuQh;
 
+    @Lob
     private String thongTinQuanHe;
 
     @Min(value = 0)
     @Max(value = 1)
     private Integer trangThai;
 
-    private DuongSuDTO idDuongSu;
+    private DuongSuDTO duongSu;
 
     public Long getIdQuanHe() {
         return idQuanHe;
@@ -54,12 +56,12 @@ public class QuanHeDuongSuDTO implements Serializable {
         this.trangThai = trangThai;
     }
 
-    public DuongSuDTO getIdDuongSu() {
-        return idDuongSu;
+    public DuongSuDTO getDuongSu() {
+        return duongSu;
     }
 
-    public void setIdDuongSu(DuongSuDTO idDuongSu) {
-        this.idDuongSu = idDuongSu;
+    public void setDuongSu(DuongSuDTO duongSu) {
+        this.duongSu = duongSu;
     }
 
     @Override
@@ -91,7 +93,7 @@ public class QuanHeDuongSuDTO implements Serializable {
             ", idDuongSuQh=" + getIdDuongSuQh() +
             ", thongTinQuanHe='" + getThongTinQuanHe() + "'" +
             ", trangThai=" + getTrangThai() +
-            ", idDuongSu=" + getIdDuongSu() +
+            ", duongSu=" + getDuongSu() +
             "}";
     }
 }

@@ -8,12 +8,19 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 import vn.vnpt.repository.QuanHeMasterRepository;
+import vn.vnpt.service.QuanHeMasterQueryService;
 import vn.vnpt.service.QuanHeMasterService;
+import vn.vnpt.service.criteria.QuanHeMasterCriteria;
 import vn.vnpt.service.dto.QuanHeMasterDTO;
 import vn.vnpt.web.rest.errors.BadRequestAlertException;
 
@@ -35,9 +42,16 @@ public class QuanHeMasterResource {
 
     private final QuanHeMasterRepository quanHeMasterRepository;
 
-    public QuanHeMasterResource(QuanHeMasterService quanHeMasterService, QuanHeMasterRepository quanHeMasterRepository) {
+    private final QuanHeMasterQueryService quanHeMasterQueryService;
+
+    public QuanHeMasterResource(
+        QuanHeMasterService quanHeMasterService,
+        QuanHeMasterRepository quanHeMasterRepository,
+        QuanHeMasterQueryService quanHeMasterQueryService
+    ) {
         this.quanHeMasterService = quanHeMasterService;
         this.quanHeMasterRepository = quanHeMasterRepository;
+        this.quanHeMasterQueryService = quanHeMasterQueryService;
     }
 
     /**
@@ -131,12 +145,32 @@ public class QuanHeMasterResource {
     /**
      * {@code GET  /quan-he-masters} : get all the quanHeMasters.
      *
+     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of quanHeMasters in body.
      */
     @GetMapping("")
-    public List<QuanHeMasterDTO> getAllQuanHeMasters() {
-        LOG.debug("REST request to get all QuanHeMasters");
-        return quanHeMasterService.findAll();
+    public ResponseEntity<List<QuanHeMasterDTO>> getAllQuanHeMasters(
+        QuanHeMasterCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        LOG.debug("REST request to get QuanHeMasters by criteria: {}", criteria);
+
+        Page<QuanHeMasterDTO> page = quanHeMasterQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /quan-he-masters/count} : count all the quanHeMasters.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countQuanHeMasters(QuanHeMasterCriteria criteria) {
+        LOG.debug("REST request to count QuanHeMasters by criteria: {}", criteria);
+        return ResponseEntity.ok().body(quanHeMasterQueryService.countByCriteria(criteria));
     }
 
     /**

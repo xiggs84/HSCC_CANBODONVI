@@ -5,8 +5,11 @@ import static vn.vnpt.domain.DanhSachDuongSuTestSamples.*;
 import static vn.vnpt.domain.DuongSuTestSamples.*;
 import static vn.vnpt.domain.DuongSuTrungCmndBakTestSamples.*;
 import static vn.vnpt.domain.DuongSuTrungCmndTestSamples.*;
+import static vn.vnpt.domain.LoaiDuongSuTestSamples.*;
+import static vn.vnpt.domain.LoaiGiayToTestSamples.*;
 import static vn.vnpt.domain.QuanHeDuongSuTestSamples.*;
 import static vn.vnpt.domain.TaiSanDuongSuTestSamples.*;
+import static vn.vnpt.domain.ThongTinCapNhatDuongSuTestSamples.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -30,25 +33,47 @@ class DuongSuTest {
     }
 
     @Test
+    void thongTinCapNhatTest() {
+        DuongSu duongSu = getDuongSuRandomSampleGenerator();
+        ThongTinCapNhatDuongSu thongTinCapNhatDuongSuBack = getThongTinCapNhatDuongSuRandomSampleGenerator();
+
+        duongSu.addThongTinCapNhat(thongTinCapNhatDuongSuBack);
+        assertThat(duongSu.getThongTinCapNhats()).containsOnly(thongTinCapNhatDuongSuBack);
+        assertThat(thongTinCapNhatDuongSuBack.getDuongSu()).isEqualTo(duongSu);
+
+        duongSu.removeThongTinCapNhat(thongTinCapNhatDuongSuBack);
+        assertThat(duongSu.getThongTinCapNhats()).doesNotContain(thongTinCapNhatDuongSuBack);
+        assertThat(thongTinCapNhatDuongSuBack.getDuongSu()).isNull();
+
+        duongSu.thongTinCapNhats(new HashSet<>(Set.of(thongTinCapNhatDuongSuBack)));
+        assertThat(duongSu.getThongTinCapNhats()).containsOnly(thongTinCapNhatDuongSuBack);
+        assertThat(thongTinCapNhatDuongSuBack.getDuongSu()).isEqualTo(duongSu);
+
+        duongSu.setThongTinCapNhats(new HashSet<>());
+        assertThat(duongSu.getThongTinCapNhats()).doesNotContain(thongTinCapNhatDuongSuBack);
+        assertThat(thongTinCapNhatDuongSuBack.getDuongSu()).isNull();
+    }
+
+    @Test
     void taiSanDuongSuTest() {
         DuongSu duongSu = getDuongSuRandomSampleGenerator();
         TaiSanDuongSu taiSanDuongSuBack = getTaiSanDuongSuRandomSampleGenerator();
 
         duongSu.addTaiSanDuongSu(taiSanDuongSuBack);
         assertThat(duongSu.getTaiSanDuongSus()).containsOnly(taiSanDuongSuBack);
-        assertThat(taiSanDuongSuBack.getIdDuongSu()).isEqualTo(duongSu);
+        assertThat(taiSanDuongSuBack.getDuongSu()).isEqualTo(duongSu);
 
         duongSu.removeTaiSanDuongSu(taiSanDuongSuBack);
         assertThat(duongSu.getTaiSanDuongSus()).doesNotContain(taiSanDuongSuBack);
-        assertThat(taiSanDuongSuBack.getIdDuongSu()).isNull();
+        assertThat(taiSanDuongSuBack.getDuongSu()).isNull();
 
         duongSu.taiSanDuongSus(new HashSet<>(Set.of(taiSanDuongSuBack)));
         assertThat(duongSu.getTaiSanDuongSus()).containsOnly(taiSanDuongSuBack);
-        assertThat(taiSanDuongSuBack.getIdDuongSu()).isEqualTo(duongSu);
+        assertThat(taiSanDuongSuBack.getDuongSu()).isEqualTo(duongSu);
 
         duongSu.setTaiSanDuongSus(new HashSet<>());
         assertThat(duongSu.getTaiSanDuongSus()).doesNotContain(taiSanDuongSuBack);
-        assertThat(taiSanDuongSuBack.getIdDuongSu()).isNull();
+        assertThat(taiSanDuongSuBack.getDuongSu()).isNull();
     }
 
     @Test
@@ -58,19 +83,19 @@ class DuongSuTest {
 
         duongSu.addQuanHeDuongSu(quanHeDuongSuBack);
         assertThat(duongSu.getQuanHeDuongSus()).containsOnly(quanHeDuongSuBack);
-        assertThat(quanHeDuongSuBack.getIdDuongSu()).isEqualTo(duongSu);
+        assertThat(quanHeDuongSuBack.getDuongSu()).isEqualTo(duongSu);
 
         duongSu.removeQuanHeDuongSu(quanHeDuongSuBack);
         assertThat(duongSu.getQuanHeDuongSus()).doesNotContain(quanHeDuongSuBack);
-        assertThat(quanHeDuongSuBack.getIdDuongSu()).isNull();
+        assertThat(quanHeDuongSuBack.getDuongSu()).isNull();
 
         duongSu.quanHeDuongSus(new HashSet<>(Set.of(quanHeDuongSuBack)));
         assertThat(duongSu.getQuanHeDuongSus()).containsOnly(quanHeDuongSuBack);
-        assertThat(quanHeDuongSuBack.getIdDuongSu()).isEqualTo(duongSu);
+        assertThat(quanHeDuongSuBack.getDuongSu()).isEqualTo(duongSu);
 
         duongSu.setQuanHeDuongSus(new HashSet<>());
         assertThat(duongSu.getQuanHeDuongSus()).doesNotContain(quanHeDuongSuBack);
-        assertThat(quanHeDuongSuBack.getIdDuongSu()).isNull();
+        assertThat(quanHeDuongSuBack.getDuongSu()).isNull();
     }
 
     @Test
@@ -80,19 +105,19 @@ class DuongSuTest {
 
         duongSu.addDanhSachDuongSu(danhSachDuongSuBack);
         assertThat(duongSu.getDanhSachDuongSus()).containsOnly(danhSachDuongSuBack);
-        assertThat(danhSachDuongSuBack.getIdDuongSu()).isEqualTo(duongSu);
+        assertThat(danhSachDuongSuBack.getDuongSu()).isEqualTo(duongSu);
 
         duongSu.removeDanhSachDuongSu(danhSachDuongSuBack);
         assertThat(duongSu.getDanhSachDuongSus()).doesNotContain(danhSachDuongSuBack);
-        assertThat(danhSachDuongSuBack.getIdDuongSu()).isNull();
+        assertThat(danhSachDuongSuBack.getDuongSu()).isNull();
 
         duongSu.danhSachDuongSus(new HashSet<>(Set.of(danhSachDuongSuBack)));
         assertThat(duongSu.getDanhSachDuongSus()).containsOnly(danhSachDuongSuBack);
-        assertThat(danhSachDuongSuBack.getIdDuongSu()).isEqualTo(duongSu);
+        assertThat(danhSachDuongSuBack.getDuongSu()).isEqualTo(duongSu);
 
         duongSu.setDanhSachDuongSus(new HashSet<>());
         assertThat(duongSu.getDanhSachDuongSus()).doesNotContain(danhSachDuongSuBack);
-        assertThat(danhSachDuongSuBack.getIdDuongSu()).isNull();
+        assertThat(danhSachDuongSuBack.getDuongSu()).isNull();
     }
 
     @Test
@@ -102,19 +127,19 @@ class DuongSuTest {
 
         duongSu.addDuongSuTrungCmnd(duongSuTrungCmndBack);
         assertThat(duongSu.getDuongSuTrungCmnds()).containsOnly(duongSuTrungCmndBack);
-        assertThat(duongSuTrungCmndBack.getIdDuongSu()).isEqualTo(duongSu);
+        assertThat(duongSuTrungCmndBack.getDuongSu()).isEqualTo(duongSu);
 
         duongSu.removeDuongSuTrungCmnd(duongSuTrungCmndBack);
         assertThat(duongSu.getDuongSuTrungCmnds()).doesNotContain(duongSuTrungCmndBack);
-        assertThat(duongSuTrungCmndBack.getIdDuongSu()).isNull();
+        assertThat(duongSuTrungCmndBack.getDuongSu()).isNull();
 
         duongSu.duongSuTrungCmnds(new HashSet<>(Set.of(duongSuTrungCmndBack)));
         assertThat(duongSu.getDuongSuTrungCmnds()).containsOnly(duongSuTrungCmndBack);
-        assertThat(duongSuTrungCmndBack.getIdDuongSu()).isEqualTo(duongSu);
+        assertThat(duongSuTrungCmndBack.getDuongSu()).isEqualTo(duongSu);
 
         duongSu.setDuongSuTrungCmnds(new HashSet<>());
         assertThat(duongSu.getDuongSuTrungCmnds()).doesNotContain(duongSuTrungCmndBack);
-        assertThat(duongSuTrungCmndBack.getIdDuongSu()).isNull();
+        assertThat(duongSuTrungCmndBack.getDuongSu()).isNull();
     }
 
     @Test
@@ -124,18 +149,42 @@ class DuongSuTest {
 
         duongSu.addDuongSuTrungCmndBak(duongSuTrungCmndBakBack);
         assertThat(duongSu.getDuongSuTrungCmndBaks()).containsOnly(duongSuTrungCmndBakBack);
-        assertThat(duongSuTrungCmndBakBack.getIdDuongSu()).isEqualTo(duongSu);
+        assertThat(duongSuTrungCmndBakBack.getDuongSu()).isEqualTo(duongSu);
 
         duongSu.removeDuongSuTrungCmndBak(duongSuTrungCmndBakBack);
         assertThat(duongSu.getDuongSuTrungCmndBaks()).doesNotContain(duongSuTrungCmndBakBack);
-        assertThat(duongSuTrungCmndBakBack.getIdDuongSu()).isNull();
+        assertThat(duongSuTrungCmndBakBack.getDuongSu()).isNull();
 
         duongSu.duongSuTrungCmndBaks(new HashSet<>(Set.of(duongSuTrungCmndBakBack)));
         assertThat(duongSu.getDuongSuTrungCmndBaks()).containsOnly(duongSuTrungCmndBakBack);
-        assertThat(duongSuTrungCmndBakBack.getIdDuongSu()).isEqualTo(duongSu);
+        assertThat(duongSuTrungCmndBakBack.getDuongSu()).isEqualTo(duongSu);
 
         duongSu.setDuongSuTrungCmndBaks(new HashSet<>());
         assertThat(duongSu.getDuongSuTrungCmndBaks()).doesNotContain(duongSuTrungCmndBakBack);
-        assertThat(duongSuTrungCmndBakBack.getIdDuongSu()).isNull();
+        assertThat(duongSuTrungCmndBakBack.getDuongSu()).isNull();
+    }
+
+    @Test
+    void loaiDuongSuTest() {
+        DuongSu duongSu = getDuongSuRandomSampleGenerator();
+        LoaiDuongSu loaiDuongSuBack = getLoaiDuongSuRandomSampleGenerator();
+
+        duongSu.setLoaiDuongSu(loaiDuongSuBack);
+        assertThat(duongSu.getLoaiDuongSu()).isEqualTo(loaiDuongSuBack);
+
+        duongSu.loaiDuongSu(null);
+        assertThat(duongSu.getLoaiDuongSu()).isNull();
+    }
+
+    @Test
+    void loaiGiayToTest() {
+        DuongSu duongSu = getDuongSuRandomSampleGenerator();
+        LoaiGiayTo loaiGiayToBack = getLoaiGiayToRandomSampleGenerator();
+
+        duongSu.setLoaiGiayTo(loaiGiayToBack);
+        assertThat(duongSu.getLoaiGiayTo()).isEqualTo(loaiGiayToBack);
+
+        duongSu.loaiGiayTo(null);
+        assertThat(duongSu.getLoaiGiayTo()).isNull();
     }
 }

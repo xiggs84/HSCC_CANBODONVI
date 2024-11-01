@@ -1,6 +1,5 @@
 package vn.vnpt.security.jwt;
 
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -15,7 +14,7 @@ public class TestAuthenticationResource {
      *
      * @return ok.
      */
-    @GetMapping(value = "/authenticate", produces = MediaType.TEXT_PLAIN_VALUE)
+    @GetMapping("/authenticate")
     public String isAuthenticated() {
         return "ok";
     }

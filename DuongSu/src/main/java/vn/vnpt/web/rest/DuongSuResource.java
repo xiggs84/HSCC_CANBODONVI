@@ -10,12 +10,19 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 import vn.vnpt.repository.DuongSuRepository;
+import vn.vnpt.service.DuongSuQueryService;
 import vn.vnpt.service.DuongSuService;
+import vn.vnpt.service.criteria.DuongSuCriteria;
 import vn.vnpt.service.dto.DuongSuDTO;
 import vn.vnpt.web.rest.errors.BadRequestAlertException;
 
@@ -37,9 +44,12 @@ public class DuongSuResource {
 
     private final DuongSuRepository duongSuRepository;
 
-    public DuongSuResource(DuongSuService duongSuService, DuongSuRepository duongSuRepository) {
+    private final DuongSuQueryService duongSuQueryService;
+
+    public DuongSuResource(DuongSuService duongSuService, DuongSuRepository duongSuRepository, DuongSuQueryService duongSuQueryService) {
         this.duongSuService = duongSuService;
         this.duongSuRepository = duongSuRepository;
+        this.duongSuQueryService = duongSuQueryService;
     }
 
     /**
@@ -133,12 +143,32 @@ public class DuongSuResource {
     /**
      * {@code GET  /duong-sus} : get all the duongSus.
      *
+     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of duongSus in body.
      */
     @GetMapping("")
-    public List<DuongSuDTO> getAllDuongSus() {
-        LOG.debug("REST request to get all DuongSus");
-        return duongSuService.findAll();
+    public ResponseEntity<List<DuongSuDTO>> getAllDuongSus(
+        DuongSuCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        LOG.debug("REST request to get DuongSus by criteria: {}", criteria);
+
+        Page<DuongSuDTO> page = duongSuQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /duong-sus/count} : count all the duongSus.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countDuongSus(DuongSuCriteria criteria) {
+        LOG.debug("REST request to count DuongSus by criteria: {}", criteria);
+        return ResponseEntity.ok().body(duongSuQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -170,9 +200,8 @@ public class DuongSuResource {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<DuongSuDTO> getDuongSuBySoGiayTo(@RequestParam String soGiayTo) {
-        LOG.debug("REST request to get DuongSu by soGiayTo : {}", soGiayTo);
-        Optional<DuongSuDTO> duongSuDTO = duongSuService.findBySoGiayTo(soGiayTo);
-        return ResponseUtil.wrapOrNotFound(duongSuDTO);
+    public List<DuongSuDTO> searchDuongSus(@RequestParam String tenDuongSu, @RequestParam String gender) {
+        LOG.debug("REST request to search DuongSus by name {} and gender {}", tenDuongSu, gender);
+        return duongSuService.searchByTenAndOppositeGender(tenDuongSu, gender);
     }
 }

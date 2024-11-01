@@ -9,8 +9,6 @@ import java.util.HashSet;
 import java.util.Set;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import vn.vnpt.domain.enumeration.LoaiDuongSu;
-import vn.vnpt.domain.enumeration.LoaiGiayTo;
 
 /**
  * A DuongSu.
@@ -31,10 +29,6 @@ public class DuongSu implements Serializable {
 
     @Column(name = "ten_duong_su")
     private String tenDuongSu;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "loai_duong_su")
-    private LoaiDuongSu loaiDuongSu;
 
     @Column(name = "dia_chi")
     private String diaChi;
@@ -78,10 +72,6 @@ public class DuongSu implements Serializable {
     @Column(name = "str_search")
     private String strSearch;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "loai_giay_to")
-    private LoaiGiayTo loaiGiayTo;
-
     @Column(name = "so_giay_to")
     private String soGiayTo;
 
@@ -96,30 +86,43 @@ public class DuongSu implements Serializable {
     @Column(name = "sync_status")
     private Integer syncStatus;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "idDuongSu")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "duongSu")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "idDuongSu" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "loaiDuongSu", "loaiGiayTo", "duongSu" }, allowSetters = true)
+    private Set<ThongTinCapNhatDuongSu> thongTinCapNhats = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "duongSu")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "duongSu" }, allowSetters = true)
     private Set<TaiSanDuongSu> taiSanDuongSus = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "idDuongSu")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "duongSu")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "idDuongSu" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "duongSu" }, allowSetters = true)
     private Set<QuanHeDuongSu> quanHeDuongSus = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "idDuongSu")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "duongSu")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "idDuongSu" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "duongSu" }, allowSetters = true)
     private Set<DanhSachDuongSu> danhSachDuongSus = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "idDuongSu")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "duongSu")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "idDuongSu" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "duongSu" }, allowSetters = true)
     private Set<DuongSuTrungCmnd> duongSuTrungCmnds = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "idDuongSu")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "duongSu")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "idDuongSu" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "duongSu" }, allowSetters = true)
     private Set<DuongSuTrungCmndBak> duongSuTrungCmndBaks = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "idLoaiDuongSus", "thongTinCapNhatDuongSus" }, allowSetters = true)
+    private LoaiDuongSu loaiDuongSu;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "idLoaiGiayTos", "thongTinCapNhatDuongSus" }, allowSetters = true)
+    private LoaiGiayTo loaiGiayTo;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -147,19 +150,6 @@ public class DuongSu implements Serializable {
 
     public void setTenDuongSu(String tenDuongSu) {
         this.tenDuongSu = tenDuongSu;
-    }
-
-    public LoaiDuongSu getLoaiDuongSu() {
-        return this.loaiDuongSu;
-    }
-
-    public DuongSu loaiDuongSu(LoaiDuongSu loaiDuongSu) {
-        this.setLoaiDuongSu(loaiDuongSu);
-        return this;
-    }
-
-    public void setLoaiDuongSu(LoaiDuongSu loaiDuongSu) {
-        this.loaiDuongSu = loaiDuongSu;
     }
 
     public String getDiaChi() {
@@ -331,19 +321,6 @@ public class DuongSu implements Serializable {
         this.strSearch = strSearch;
     }
 
-    public LoaiGiayTo getLoaiGiayTo() {
-        return this.loaiGiayTo;
-    }
-
-    public DuongSu loaiGiayTo(LoaiGiayTo loaiGiayTo) {
-        this.setLoaiGiayTo(loaiGiayTo);
-        return this;
-    }
-
-    public void setLoaiGiayTo(LoaiGiayTo loaiGiayTo) {
-        this.loaiGiayTo = loaiGiayTo;
-    }
-
     public String getSoGiayTo() {
         return this.soGiayTo;
     }
@@ -396,16 +373,47 @@ public class DuongSu implements Serializable {
         this.syncStatus = syncStatus;
     }
 
+    public Set<ThongTinCapNhatDuongSu> getThongTinCapNhats() {
+        return this.thongTinCapNhats;
+    }
+
+    public void setThongTinCapNhats(Set<ThongTinCapNhatDuongSu> thongTinCapNhatDuongSus) {
+        if (this.thongTinCapNhats != null) {
+            this.thongTinCapNhats.forEach(i -> i.setDuongSu(null));
+        }
+        if (thongTinCapNhatDuongSus != null) {
+            thongTinCapNhatDuongSus.forEach(i -> i.setDuongSu(this));
+        }
+        this.thongTinCapNhats = thongTinCapNhatDuongSus;
+    }
+
+    public DuongSu thongTinCapNhats(Set<ThongTinCapNhatDuongSu> thongTinCapNhatDuongSus) {
+        this.setThongTinCapNhats(thongTinCapNhatDuongSus);
+        return this;
+    }
+
+    public DuongSu addThongTinCapNhat(ThongTinCapNhatDuongSu thongTinCapNhatDuongSu) {
+        this.thongTinCapNhats.add(thongTinCapNhatDuongSu);
+        thongTinCapNhatDuongSu.setDuongSu(this);
+        return this;
+    }
+
+    public DuongSu removeThongTinCapNhat(ThongTinCapNhatDuongSu thongTinCapNhatDuongSu) {
+        this.thongTinCapNhats.remove(thongTinCapNhatDuongSu);
+        thongTinCapNhatDuongSu.setDuongSu(null);
+        return this;
+    }
+
     public Set<TaiSanDuongSu> getTaiSanDuongSus() {
         return this.taiSanDuongSus;
     }
 
     public void setTaiSanDuongSus(Set<TaiSanDuongSu> taiSanDuongSus) {
         if (this.taiSanDuongSus != null) {
-            this.taiSanDuongSus.forEach(i -> i.setIdDuongSu(null));
+            this.taiSanDuongSus.forEach(i -> i.setDuongSu(null));
         }
         if (taiSanDuongSus != null) {
-            taiSanDuongSus.forEach(i -> i.setIdDuongSu(this));
+            taiSanDuongSus.forEach(i -> i.setDuongSu(this));
         }
         this.taiSanDuongSus = taiSanDuongSus;
     }
@@ -417,13 +425,13 @@ public class DuongSu implements Serializable {
 
     public DuongSu addTaiSanDuongSu(TaiSanDuongSu taiSanDuongSu) {
         this.taiSanDuongSus.add(taiSanDuongSu);
-        taiSanDuongSu.setIdDuongSu(this);
+        taiSanDuongSu.setDuongSu(this);
         return this;
     }
 
     public DuongSu removeTaiSanDuongSu(TaiSanDuongSu taiSanDuongSu) {
         this.taiSanDuongSus.remove(taiSanDuongSu);
-        taiSanDuongSu.setIdDuongSu(null);
+        taiSanDuongSu.setDuongSu(null);
         return this;
     }
 
@@ -433,10 +441,10 @@ public class DuongSu implements Serializable {
 
     public void setQuanHeDuongSus(Set<QuanHeDuongSu> quanHeDuongSus) {
         if (this.quanHeDuongSus != null) {
-            this.quanHeDuongSus.forEach(i -> i.setIdDuongSu(null));
+            this.quanHeDuongSus.forEach(i -> i.setDuongSu(null));
         }
         if (quanHeDuongSus != null) {
-            quanHeDuongSus.forEach(i -> i.setIdDuongSu(this));
+            quanHeDuongSus.forEach(i -> i.setDuongSu(this));
         }
         this.quanHeDuongSus = quanHeDuongSus;
     }
@@ -448,13 +456,13 @@ public class DuongSu implements Serializable {
 
     public DuongSu addQuanHeDuongSu(QuanHeDuongSu quanHeDuongSu) {
         this.quanHeDuongSus.add(quanHeDuongSu);
-        quanHeDuongSu.setIdDuongSu(this);
+        quanHeDuongSu.setDuongSu(this);
         return this;
     }
 
     public DuongSu removeQuanHeDuongSu(QuanHeDuongSu quanHeDuongSu) {
         this.quanHeDuongSus.remove(quanHeDuongSu);
-        quanHeDuongSu.setIdDuongSu(null);
+        quanHeDuongSu.setDuongSu(null);
         return this;
     }
 
@@ -464,10 +472,10 @@ public class DuongSu implements Serializable {
 
     public void setDanhSachDuongSus(Set<DanhSachDuongSu> danhSachDuongSus) {
         if (this.danhSachDuongSus != null) {
-            this.danhSachDuongSus.forEach(i -> i.setIdDuongSu(null));
+            this.danhSachDuongSus.forEach(i -> i.setDuongSu(null));
         }
         if (danhSachDuongSus != null) {
-            danhSachDuongSus.forEach(i -> i.setIdDuongSu(this));
+            danhSachDuongSus.forEach(i -> i.setDuongSu(this));
         }
         this.danhSachDuongSus = danhSachDuongSus;
     }
@@ -479,13 +487,13 @@ public class DuongSu implements Serializable {
 
     public DuongSu addDanhSachDuongSu(DanhSachDuongSu danhSachDuongSu) {
         this.danhSachDuongSus.add(danhSachDuongSu);
-        danhSachDuongSu.setIdDuongSu(this);
+        danhSachDuongSu.setDuongSu(this);
         return this;
     }
 
     public DuongSu removeDanhSachDuongSu(DanhSachDuongSu danhSachDuongSu) {
         this.danhSachDuongSus.remove(danhSachDuongSu);
-        danhSachDuongSu.setIdDuongSu(null);
+        danhSachDuongSu.setDuongSu(null);
         return this;
     }
 
@@ -495,10 +503,10 @@ public class DuongSu implements Serializable {
 
     public void setDuongSuTrungCmnds(Set<DuongSuTrungCmnd> duongSuTrungCmnds) {
         if (this.duongSuTrungCmnds != null) {
-            this.duongSuTrungCmnds.forEach(i -> i.setIdDuongSu(null));
+            this.duongSuTrungCmnds.forEach(i -> i.setDuongSu(null));
         }
         if (duongSuTrungCmnds != null) {
-            duongSuTrungCmnds.forEach(i -> i.setIdDuongSu(this));
+            duongSuTrungCmnds.forEach(i -> i.setDuongSu(this));
         }
         this.duongSuTrungCmnds = duongSuTrungCmnds;
     }
@@ -510,13 +518,13 @@ public class DuongSu implements Serializable {
 
     public DuongSu addDuongSuTrungCmnd(DuongSuTrungCmnd duongSuTrungCmnd) {
         this.duongSuTrungCmnds.add(duongSuTrungCmnd);
-        duongSuTrungCmnd.setIdDuongSu(this);
+        duongSuTrungCmnd.setDuongSu(this);
         return this;
     }
 
     public DuongSu removeDuongSuTrungCmnd(DuongSuTrungCmnd duongSuTrungCmnd) {
         this.duongSuTrungCmnds.remove(duongSuTrungCmnd);
-        duongSuTrungCmnd.setIdDuongSu(null);
+        duongSuTrungCmnd.setDuongSu(null);
         return this;
     }
 
@@ -526,10 +534,10 @@ public class DuongSu implements Serializable {
 
     public void setDuongSuTrungCmndBaks(Set<DuongSuTrungCmndBak> duongSuTrungCmndBaks) {
         if (this.duongSuTrungCmndBaks != null) {
-            this.duongSuTrungCmndBaks.forEach(i -> i.setIdDuongSu(null));
+            this.duongSuTrungCmndBaks.forEach(i -> i.setDuongSu(null));
         }
         if (duongSuTrungCmndBaks != null) {
-            duongSuTrungCmndBaks.forEach(i -> i.setIdDuongSu(this));
+            duongSuTrungCmndBaks.forEach(i -> i.setDuongSu(this));
         }
         this.duongSuTrungCmndBaks = duongSuTrungCmndBaks;
     }
@@ -541,13 +549,39 @@ public class DuongSu implements Serializable {
 
     public DuongSu addDuongSuTrungCmndBak(DuongSuTrungCmndBak duongSuTrungCmndBak) {
         this.duongSuTrungCmndBaks.add(duongSuTrungCmndBak);
-        duongSuTrungCmndBak.setIdDuongSu(this);
+        duongSuTrungCmndBak.setDuongSu(this);
         return this;
     }
 
     public DuongSu removeDuongSuTrungCmndBak(DuongSuTrungCmndBak duongSuTrungCmndBak) {
         this.duongSuTrungCmndBaks.remove(duongSuTrungCmndBak);
-        duongSuTrungCmndBak.setIdDuongSu(null);
+        duongSuTrungCmndBak.setDuongSu(null);
+        return this;
+    }
+
+    public LoaiDuongSu getLoaiDuongSu() {
+        return this.loaiDuongSu;
+    }
+
+    public void setLoaiDuongSu(LoaiDuongSu loaiDuongSu) {
+        this.loaiDuongSu = loaiDuongSu;
+    }
+
+    public DuongSu loaiDuongSu(LoaiDuongSu loaiDuongSu) {
+        this.setLoaiDuongSu(loaiDuongSu);
+        return this;
+    }
+
+    public LoaiGiayTo getLoaiGiayTo() {
+        return this.loaiGiayTo;
+    }
+
+    public void setLoaiGiayTo(LoaiGiayTo loaiGiayTo) {
+        this.loaiGiayTo = loaiGiayTo;
+    }
+
+    public DuongSu loaiGiayTo(LoaiGiayTo loaiGiayTo) {
+        this.setLoaiGiayTo(loaiGiayTo);
         return this;
     }
 
@@ -576,7 +610,6 @@ public class DuongSu implements Serializable {
         return "DuongSu{" +
             "idDuongSu=" + getIdDuongSu() +
             ", tenDuongSu='" + getTenDuongSu() + "'" +
-            ", loaiDuongSu='" + getLoaiDuongSu() + "'" +
             ", diaChi='" + getDiaChi() + "'" +
             ", soDienThoai='" + getSoDienThoai() + "'" +
             ", email='" + getEmail() + "'" +
@@ -590,7 +623,6 @@ public class DuongSu implements Serializable {
             ", idMaster='" + getIdMaster() + "'" +
             ", idDonVi=" + getIdDonVi() +
             ", strSearch='" + getStrSearch() + "'" +
-            ", loaiGiayTo='" + getLoaiGiayTo() + "'" +
             ", soGiayTo='" + getSoGiayTo() + "'" +
             ", ghiChu='" + getGhiChu() + "'" +
             ", idLoaiNganChan=" + getIdLoaiNganChan() +

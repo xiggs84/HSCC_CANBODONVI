@@ -8,12 +8,19 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 import vn.vnpt.repository.QuanHeNhanThanRepository;
+import vn.vnpt.service.QuanHeNhanThanQueryService;
 import vn.vnpt.service.QuanHeNhanThanService;
+import vn.vnpt.service.criteria.QuanHeNhanThanCriteria;
 import vn.vnpt.service.dto.QuanHeNhanThanDTO;
 import vn.vnpt.web.rest.errors.BadRequestAlertException;
 
@@ -35,9 +42,16 @@ public class QuanHeNhanThanResource {
 
     private final QuanHeNhanThanRepository quanHeNhanThanRepository;
 
-    public QuanHeNhanThanResource(QuanHeNhanThanService quanHeNhanThanService, QuanHeNhanThanRepository quanHeNhanThanRepository) {
+    private final QuanHeNhanThanQueryService quanHeNhanThanQueryService;
+
+    public QuanHeNhanThanResource(
+        QuanHeNhanThanService quanHeNhanThanService,
+        QuanHeNhanThanRepository quanHeNhanThanRepository,
+        QuanHeNhanThanQueryService quanHeNhanThanQueryService
+    ) {
         this.quanHeNhanThanService = quanHeNhanThanService;
         this.quanHeNhanThanRepository = quanHeNhanThanRepository;
+        this.quanHeNhanThanQueryService = quanHeNhanThanQueryService;
     }
 
     /**
@@ -132,12 +146,32 @@ public class QuanHeNhanThanResource {
     /**
      * {@code GET  /quan-he-nhan-thans} : get all the quanHeNhanThans.
      *
+     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of quanHeNhanThans in body.
      */
     @GetMapping("")
-    public List<QuanHeNhanThanDTO> getAllQuanHeNhanThans() {
-        LOG.debug("REST request to get all QuanHeNhanThans");
-        return quanHeNhanThanService.findAll();
+    public ResponseEntity<List<QuanHeNhanThanDTO>> getAllQuanHeNhanThans(
+        QuanHeNhanThanCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        LOG.debug("REST request to get QuanHeNhanThans by criteria: {}", criteria);
+
+        Page<QuanHeNhanThanDTO> page = quanHeNhanThanQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /quan-he-nhan-thans/count} : count all the quanHeNhanThans.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countQuanHeNhanThans(QuanHeNhanThanCriteria criteria) {
+        LOG.debug("REST request to count QuanHeNhanThans by criteria: {}", criteria);
+        return ResponseEntity.ok().body(quanHeNhanThanQueryService.countByCriteria(criteria));
     }
 
     /**

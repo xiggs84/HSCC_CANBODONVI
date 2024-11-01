@@ -1,6 +1,6 @@
 {
   "annotations": {
-    "changelogDate": "20240902124131"
+    "changelogDate": "20240922093324"
   },
   "applications": "*",
   "clientRootFolder": "DuongSu",
@@ -17,11 +17,6 @@
     {
       "fieldName": "tenDuongSu",
       "fieldType": "String"
-    },
-    {
-      "fieldName": "loaiDuongSu",
-      "fieldType": "LoaiDuongSu",
-      "fieldValues": "CaNhan (Cá nhân),ToChuc (Tổ chức),ToChucTinDung (Tổ chức tín dụng)"
     },
     {
       "fieldName": "diaChi",
@@ -80,11 +75,6 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "loaiGiayTo",
-      "fieldType": "LoaiGiayTo",
-      "fieldValues": "Cmnd (Chứng minh nhân dân),Cccd (Căn cước công dân),Cc (Căn cước),Hc (Hộ chiếu),K (Giấy tờ hợp lệ khác)"
-    },
-    {
       "fieldName": "soGiayTo",
       "fieldType": "String"
     },
@@ -104,45 +94,56 @@
       "fieldValidateRulesMin": "0"
     }
   ],
+  "jpaMetamodelFiltering": true,
   "microserviceName": "DuongSu",
   "name": "DuongSu",
+  "pagination": "pagination",
   "relationships": [
     {
+      "otherEntityName": "thongTinCapNhatDuongSu",
+      "relationshipName": "thongTinCapNhat",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
       "otherEntityName": "taiSanDuongSu",
-      "otherEntityRelationshipName": "idDuongSu",
+      "otherEntityRelationshipName": "duongSu",
       "relationshipName": "taiSanDuongSu",
       "relationshipSide": "left",
       "relationshipType": "one-to-many"
     },
     {
+      "options": {
+        "onDelete": "CASCADE"
+      },
       "otherEntityName": "quanHeDuongSu",
-      "otherEntityRelationshipName": "idDuongSu",
+      "otherEntityRelationshipName": "duongSu",
       "relationshipName": "quanHeDuongSu",
       "relationshipSide": "left",
       "relationshipType": "one-to-many"
     },
     {
       "otherEntityName": "danhSachDuongSu",
-      "otherEntityRelationshipName": "idDuongSu",
+      "otherEntityRelationshipName": "duongSu",
       "relationshipName": "danhSachDuongSu",
       "relationshipSide": "left",
       "relationshipType": "one-to-many"
     },
     {
       "otherEntityName": "duongSuTrungCmnd",
-      "otherEntityRelationshipName": "idDuongSu",
+      "otherEntityRelationshipName": "duongSu",
       "relationshipName": "duongSuTrungCmnd",
       "relationshipSide": "left",
       "relationshipType": "one-to-many"
     },
     {
       "otherEntityName": "duongSuTrungCmndBak",
-      "otherEntityRelationshipName": "idDuongSu",
+      "otherEntityRelationshipName": "duongSu",
       "relationshipName": "duongSuTrungCmndBak",
       "relationshipSide": "left",
       "relationshipType": "one-to-many"
     }
   ],
   "searchEngine": "no",
-  "service": "serviceClass"
+  "service": "serviceImpl"
 }

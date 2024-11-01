@@ -10,12 +10,19 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 import vn.vnpt.repository.QuanHeDuongSuRepository;
+import vn.vnpt.service.QuanHeDuongSuQueryService;
 import vn.vnpt.service.QuanHeDuongSuService;
+import vn.vnpt.service.criteria.QuanHeDuongSuCriteria;
 import vn.vnpt.service.dto.QuanHeDuongSuDTO;
 import vn.vnpt.web.rest.errors.BadRequestAlertException;
 
@@ -37,9 +44,16 @@ public class QuanHeDuongSuResource {
 
     private final QuanHeDuongSuRepository quanHeDuongSuRepository;
 
-    public QuanHeDuongSuResource(QuanHeDuongSuService quanHeDuongSuService, QuanHeDuongSuRepository quanHeDuongSuRepository) {
+    private final QuanHeDuongSuQueryService quanHeDuongSuQueryService;
+
+    public QuanHeDuongSuResource(
+        QuanHeDuongSuService quanHeDuongSuService,
+        QuanHeDuongSuRepository quanHeDuongSuRepository,
+        QuanHeDuongSuQueryService quanHeDuongSuQueryService
+    ) {
         this.quanHeDuongSuService = quanHeDuongSuService;
         this.quanHeDuongSuRepository = quanHeDuongSuRepository;
+        this.quanHeDuongSuQueryService = quanHeDuongSuQueryService;
     }
 
     /**
@@ -134,12 +148,32 @@ public class QuanHeDuongSuResource {
     /**
      * {@code GET  /quan-he-duong-sus} : get all the quanHeDuongSus.
      *
+     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of quanHeDuongSus in body.
      */
     @GetMapping("")
-    public List<QuanHeDuongSuDTO> getAllQuanHeDuongSus() {
-        LOG.debug("REST request to get all QuanHeDuongSus");
-        return quanHeDuongSuService.findAll();
+    public ResponseEntity<List<QuanHeDuongSuDTO>> getAllQuanHeDuongSus(
+        QuanHeDuongSuCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        LOG.debug("REST request to get QuanHeDuongSus by criteria: {}", criteria);
+
+        Page<QuanHeDuongSuDTO> page = quanHeDuongSuQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /quan-he-duong-sus/count} : count all the quanHeDuongSus.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countQuanHeDuongSus(QuanHeDuongSuCriteria criteria) {
+        LOG.debug("REST request to count QuanHeDuongSus by criteria: {}", criteria);
+        return ResponseEntity.ok().body(quanHeDuongSuQueryService.countByCriteria(criteria));
     }
 
     /**

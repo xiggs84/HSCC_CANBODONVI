@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import vn.vnpt.domain.enumeration.GioiTinh;
 
 /**
  * A QuanHeNhanThan.
@@ -28,10 +27,6 @@ public class QuanHeNhanThan implements Serializable {
 
     @Column(name = "id_quan_he_doi_ung")
     private Long idQuanHeDoiUng;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "gioi_tinh")
-    private GioiTinh gioiTinh;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -74,19 +69,6 @@ public class QuanHeNhanThan implements Serializable {
         this.idQuanHeDoiUng = idQuanHeDoiUng;
     }
 
-    public GioiTinh getGioiTinh() {
-        return this.gioiTinh;
-    }
-
-    public QuanHeNhanThan gioiTinh(GioiTinh gioiTinh) {
-        this.setGioiTinh(gioiTinh);
-        return this;
-    }
-
-    public void setGioiTinh(GioiTinh gioiTinh) {
-        this.gioiTinh = gioiTinh;
-    }
-
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -113,7 +95,6 @@ public class QuanHeNhanThan implements Serializable {
             "idQuanHe=" + getIdQuanHe() +
             ", dienGiai='" + getDienGiai() + "'" +
             ", idQuanHeDoiUng=" + getIdQuanHeDoiUng() +
-            ", gioiTinh='" + getGioiTinh() + "'" +
             "}";
     }
 }

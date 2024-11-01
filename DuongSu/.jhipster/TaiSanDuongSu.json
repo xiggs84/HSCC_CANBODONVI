@@ -1,6 +1,6 @@
 {
   "annotations": {
-    "changelogDate": "20240902124137"
+    "changelogDate": "20240922093332"
   },
   "applications": "*",
   "clientRootFolder": "DuongSu",
@@ -35,16 +35,19 @@
       "fieldType": "Long"
     }
   ],
+  "jpaMetamodelFiltering": true,
   "microserviceName": "DuongSu",
   "name": "TaiSanDuongSu",
+  "pagination": "pagination",
   "relationships": [
     {
       "otherEntityName": "duongSu",
-      "relationshipName": "idDuongSu",
+      "otherEntityRelationshipName": "taiSanDuongSu",
+      "relationshipName": "duongSu",
       "relationshipSide": "right",
       "relationshipType": "many-to-one"
     }
   ],
   "searchEngine": "no",
-  "service": "serviceClass"
+  "service": "serviceImpl"
 }

@@ -36,9 +36,11 @@ class QuanHeMasterResourceIT {
 
     private static final Long DEFAULT_ID_DUONG_SU = 1L;
     private static final Long UPDATED_ID_DUONG_SU = 2L;
+    private static final Long SMALLER_ID_DUONG_SU = 1L - 1L;
 
     private static final Long DEFAULT_ID_DUONG_SU_QH = 1L;
     private static final Long UPDATED_ID_DUONG_SU_QH = 2L;
+    private static final Long SMALLER_ID_DUONG_SU_QH = 1L - 1L;
 
     private static final String ENTITY_API_URL = "/api/quan-he-masters";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -174,6 +176,226 @@ class QuanHeMasterResourceIT {
 
     @Test
     @Transactional
+    void getQuanHeMastersByIdFiltering() throws Exception {
+        // Initialize the database
+        insertedQuanHeMaster = quanHeMasterRepository.saveAndFlush(quanHeMaster);
+
+        Long id = quanHeMaster.getId();
+
+        defaultQuanHeMasterFiltering("id.equals=" + id, "id.notEquals=" + id);
+
+        defaultQuanHeMasterFiltering("id.greaterThanOrEqual=" + id, "id.greaterThan=" + id);
+
+        defaultQuanHeMasterFiltering("id.lessThanOrEqual=" + id, "id.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeMastersByIdDuongSuIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeMaster = quanHeMasterRepository.saveAndFlush(quanHeMaster);
+
+        // Get all the quanHeMasterList where idDuongSu equals to
+        defaultQuanHeMasterFiltering("idDuongSu.equals=" + DEFAULT_ID_DUONG_SU, "idDuongSu.equals=" + UPDATED_ID_DUONG_SU);
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeMastersByIdDuongSuIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedQuanHeMaster = quanHeMasterRepository.saveAndFlush(quanHeMaster);
+
+        // Get all the quanHeMasterList where idDuongSu in
+        defaultQuanHeMasterFiltering(
+            "idDuongSu.in=" + DEFAULT_ID_DUONG_SU + "," + UPDATED_ID_DUONG_SU,
+            "idDuongSu.in=" + UPDATED_ID_DUONG_SU
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeMastersByIdDuongSuIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedQuanHeMaster = quanHeMasterRepository.saveAndFlush(quanHeMaster);
+
+        // Get all the quanHeMasterList where idDuongSu is not null
+        defaultQuanHeMasterFiltering("idDuongSu.specified=true", "idDuongSu.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeMastersByIdDuongSuIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeMaster = quanHeMasterRepository.saveAndFlush(quanHeMaster);
+
+        // Get all the quanHeMasterList where idDuongSu is greater than or equal to
+        defaultQuanHeMasterFiltering(
+            "idDuongSu.greaterThanOrEqual=" + DEFAULT_ID_DUONG_SU,
+            "idDuongSu.greaterThanOrEqual=" + UPDATED_ID_DUONG_SU
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeMastersByIdDuongSuIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeMaster = quanHeMasterRepository.saveAndFlush(quanHeMaster);
+
+        // Get all the quanHeMasterList where idDuongSu is less than or equal to
+        defaultQuanHeMasterFiltering(
+            "idDuongSu.lessThanOrEqual=" + DEFAULT_ID_DUONG_SU,
+            "idDuongSu.lessThanOrEqual=" + SMALLER_ID_DUONG_SU
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeMastersByIdDuongSuIsLessThanSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeMaster = quanHeMasterRepository.saveAndFlush(quanHeMaster);
+
+        // Get all the quanHeMasterList where idDuongSu is less than
+        defaultQuanHeMasterFiltering("idDuongSu.lessThan=" + UPDATED_ID_DUONG_SU, "idDuongSu.lessThan=" + DEFAULT_ID_DUONG_SU);
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeMastersByIdDuongSuIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeMaster = quanHeMasterRepository.saveAndFlush(quanHeMaster);
+
+        // Get all the quanHeMasterList where idDuongSu is greater than
+        defaultQuanHeMasterFiltering("idDuongSu.greaterThan=" + SMALLER_ID_DUONG_SU, "idDuongSu.greaterThan=" + DEFAULT_ID_DUONG_SU);
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeMastersByIdDuongSuQhIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeMaster = quanHeMasterRepository.saveAndFlush(quanHeMaster);
+
+        // Get all the quanHeMasterList where idDuongSuQh equals to
+        defaultQuanHeMasterFiltering("idDuongSuQh.equals=" + DEFAULT_ID_DUONG_SU_QH, "idDuongSuQh.equals=" + UPDATED_ID_DUONG_SU_QH);
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeMastersByIdDuongSuQhIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedQuanHeMaster = quanHeMasterRepository.saveAndFlush(quanHeMaster);
+
+        // Get all the quanHeMasterList where idDuongSuQh in
+        defaultQuanHeMasterFiltering(
+            "idDuongSuQh.in=" + DEFAULT_ID_DUONG_SU_QH + "," + UPDATED_ID_DUONG_SU_QH,
+            "idDuongSuQh.in=" + UPDATED_ID_DUONG_SU_QH
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeMastersByIdDuongSuQhIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedQuanHeMaster = quanHeMasterRepository.saveAndFlush(quanHeMaster);
+
+        // Get all the quanHeMasterList where idDuongSuQh is not null
+        defaultQuanHeMasterFiltering("idDuongSuQh.specified=true", "idDuongSuQh.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeMastersByIdDuongSuQhIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeMaster = quanHeMasterRepository.saveAndFlush(quanHeMaster);
+
+        // Get all the quanHeMasterList where idDuongSuQh is greater than or equal to
+        defaultQuanHeMasterFiltering(
+            "idDuongSuQh.greaterThanOrEqual=" + DEFAULT_ID_DUONG_SU_QH,
+            "idDuongSuQh.greaterThanOrEqual=" + UPDATED_ID_DUONG_SU_QH
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeMastersByIdDuongSuQhIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeMaster = quanHeMasterRepository.saveAndFlush(quanHeMaster);
+
+        // Get all the quanHeMasterList where idDuongSuQh is less than or equal to
+        defaultQuanHeMasterFiltering(
+            "idDuongSuQh.lessThanOrEqual=" + DEFAULT_ID_DUONG_SU_QH,
+            "idDuongSuQh.lessThanOrEqual=" + SMALLER_ID_DUONG_SU_QH
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeMastersByIdDuongSuQhIsLessThanSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeMaster = quanHeMasterRepository.saveAndFlush(quanHeMaster);
+
+        // Get all the quanHeMasterList where idDuongSuQh is less than
+        defaultQuanHeMasterFiltering("idDuongSuQh.lessThan=" + UPDATED_ID_DUONG_SU_QH, "idDuongSuQh.lessThan=" + DEFAULT_ID_DUONG_SU_QH);
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeMastersByIdDuongSuQhIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeMaster = quanHeMasterRepository.saveAndFlush(quanHeMaster);
+
+        // Get all the quanHeMasterList where idDuongSuQh is greater than
+        defaultQuanHeMasterFiltering(
+            "idDuongSuQh.greaterThan=" + SMALLER_ID_DUONG_SU_QH,
+            "idDuongSuQh.greaterThan=" + DEFAULT_ID_DUONG_SU_QH
+        );
+    }
+
+    private void defaultQuanHeMasterFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
+        defaultQuanHeMasterShouldBeFound(shouldBeFound);
+        defaultQuanHeMasterShouldNotBeFound(shouldNotBeFound);
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultQuanHeMasterShouldBeFound(String filter) throws Exception {
+        restQuanHeMasterMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(quanHeMaster.getId().intValue())))
+            .andExpect(jsonPath("$.[*].idDuongSu").value(hasItem(DEFAULT_ID_DUONG_SU.intValue())))
+            .andExpect(jsonPath("$.[*].idDuongSuQh").value(hasItem(DEFAULT_ID_DUONG_SU_QH.intValue())));
+
+        // Check, that the count call also returns 1
+        restQuanHeMasterMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultQuanHeMasterShouldNotBeFound(String filter) throws Exception {
+        restQuanHeMasterMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restQuanHeMasterMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
+    }
+
+    @Test
+    @Transactional
     void getNonExistingQuanHeMaster() throws Exception {
         // Get the quanHeMaster
         restQuanHeMasterMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
@@ -280,6 +502,8 @@ class QuanHeMasterResourceIT {
         // Update the quanHeMaster using partial update
         QuanHeMaster partialUpdatedQuanHeMaster = new QuanHeMaster();
         partialUpdatedQuanHeMaster.setId(quanHeMaster.getId());
+
+        partialUpdatedQuanHeMaster.idDuongSu(UPDATED_ID_DUONG_SU);
 
         restQuanHeMasterMockMvc
             .perform(

@@ -9,4 +9,4 @@ import vn.vnpt.domain.QuanHeNhanThan;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface QuanHeNhanThanRepository extends JpaRepository<QuanHeNhanThan, Long> {}
+public interface QuanHeNhanThanRepository extends JpaRepository<QuanHeNhanThan, Long>, JpaSpecificationExecutor<QuanHeNhanThan> {}

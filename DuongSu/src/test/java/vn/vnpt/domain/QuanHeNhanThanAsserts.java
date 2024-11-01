@@ -48,8 +48,7 @@ public class QuanHeNhanThanAsserts {
         assertThat(expected)
             .as("Verify QuanHeNhanThan relevant properties")
             .satisfies(e -> assertThat(e.getDienGiai()).as("check dienGiai").isEqualTo(actual.getDienGiai()))
-            .satisfies(e -> assertThat(e.getIdQuanHeDoiUng()).as("check idQuanHeDoiUng").isEqualTo(actual.getIdQuanHeDoiUng()))
-            .satisfies(e -> assertThat(e.getGioiTinh()).as("check gioiTinh").isEqualTo(actual.getGioiTinh()));
+            .satisfies(e -> assertThat(e.getIdQuanHeDoiUng()).as("check idQuanHeDoiUng").isEqualTo(actual.getIdQuanHeDoiUng()));
     }
 
     /**

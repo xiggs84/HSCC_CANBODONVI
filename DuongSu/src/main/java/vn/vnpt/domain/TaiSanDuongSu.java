@@ -47,10 +47,19 @@ public class TaiSanDuongSu implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
-        value = { "taiSanDuongSus", "quanHeDuongSus", "danhSachDuongSus", "duongSuTrungCmnds", "duongSuTrungCmndBaks" },
+        value = {
+            "thongTinCapNhats",
+            "taiSanDuongSus",
+            "quanHeDuongSus",
+            "danhSachDuongSus",
+            "duongSuTrungCmnds",
+            "duongSuTrungCmndBaks",
+            "loaiDuongSu",
+            "loaiGiayTo",
+        },
         allowSetters = true
     )
-    private DuongSu idDuongSu;
+    private DuongSu duongSu;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -145,16 +154,16 @@ public class TaiSanDuongSu implements Serializable {
         this.idChungThuc = idChungThuc;
     }
 
-    public DuongSu getIdDuongSu() {
-        return this.idDuongSu;
+    public DuongSu getDuongSu() {
+        return this.duongSu;
     }
 
-    public void setIdDuongSu(DuongSu duongSu) {
-        this.idDuongSu = duongSu;
+    public void setDuongSu(DuongSu duongSu) {
+        this.duongSu = duongSu;
     }
 
-    public TaiSanDuongSu idDuongSu(DuongSu duongSu) {
-        this.setIdDuongSu(duongSu);
+    public TaiSanDuongSu duongSu(DuongSu duongSu) {
+        this.setDuongSu(duongSu);
         return this;
     }
 

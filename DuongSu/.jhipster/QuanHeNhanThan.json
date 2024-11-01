@@ -1,6 +1,6 @@
 {
   "annotations": {
-    "changelogDate": "20240902124136"
+    "changelogDate": "20240922093331"
   },
   "applications": "*",
   "clientRootFolder": "DuongSu",
@@ -21,16 +21,13 @@
     {
       "fieldName": "idQuanHeDoiUng",
       "fieldType": "Long"
-    },
-    {
-      "fieldName": "gioiTinh",
-      "fieldType": "GioiTinh",
-      "fieldValues": "Nam (Nam),Nu (Nữ)"
     }
   ],
+  "jpaMetamodelFiltering": true,
   "microserviceName": "DuongSu",
   "name": "QuanHeNhanThan",
+  "pagination": "pagination",
   "relationships": [],
   "searchEngine": "no",
-  "service": "serviceClass"
+  "service": "serviceImpl"
 }

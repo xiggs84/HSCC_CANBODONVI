@@ -10,12 +10,19 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 import vn.vnpt.repository.DmDuongSuRepository;
+import vn.vnpt.service.DmDuongSuQueryService;
 import vn.vnpt.service.DmDuongSuService;
+import vn.vnpt.service.criteria.DmDuongSuCriteria;
 import vn.vnpt.service.dto.DmDuongSuDTO;
 import vn.vnpt.web.rest.errors.BadRequestAlertException;
 
@@ -37,9 +44,16 @@ public class DmDuongSuResource {
 
     private final DmDuongSuRepository dmDuongSuRepository;
 
-    public DmDuongSuResource(DmDuongSuService dmDuongSuService, DmDuongSuRepository dmDuongSuRepository) {
+    private final DmDuongSuQueryService dmDuongSuQueryService;
+
+    public DmDuongSuResource(
+        DmDuongSuService dmDuongSuService,
+        DmDuongSuRepository dmDuongSuRepository,
+        DmDuongSuQueryService dmDuongSuQueryService
+    ) {
         this.dmDuongSuService = dmDuongSuService;
         this.dmDuongSuRepository = dmDuongSuRepository;
+        this.dmDuongSuQueryService = dmDuongSuQueryService;
     }
 
     /**
@@ -133,12 +147,32 @@ public class DmDuongSuResource {
     /**
      * {@code GET  /dm-duong-sus} : get all the dmDuongSus.
      *
+     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of dmDuongSus in body.
      */
     @GetMapping("")
-    public List<DmDuongSuDTO> getAllDmDuongSus() {
-        LOG.debug("REST request to get all DmDuongSus");
-        return dmDuongSuService.findAll();
+    public ResponseEntity<List<DmDuongSuDTO>> getAllDmDuongSus(
+        DmDuongSuCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        LOG.debug("REST request to get DmDuongSus by criteria: {}", criteria);
+
+        Page<DmDuongSuDTO> page = dmDuongSuQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /dm-duong-sus/count} : count all the dmDuongSus.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countDmDuongSus(DmDuongSuCriteria criteria) {
+        LOG.debug("REST request to count DmDuongSus by criteria: {}", criteria);
+        return ResponseEntity.ok().body(dmDuongSuQueryService.countByCriteria(criteria));
     }
 
     /**

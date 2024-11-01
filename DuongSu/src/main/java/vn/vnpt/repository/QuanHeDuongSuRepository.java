@@ -9,4 +9,4 @@ import vn.vnpt.domain.QuanHeDuongSu;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface QuanHeDuongSuRepository extends JpaRepository<QuanHeDuongSu, Long> {}
+public interface QuanHeDuongSuRepository extends JpaRepository<QuanHeDuongSu, Long>, JpaSpecificationExecutor<QuanHeDuongSu> {}

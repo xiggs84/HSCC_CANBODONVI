@@ -24,14 +24,14 @@ class DanhSachDuongSuTest {
     }
 
     @Test
-    void idDuongSuTest() {
+    void duongSuTest() {
         DanhSachDuongSu danhSachDuongSu = getDanhSachDuongSuRandomSampleGenerator();
         DuongSu duongSuBack = getDuongSuRandomSampleGenerator();
 
-        danhSachDuongSu.setIdDuongSu(duongSuBack);
-        assertThat(danhSachDuongSu.getIdDuongSu()).isEqualTo(duongSuBack);
+        danhSachDuongSu.setDuongSu(duongSuBack);
+        assertThat(danhSachDuongSu.getDuongSu()).isEqualTo(duongSuBack);
 
-        danhSachDuongSu.idDuongSu(null);
-        assertThat(danhSachDuongSu.getIdDuongSu()).isNull();
+        danhSachDuongSu.duongSu(null);
+        assertThat(danhSachDuongSu.getDuongSu()).isNull();
     }
 }

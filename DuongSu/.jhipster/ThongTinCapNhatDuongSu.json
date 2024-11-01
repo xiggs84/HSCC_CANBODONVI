@@ -1,0 +1,57 @@
+{
+  "annotations": {
+    "changelogDate": "20240922093333"
+  },
+  "applications": "*",
+  "clientRootFolder": "DuongSu",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "idCapNhat",
+      "fieldType": "Long",
+      "options": {
+        "id": true
+      }
+    },
+    {
+      "fieldName": "tenDuongSu",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "soGiayTo",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "thongTinDuongSu",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "ngayCapNhat",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "microserviceName": "DuongSu",
+  "name": "ThongTinCapNhatDuongSu",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "loaiDuongSu",
+      "otherEntityRelationshipName": "thongTinCapNhatDuongSu",
+      "relationshipName": "loaiDuongSu",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "loaiGiayTo",
+      "otherEntityRelationshipName": "thongTinCapNhatDuongSu",
+      "relationshipName": "loaiGiayTo",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

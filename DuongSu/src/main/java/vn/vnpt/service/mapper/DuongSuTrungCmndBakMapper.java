@@ -11,7 +11,7 @@ import vn.vnpt.service.dto.DuongSuTrungCmndBakDTO;
  */
 @Mapper(componentModel = "spring")
 public interface DuongSuTrungCmndBakMapper extends EntityMapper<DuongSuTrungCmndBakDTO, DuongSuTrungCmndBak> {
-    @Mapping(target = "idDuongSu", source = "idDuongSu", qualifiedByName = "duongSuIdDuongSu")
+    @Mapping(target = "duongSu", source = "duongSu", qualifiedByName = "duongSuIdDuongSu")
     DuongSuTrungCmndBakDTO toDto(DuongSuTrungCmndBak s);
 
     @Named("duongSuIdDuongSu")

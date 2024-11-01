@@ -10,12 +10,19 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 import vn.vnpt.repository.DuongSuTrungCmndBakRepository;
+import vn.vnpt.service.DuongSuTrungCmndBakQueryService;
 import vn.vnpt.service.DuongSuTrungCmndBakService;
+import vn.vnpt.service.criteria.DuongSuTrungCmndBakCriteria;
 import vn.vnpt.service.dto.DuongSuTrungCmndBakDTO;
 import vn.vnpt.web.rest.errors.BadRequestAlertException;
 
@@ -37,12 +44,16 @@ public class DuongSuTrungCmndBakResource {
 
     private final DuongSuTrungCmndBakRepository duongSuTrungCmndBakRepository;
 
+    private final DuongSuTrungCmndBakQueryService duongSuTrungCmndBakQueryService;
+
     public DuongSuTrungCmndBakResource(
         DuongSuTrungCmndBakService duongSuTrungCmndBakService,
-        DuongSuTrungCmndBakRepository duongSuTrungCmndBakRepository
+        DuongSuTrungCmndBakRepository duongSuTrungCmndBakRepository,
+        DuongSuTrungCmndBakQueryService duongSuTrungCmndBakQueryService
     ) {
         this.duongSuTrungCmndBakService = duongSuTrungCmndBakService;
         this.duongSuTrungCmndBakRepository = duongSuTrungCmndBakRepository;
+        this.duongSuTrungCmndBakQueryService = duongSuTrungCmndBakQueryService;
     }
 
     /**
@@ -138,12 +149,32 @@ public class DuongSuTrungCmndBakResource {
     /**
      * {@code GET  /duong-su-trung-cmnd-baks} : get all the duongSuTrungCmndBaks.
      *
+     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of duongSuTrungCmndBaks in body.
      */
     @GetMapping("")
-    public List<DuongSuTrungCmndBakDTO> getAllDuongSuTrungCmndBaks() {
-        LOG.debug("REST request to get all DuongSuTrungCmndBaks");
-        return duongSuTrungCmndBakService.findAll();
+    public ResponseEntity<List<DuongSuTrungCmndBakDTO>> getAllDuongSuTrungCmndBaks(
+        DuongSuTrungCmndBakCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        LOG.debug("REST request to get DuongSuTrungCmndBaks by criteria: {}", criteria);
+
+        Page<DuongSuTrungCmndBakDTO> page = duongSuTrungCmndBakQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /duong-su-trung-cmnd-baks/count} : count all the duongSuTrungCmndBaks.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countDuongSuTrungCmndBaks(DuongSuTrungCmndBakCriteria criteria) {
+        LOG.debug("REST request to count DuongSuTrungCmndBaks by criteria: {}", criteria);
+        return ResponseEntity.ok().body(duongSuTrungCmndBakQueryService.countByCriteria(criteria));
     }
 
     /**

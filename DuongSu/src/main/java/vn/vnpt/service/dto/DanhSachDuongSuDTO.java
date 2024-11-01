@@ -37,7 +37,7 @@ public class DanhSachDuongSuDTO implements Serializable {
 
     private Long idLoaiNganChan;
 
-    private DuongSuDTO idDuongSu;
+    private DuongSuDTO duongSu;
 
     public Long getId() {
         return id;
@@ -135,12 +135,12 @@ public class DanhSachDuongSuDTO implements Serializable {
         this.idLoaiNganChan = idLoaiNganChan;
     }
 
-    public DuongSuDTO getIdDuongSu() {
-        return idDuongSu;
+    public DuongSuDTO getDuongSu() {
+        return duongSu;
     }
 
-    public void setIdDuongSu(DuongSuDTO idDuongSu) {
-        this.idDuongSu = idDuongSu;
+    public void setDuongSu(DuongSuDTO duongSu) {
+        this.duongSu = duongSu;
     }
 
     @Override
@@ -180,7 +180,7 @@ public class DanhSachDuongSuDTO implements Serializable {
             ", strSearch='" + getStrSearch() + "'" +
             ", soGiayTo='" + getSoGiayTo() + "'" +
             ", idLoaiNganChan=" + getIdLoaiNganChan() +
-            ", idDuongSu=" + getIdDuongSu() +
+            ", duongSu=" + getDuongSu() +
             "}";
     }
 }

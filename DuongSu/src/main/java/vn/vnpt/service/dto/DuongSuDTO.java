@@ -5,8 +5,6 @@ import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
-import vn.vnpt.domain.enumeration.LoaiDuongSu;
-import vn.vnpt.domain.enumeration.LoaiGiayTo;
 
 /**
  * A DTO for the {@link vn.vnpt.domain.DuongSu} entity.
@@ -17,8 +15,6 @@ public class DuongSuDTO implements Serializable {
     private Long idDuongSu;
 
     private String tenDuongSu;
-
-    private LoaiDuongSu loaiDuongSu;
 
     private String diaChi;
 
@@ -49,8 +45,6 @@ public class DuongSuDTO implements Serializable {
 
     private String strSearch;
 
-    private LoaiGiayTo loaiGiayTo;
-
     private String soGiayTo;
 
     private String ghiChu;
@@ -60,6 +54,10 @@ public class DuongSuDTO implements Serializable {
     @Min(value = 0)
     @Max(value = 1)
     private Integer syncStatus;
+
+    private LoaiDuongSuDTO loaiDuongSu;
+
+    private LoaiGiayToDTO loaiGiayTo;
 
     public Long getIdDuongSu() {
         return idDuongSu;
@@ -75,14 +73,6 @@ public class DuongSuDTO implements Serializable {
 
     public void setTenDuongSu(String tenDuongSu) {
         this.tenDuongSu = tenDuongSu;
-    }
-
-    public LoaiDuongSu getLoaiDuongSu() {
-        return loaiDuongSu;
-    }
-
-    public void setLoaiDuongSu(LoaiDuongSu loaiDuongSu) {
-        this.loaiDuongSu = loaiDuongSu;
     }
 
     public String getDiaChi() {
@@ -189,14 +179,6 @@ public class DuongSuDTO implements Serializable {
         this.strSearch = strSearch;
     }
 
-    public LoaiGiayTo getLoaiGiayTo() {
-        return loaiGiayTo;
-    }
-
-    public void setLoaiGiayTo(LoaiGiayTo loaiGiayTo) {
-        this.loaiGiayTo = loaiGiayTo;
-    }
-
     public String getSoGiayTo() {
         return soGiayTo;
     }
@@ -229,6 +211,22 @@ public class DuongSuDTO implements Serializable {
         this.syncStatus = syncStatus;
     }
 
+    public LoaiDuongSuDTO getLoaiDuongSu() {
+        return loaiDuongSu;
+    }
+
+    public void setLoaiDuongSu(LoaiDuongSuDTO loaiDuongSu) {
+        this.loaiDuongSu = loaiDuongSu;
+    }
+
+    public LoaiGiayToDTO getLoaiGiayTo() {
+        return loaiGiayTo;
+    }
+
+    public void setLoaiGiayTo(LoaiGiayToDTO loaiGiayTo) {
+        this.loaiGiayTo = loaiGiayTo;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -256,7 +254,6 @@ public class DuongSuDTO implements Serializable {
         return "DuongSuDTO{" +
             "idDuongSu=" + getIdDuongSu() +
             ", tenDuongSu='" + getTenDuongSu() + "'" +
-            ", loaiDuongSu='" + getLoaiDuongSu() + "'" +
             ", diaChi='" + getDiaChi() + "'" +
             ", soDienThoai='" + getSoDienThoai() + "'" +
             ", email='" + getEmail() + "'" +
@@ -270,11 +267,12 @@ public class DuongSuDTO implements Serializable {
             ", idMaster='" + getIdMaster() + "'" +
             ", idDonVi=" + getIdDonVi() +
             ", strSearch='" + getStrSearch() + "'" +
-            ", loaiGiayTo='" + getLoaiGiayTo() + "'" +
             ", soGiayTo='" + getSoGiayTo() + "'" +
             ", ghiChu='" + getGhiChu() + "'" +
             ", idLoaiNganChan=" + getIdLoaiNganChan() +
             ", syncStatus=" + getSyncStatus() +
+            ", loaiDuongSu=" + getLoaiDuongSu() +
+            ", loaiGiayTo=" + getLoaiGiayTo() +
             "}";
     }
 }

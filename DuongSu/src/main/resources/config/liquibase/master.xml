@@ -17,23 +17,28 @@
     <property name="datetimeType" value="datetime" dbms="postgresql"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20240902124127_added_entity_CauHinhThongTinDuongSu.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20240902124128_added_entity_ChiTietNganChan.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20240902124129_added_entity_DanhSachDuongSu.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20240902124130_added_entity_DmDuongSu.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20240902124131_added_entity_DuongSu.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20240902124132_added_entity_DuongSuTrungCmnd.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20240902124133_added_entity_DuongSuTrungCmndBak.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20240902124134_added_entity_QuanHeDuongSu.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20240902124135_added_entity_QuanHeMaster.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20240902124136_added_entity_QuanHeNhanThan.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20240902124137_added_entity_TaiSanDuongSu.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240922093320_added_entity_CauHinhThongTinDuongSu.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240922093321_added_entity_ChiTietNganChan.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240922093322_added_entity_DanhSachDuongSu.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240922093323_added_entity_DmDuongSu.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240922093324_added_entity_DuongSu.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240922093325_added_entity_DuongSuTrungCmnd.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240922093326_added_entity_DuongSuTrungCmndBak.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240922093327_added_entity_LoaiDuongSu.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240922093328_added_entity_LoaiGiayTo.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240922093329_added_entity_QuanHeDuongSu.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240922093330_added_entity_QuanHeMaster.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240922093331_added_entity_QuanHeNhanThan.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240922093332_added_entity_TaiSanDuongSu.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240922093333_added_entity_ThongTinCapNhatDuongSu.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
-    <include file="config/liquibase/changelog/20240902124129_added_entity_constraints_DanhSachDuongSu.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20240902124132_added_entity_constraints_DuongSuTrungCmnd.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20240902124133_added_entity_constraints_DuongSuTrungCmndBak.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20240902124134_added_entity_constraints_QuanHeDuongSu.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20240902124137_added_entity_constraints_TaiSanDuongSu.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240922093322_added_entity_constraints_DanhSachDuongSu.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240922093324_added_entity_constraints_DuongSu.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240922093325_added_entity_constraints_DuongSuTrungCmnd.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240922093326_added_entity_constraints_DuongSuTrungCmndBak.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240922093329_added_entity_constraints_QuanHeDuongSu.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240922093332_added_entity_constraints_TaiSanDuongSu.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240922093333_added_entity_constraints_ThongTinCapNhatDuongSu.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

@@ -1,6 +1,6 @@
 {
   "annotations": {
-    "changelogDate": "20240902124135"
+    "changelogDate": "20240922093330"
   },
   "applications": "*",
   "clientRootFolder": "DuongSu",
@@ -16,9 +16,11 @@
       "fieldType": "Long"
     }
   ],
+  "jpaMetamodelFiltering": true,
   "microserviceName": "DuongSu",
   "name": "QuanHeMaster",
+  "pagination": "pagination",
   "relationships": [],
   "searchEngine": "no",
-  "service": "serviceClass"
+  "service": "serviceImpl"
 }

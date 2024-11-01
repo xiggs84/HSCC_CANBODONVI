@@ -23,7 +23,7 @@ import vn.vnpt.config.CRLFLogConverter;
 @EnableConfigurationProperties({ LiquibaseProperties.class, ApplicationProperties.class })
 public class DuongSuApp {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DuongSuApp.class);
+    private static final Logger log = LoggerFactory.getLogger(DuongSuApp.class);
 
     private final Environment env;
 
@@ -45,7 +45,7 @@ public class DuongSuApp {
             activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) &&
             activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)
         ) {
-            LOG.error(
+            log.error(
                 "You have misconfigured your application! It should not run " + "with both the 'dev' and 'prod' profiles at the same time."
             );
         }
@@ -53,7 +53,7 @@ public class DuongSuApp {
             activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) &&
             activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_CLOUD)
         ) {
-            LOG.error(
+            log.error(
                 "You have misconfigured your application! It should not " + "run with both the 'dev' and 'cloud' profiles at the same time."
             );
         }
@@ -82,9 +82,9 @@ public class DuongSuApp {
         try {
             hostAddress = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
-            LOG.warn("The host name could not be determined, using `localhost` as fallback");
+            log.warn("The host name could not be determined, using `localhost` as fallback");
         }
-        LOG.info(
+        log.info(
             CRLFLogConverter.CRLF_SAFE_MARKER,
             """
 
@@ -109,7 +109,7 @@ public class DuongSuApp {
         if (configServerStatus == null) {
             configServerStatus = "Not found or not setup for this application";
         }
-        LOG.info(
+        log.info(
             CRLFLogConverter.CRLF_SAFE_MARKER,
             "\n----------------------------------------------------------\n\t" +
             "Config Server: \t{}\n----------------------------------------------------------",

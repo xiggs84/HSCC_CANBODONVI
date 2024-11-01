@@ -61,6 +61,6 @@ public class QuanHeDuongSuAsserts {
     public static void assertQuanHeDuongSuUpdatableRelationshipsEquals(QuanHeDuongSu expected, QuanHeDuongSu actual) {
         assertThat(expected)
             .as("Verify QuanHeDuongSu relationships")
-            .satisfies(e -> assertThat(e.getIdDuongSu()).as("check idDuongSu").isEqualTo(actual.getIdDuongSu()));
+            .satisfies(e -> assertThat(e.getDuongSu()).as("check duongSu").isEqualTo(actual.getDuongSu()));
     }
 }

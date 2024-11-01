@@ -9,4 +9,4 @@ import vn.vnpt.domain.DmDuongSu;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface DmDuongSuRepository extends JpaRepository<DmDuongSu, Long> {}
+public interface DmDuongSuRepository extends JpaRepository<DmDuongSu, Long>, JpaSpecificationExecutor<DmDuongSu> {}

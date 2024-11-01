@@ -2,7 +2,6 @@ package vn.vnpt.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-import vn.vnpt.domain.enumeration.GioiTinh;
 
 /**
  * A DTO for the {@link vn.vnpt.domain.QuanHeNhanThan} entity.
@@ -15,8 +14,6 @@ public class QuanHeNhanThanDTO implements Serializable {
     private String dienGiai;
 
     private Long idQuanHeDoiUng;
-
-    private GioiTinh gioiTinh;
 
     public Long getIdQuanHe() {
         return idQuanHe;
@@ -40,14 +37,6 @@ public class QuanHeNhanThanDTO implements Serializable {
 
     public void setIdQuanHeDoiUng(Long idQuanHeDoiUng) {
         this.idQuanHeDoiUng = idQuanHeDoiUng;
-    }
-
-    public GioiTinh getGioiTinh() {
-        return gioiTinh;
-    }
-
-    public void setGioiTinh(GioiTinh gioiTinh) {
-        this.gioiTinh = gioiTinh;
     }
 
     @Override
@@ -78,7 +67,6 @@ public class QuanHeNhanThanDTO implements Serializable {
             "idQuanHe=" + getIdQuanHe() +
             ", dienGiai='" + getDienGiai() + "'" +
             ", idQuanHeDoiUng=" + getIdQuanHeDoiUng() +
-            ", gioiTinh='" + getGioiTinh() + "'" +
             "}";
     }
 }

@@ -21,6 +21,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import vn.vnpt.IntegrationTest;
+import vn.vnpt.domain.DuongSu;
 import vn.vnpt.domain.QuanHeDuongSu;
 import vn.vnpt.repository.QuanHeDuongSuRepository;
 import vn.vnpt.service.dto.QuanHeDuongSuDTO;
@@ -36,12 +37,14 @@ class QuanHeDuongSuResourceIT {
 
     private static final Long DEFAULT_ID_DUONG_SU_QH = 1L;
     private static final Long UPDATED_ID_DUONG_SU_QH = 2L;
+    private static final Long SMALLER_ID_DUONG_SU_QH = 1L - 1L;
 
     private static final String DEFAULT_THONG_TIN_QUAN_HE = "AAAAAAAAAA";
     private static final String UPDATED_THONG_TIN_QUAN_HE = "BBBBBBBBBB";
 
     private static final Integer DEFAULT_TRANG_THAI = 0;
     private static final Integer UPDATED_TRANG_THAI = 1;
+    private static final Integer SMALLER_TRANG_THAI = 0 - 1;
 
     private static final String ENTITY_API_URL = "/api/quan-he-duong-sus";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{idQuanHe}";
@@ -162,7 +165,7 @@ class QuanHeDuongSuResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].idQuanHe").value(hasItem(quanHeDuongSu.getIdQuanHe().intValue())))
             .andExpect(jsonPath("$.[*].idDuongSuQh").value(hasItem(DEFAULT_ID_DUONG_SU_QH.intValue())))
-            .andExpect(jsonPath("$.[*].thongTinQuanHe").value(hasItem(DEFAULT_THONG_TIN_QUAN_HE)))
+            .andExpect(jsonPath("$.[*].thongTinQuanHe").value(hasItem(DEFAULT_THONG_TIN_QUAN_HE.toString())))
             .andExpect(jsonPath("$.[*].trangThai").value(hasItem(DEFAULT_TRANG_THAI)));
     }
 
@@ -179,8 +182,248 @@ class QuanHeDuongSuResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.idQuanHe").value(quanHeDuongSu.getIdQuanHe().intValue()))
             .andExpect(jsonPath("$.idDuongSuQh").value(DEFAULT_ID_DUONG_SU_QH.intValue()))
-            .andExpect(jsonPath("$.thongTinQuanHe").value(DEFAULT_THONG_TIN_QUAN_HE))
+            .andExpect(jsonPath("$.thongTinQuanHe").value(DEFAULT_THONG_TIN_QUAN_HE.toString()))
             .andExpect(jsonPath("$.trangThai").value(DEFAULT_TRANG_THAI));
+    }
+
+    @Test
+    @Transactional
+    void getQuanHeDuongSusByIdFiltering() throws Exception {
+        // Initialize the database
+        insertedQuanHeDuongSu = quanHeDuongSuRepository.saveAndFlush(quanHeDuongSu);
+
+        Long id = quanHeDuongSu.getIdQuanHe();
+
+        defaultQuanHeDuongSuFiltering("idQuanHe.equals=" + id, "idQuanHe.notEquals=" + id);
+
+        defaultQuanHeDuongSuFiltering("idQuanHe.greaterThanOrEqual=" + id, "idQuanHe.greaterThan=" + id);
+
+        defaultQuanHeDuongSuFiltering("idQuanHe.lessThanOrEqual=" + id, "idQuanHe.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeDuongSusByIdDuongSuQhIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeDuongSu = quanHeDuongSuRepository.saveAndFlush(quanHeDuongSu);
+
+        // Get all the quanHeDuongSuList where idDuongSuQh equals to
+        defaultQuanHeDuongSuFiltering("idDuongSuQh.equals=" + DEFAULT_ID_DUONG_SU_QH, "idDuongSuQh.equals=" + UPDATED_ID_DUONG_SU_QH);
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeDuongSusByIdDuongSuQhIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedQuanHeDuongSu = quanHeDuongSuRepository.saveAndFlush(quanHeDuongSu);
+
+        // Get all the quanHeDuongSuList where idDuongSuQh in
+        defaultQuanHeDuongSuFiltering(
+            "idDuongSuQh.in=" + DEFAULT_ID_DUONG_SU_QH + "," + UPDATED_ID_DUONG_SU_QH,
+            "idDuongSuQh.in=" + UPDATED_ID_DUONG_SU_QH
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeDuongSusByIdDuongSuQhIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedQuanHeDuongSu = quanHeDuongSuRepository.saveAndFlush(quanHeDuongSu);
+
+        // Get all the quanHeDuongSuList where idDuongSuQh is not null
+        defaultQuanHeDuongSuFiltering("idDuongSuQh.specified=true", "idDuongSuQh.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeDuongSusByIdDuongSuQhIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeDuongSu = quanHeDuongSuRepository.saveAndFlush(quanHeDuongSu);
+
+        // Get all the quanHeDuongSuList where idDuongSuQh is greater than or equal to
+        defaultQuanHeDuongSuFiltering(
+            "idDuongSuQh.greaterThanOrEqual=" + DEFAULT_ID_DUONG_SU_QH,
+            "idDuongSuQh.greaterThanOrEqual=" + UPDATED_ID_DUONG_SU_QH
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeDuongSusByIdDuongSuQhIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeDuongSu = quanHeDuongSuRepository.saveAndFlush(quanHeDuongSu);
+
+        // Get all the quanHeDuongSuList where idDuongSuQh is less than or equal to
+        defaultQuanHeDuongSuFiltering(
+            "idDuongSuQh.lessThanOrEqual=" + DEFAULT_ID_DUONG_SU_QH,
+            "idDuongSuQh.lessThanOrEqual=" + SMALLER_ID_DUONG_SU_QH
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeDuongSusByIdDuongSuQhIsLessThanSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeDuongSu = quanHeDuongSuRepository.saveAndFlush(quanHeDuongSu);
+
+        // Get all the quanHeDuongSuList where idDuongSuQh is less than
+        defaultQuanHeDuongSuFiltering("idDuongSuQh.lessThan=" + UPDATED_ID_DUONG_SU_QH, "idDuongSuQh.lessThan=" + DEFAULT_ID_DUONG_SU_QH);
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeDuongSusByIdDuongSuQhIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeDuongSu = quanHeDuongSuRepository.saveAndFlush(quanHeDuongSu);
+
+        // Get all the quanHeDuongSuList where idDuongSuQh is greater than
+        defaultQuanHeDuongSuFiltering(
+            "idDuongSuQh.greaterThan=" + SMALLER_ID_DUONG_SU_QH,
+            "idDuongSuQh.greaterThan=" + DEFAULT_ID_DUONG_SU_QH
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeDuongSusByTrangThaiIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeDuongSu = quanHeDuongSuRepository.saveAndFlush(quanHeDuongSu);
+
+        // Get all the quanHeDuongSuList where trangThai equals to
+        defaultQuanHeDuongSuFiltering("trangThai.equals=" + DEFAULT_TRANG_THAI, "trangThai.equals=" + UPDATED_TRANG_THAI);
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeDuongSusByTrangThaiIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedQuanHeDuongSu = quanHeDuongSuRepository.saveAndFlush(quanHeDuongSu);
+
+        // Get all the quanHeDuongSuList where trangThai in
+        defaultQuanHeDuongSuFiltering(
+            "trangThai.in=" + DEFAULT_TRANG_THAI + "," + UPDATED_TRANG_THAI,
+            "trangThai.in=" + UPDATED_TRANG_THAI
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeDuongSusByTrangThaiIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedQuanHeDuongSu = quanHeDuongSuRepository.saveAndFlush(quanHeDuongSu);
+
+        // Get all the quanHeDuongSuList where trangThai is not null
+        defaultQuanHeDuongSuFiltering("trangThai.specified=true", "trangThai.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeDuongSusByTrangThaiIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeDuongSu = quanHeDuongSuRepository.saveAndFlush(quanHeDuongSu);
+
+        // Get all the quanHeDuongSuList where trangThai is greater than or equal to
+        defaultQuanHeDuongSuFiltering(
+            "trangThai.greaterThanOrEqual=" + DEFAULT_TRANG_THAI,
+            "trangThai.greaterThanOrEqual=" + (DEFAULT_TRANG_THAI + 1)
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeDuongSusByTrangThaiIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeDuongSu = quanHeDuongSuRepository.saveAndFlush(quanHeDuongSu);
+
+        // Get all the quanHeDuongSuList where trangThai is less than or equal to
+        defaultQuanHeDuongSuFiltering("trangThai.lessThanOrEqual=" + DEFAULT_TRANG_THAI, "trangThai.lessThanOrEqual=" + SMALLER_TRANG_THAI);
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeDuongSusByTrangThaiIsLessThanSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeDuongSu = quanHeDuongSuRepository.saveAndFlush(quanHeDuongSu);
+
+        // Get all the quanHeDuongSuList where trangThai is less than
+        defaultQuanHeDuongSuFiltering("trangThai.lessThan=" + (DEFAULT_TRANG_THAI + 1), "trangThai.lessThan=" + DEFAULT_TRANG_THAI);
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeDuongSusByTrangThaiIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeDuongSu = quanHeDuongSuRepository.saveAndFlush(quanHeDuongSu);
+
+        // Get all the quanHeDuongSuList where trangThai is greater than
+        defaultQuanHeDuongSuFiltering("trangThai.greaterThan=" + SMALLER_TRANG_THAI, "trangThai.greaterThan=" + DEFAULT_TRANG_THAI);
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeDuongSusByDuongSuIsEqualToSomething() throws Exception {
+        DuongSu duongSu;
+        if (TestUtil.findAll(em, DuongSu.class).isEmpty()) {
+            quanHeDuongSuRepository.saveAndFlush(quanHeDuongSu);
+            duongSu = DuongSuResourceIT.createEntity();
+        } else {
+            duongSu = TestUtil.findAll(em, DuongSu.class).get(0);
+        }
+        em.persist(duongSu);
+        em.flush();
+        quanHeDuongSu.setDuongSu(duongSu);
+        quanHeDuongSuRepository.saveAndFlush(quanHeDuongSu);
+        Long duongSuId = duongSu.getIdDuongSu();
+        // Get all the quanHeDuongSuList where duongSu equals to duongSuId
+        defaultQuanHeDuongSuShouldBeFound("duongSuId.equals=" + duongSuId);
+
+        // Get all the quanHeDuongSuList where duongSu equals to (duongSuId + 1)
+        defaultQuanHeDuongSuShouldNotBeFound("duongSuId.equals=" + (duongSuId + 1));
+    }
+
+    private void defaultQuanHeDuongSuFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
+        defaultQuanHeDuongSuShouldBeFound(shouldBeFound);
+        defaultQuanHeDuongSuShouldNotBeFound(shouldNotBeFound);
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultQuanHeDuongSuShouldBeFound(String filter) throws Exception {
+        restQuanHeDuongSuMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=idQuanHe,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].idQuanHe").value(hasItem(quanHeDuongSu.getIdQuanHe().intValue())))
+            .andExpect(jsonPath("$.[*].idDuongSuQh").value(hasItem(DEFAULT_ID_DUONG_SU_QH.intValue())))
+            .andExpect(jsonPath("$.[*].thongTinQuanHe").value(hasItem(DEFAULT_THONG_TIN_QUAN_HE.toString())))
+            .andExpect(jsonPath("$.[*].trangThai").value(hasItem(DEFAULT_TRANG_THAI)));
+
+        // Check, that the count call also returns 1
+        restQuanHeDuongSuMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=idQuanHe,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultQuanHeDuongSuShouldNotBeFound(String filter) throws Exception {
+        restQuanHeDuongSuMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=idQuanHe,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restQuanHeDuongSuMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=idQuanHe,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
     }
 
     @Test
@@ -292,7 +535,7 @@ class QuanHeDuongSuResourceIT {
         QuanHeDuongSu partialUpdatedQuanHeDuongSu = new QuanHeDuongSu();
         partialUpdatedQuanHeDuongSu.setIdQuanHe(quanHeDuongSu.getIdQuanHe());
 
-        partialUpdatedQuanHeDuongSu.idDuongSuQh(UPDATED_ID_DUONG_SU_QH).trangThai(UPDATED_TRANG_THAI);
+        partialUpdatedQuanHeDuongSu.idDuongSuQh(UPDATED_ID_DUONG_SU_QH);
 
         restQuanHeDuongSuMockMvc
             .perform(

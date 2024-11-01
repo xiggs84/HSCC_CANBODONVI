@@ -24,14 +24,14 @@ class DuongSuTrungCmndTest {
     }
 
     @Test
-    void idDuongSuTest() {
+    void duongSuTest() {
         DuongSuTrungCmnd duongSuTrungCmnd = getDuongSuTrungCmndRandomSampleGenerator();
         DuongSu duongSuBack = getDuongSuRandomSampleGenerator();
 
-        duongSuTrungCmnd.setIdDuongSu(duongSuBack);
-        assertThat(duongSuTrungCmnd.getIdDuongSu()).isEqualTo(duongSuBack);
+        duongSuTrungCmnd.setDuongSu(duongSuBack);
+        assertThat(duongSuTrungCmnd.getDuongSu()).isEqualTo(duongSuBack);
 
-        duongSuTrungCmnd.idDuongSu(null);
-        assertThat(duongSuTrungCmnd.getIdDuongSu()).isNull();
+        duongSuTrungCmnd.duongSu(null);
+        assertThat(duongSuTrungCmnd.getDuongSu()).isNull();
     }
 }

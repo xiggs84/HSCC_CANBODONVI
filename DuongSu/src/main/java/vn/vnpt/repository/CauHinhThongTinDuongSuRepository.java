@@ -9,4 +9,5 @@ import vn.vnpt.domain.CauHinhThongTinDuongSu;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface CauHinhThongTinDuongSuRepository extends JpaRepository<CauHinhThongTinDuongSu, Long> {}
+public interface CauHinhThongTinDuongSuRepository
+    extends JpaRepository<CauHinhThongTinDuongSu, Long>, JpaSpecificationExecutor<CauHinhThongTinDuongSu> {}

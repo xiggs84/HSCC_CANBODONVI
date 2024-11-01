@@ -37,7 +37,7 @@ public class DuongSuTrungCmndBakDTO implements Serializable {
 
     private String soGiayTo;
 
-    private DuongSuDTO idDuongSu;
+    private DuongSuDTO duongSu;
 
     public Long getId() {
         return id;
@@ -135,12 +135,12 @@ public class DuongSuTrungCmndBakDTO implements Serializable {
         this.soGiayTo = soGiayTo;
     }
 
-    public DuongSuDTO getIdDuongSu() {
-        return idDuongSu;
+    public DuongSuDTO getDuongSu() {
+        return duongSu;
     }
 
-    public void setIdDuongSu(DuongSuDTO idDuongSu) {
-        this.idDuongSu = idDuongSu;
+    public void setDuongSu(DuongSuDTO duongSu) {
+        this.duongSu = duongSu;
     }
 
     @Override
@@ -180,7 +180,7 @@ public class DuongSuTrungCmndBakDTO implements Serializable {
             ", idDonVi=" + getIdDonVi() +
             ", strSearch='" + getStrSearch() + "'" +
             ", soGiayTo='" + getSoGiayTo() + "'" +
-            ", idDuongSu=" + getIdDuongSu() +
+            ", duongSu=" + getDuongSu() +
             "}";
     }
 }

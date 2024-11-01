@@ -22,7 +22,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import vn.vnpt.IntegrationTest;
 import vn.vnpt.domain.QuanHeNhanThan;
-import vn.vnpt.domain.enumeration.GioiTinh;
 import vn.vnpt.repository.QuanHeNhanThanRepository;
 import vn.vnpt.service.dto.QuanHeNhanThanDTO;
 import vn.vnpt.service.mapper.QuanHeNhanThanMapper;
@@ -40,9 +39,7 @@ class QuanHeNhanThanResourceIT {
 
     private static final Long DEFAULT_ID_QUAN_HE_DOI_UNG = 1L;
     private static final Long UPDATED_ID_QUAN_HE_DOI_UNG = 2L;
-
-    private static final GioiTinh DEFAULT_GIOI_TINH = GioiTinh.Nam;
-    private static final GioiTinh UPDATED_GIOI_TINH = GioiTinh.Nu;
+    private static final Long SMALLER_ID_QUAN_HE_DOI_UNG = 1L - 1L;
 
     private static final String ENTITY_API_URL = "/api/quan-he-nhan-thans";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{idQuanHe}";
@@ -76,7 +73,7 @@ class QuanHeNhanThanResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static QuanHeNhanThan createEntity() {
-        return new QuanHeNhanThan().dienGiai(DEFAULT_DIEN_GIAI).idQuanHeDoiUng(DEFAULT_ID_QUAN_HE_DOI_UNG).gioiTinh(DEFAULT_GIOI_TINH);
+        return new QuanHeNhanThan().dienGiai(DEFAULT_DIEN_GIAI).idQuanHeDoiUng(DEFAULT_ID_QUAN_HE_DOI_UNG);
     }
 
     /**
@@ -86,7 +83,7 @@ class QuanHeNhanThanResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static QuanHeNhanThan createUpdatedEntity() {
-        return new QuanHeNhanThan().dienGiai(UPDATED_DIEN_GIAI).idQuanHeDoiUng(UPDATED_ID_QUAN_HE_DOI_UNG).gioiTinh(UPDATED_GIOI_TINH);
+        return new QuanHeNhanThan().dienGiai(UPDATED_DIEN_GIAI).idQuanHeDoiUng(UPDATED_ID_QUAN_HE_DOI_UNG);
     }
 
     @BeforeEach
@@ -157,8 +154,7 @@ class QuanHeNhanThanResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].idQuanHe").value(hasItem(quanHeNhanThan.getIdQuanHe().intValue())))
             .andExpect(jsonPath("$.[*].dienGiai").value(hasItem(DEFAULT_DIEN_GIAI)))
-            .andExpect(jsonPath("$.[*].idQuanHeDoiUng").value(hasItem(DEFAULT_ID_QUAN_HE_DOI_UNG.intValue())))
-            .andExpect(jsonPath("$.[*].gioiTinh").value(hasItem(DEFAULT_GIOI_TINH.toString())));
+            .andExpect(jsonPath("$.[*].idQuanHeDoiUng").value(hasItem(DEFAULT_ID_QUAN_HE_DOI_UNG.intValue())));
     }
 
     @Test
@@ -174,8 +170,204 @@ class QuanHeNhanThanResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.idQuanHe").value(quanHeNhanThan.getIdQuanHe().intValue()))
             .andExpect(jsonPath("$.dienGiai").value(DEFAULT_DIEN_GIAI))
-            .andExpect(jsonPath("$.idQuanHeDoiUng").value(DEFAULT_ID_QUAN_HE_DOI_UNG.intValue()))
-            .andExpect(jsonPath("$.gioiTinh").value(DEFAULT_GIOI_TINH.toString()));
+            .andExpect(jsonPath("$.idQuanHeDoiUng").value(DEFAULT_ID_QUAN_HE_DOI_UNG.intValue()));
+    }
+
+    @Test
+    @Transactional
+    void getQuanHeNhanThansByIdFiltering() throws Exception {
+        // Initialize the database
+        insertedQuanHeNhanThan = quanHeNhanThanRepository.saveAndFlush(quanHeNhanThan);
+
+        Long id = quanHeNhanThan.getIdQuanHe();
+
+        defaultQuanHeNhanThanFiltering("idQuanHe.equals=" + id, "idQuanHe.notEquals=" + id);
+
+        defaultQuanHeNhanThanFiltering("idQuanHe.greaterThanOrEqual=" + id, "idQuanHe.greaterThan=" + id);
+
+        defaultQuanHeNhanThanFiltering("idQuanHe.lessThanOrEqual=" + id, "idQuanHe.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeNhanThansByDienGiaiIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeNhanThan = quanHeNhanThanRepository.saveAndFlush(quanHeNhanThan);
+
+        // Get all the quanHeNhanThanList where dienGiai equals to
+        defaultQuanHeNhanThanFiltering("dienGiai.equals=" + DEFAULT_DIEN_GIAI, "dienGiai.equals=" + UPDATED_DIEN_GIAI);
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeNhanThansByDienGiaiIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedQuanHeNhanThan = quanHeNhanThanRepository.saveAndFlush(quanHeNhanThan);
+
+        // Get all the quanHeNhanThanList where dienGiai in
+        defaultQuanHeNhanThanFiltering("dienGiai.in=" + DEFAULT_DIEN_GIAI + "," + UPDATED_DIEN_GIAI, "dienGiai.in=" + UPDATED_DIEN_GIAI);
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeNhanThansByDienGiaiIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedQuanHeNhanThan = quanHeNhanThanRepository.saveAndFlush(quanHeNhanThan);
+
+        // Get all the quanHeNhanThanList where dienGiai is not null
+        defaultQuanHeNhanThanFiltering("dienGiai.specified=true", "dienGiai.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeNhanThansByDienGiaiContainsSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeNhanThan = quanHeNhanThanRepository.saveAndFlush(quanHeNhanThan);
+
+        // Get all the quanHeNhanThanList where dienGiai contains
+        defaultQuanHeNhanThanFiltering("dienGiai.contains=" + DEFAULT_DIEN_GIAI, "dienGiai.contains=" + UPDATED_DIEN_GIAI);
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeNhanThansByDienGiaiNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeNhanThan = quanHeNhanThanRepository.saveAndFlush(quanHeNhanThan);
+
+        // Get all the quanHeNhanThanList where dienGiai does not contain
+        defaultQuanHeNhanThanFiltering("dienGiai.doesNotContain=" + UPDATED_DIEN_GIAI, "dienGiai.doesNotContain=" + DEFAULT_DIEN_GIAI);
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeNhanThansByIdQuanHeDoiUngIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeNhanThan = quanHeNhanThanRepository.saveAndFlush(quanHeNhanThan);
+
+        // Get all the quanHeNhanThanList where idQuanHeDoiUng equals to
+        defaultQuanHeNhanThanFiltering(
+            "idQuanHeDoiUng.equals=" + DEFAULT_ID_QUAN_HE_DOI_UNG,
+            "idQuanHeDoiUng.equals=" + UPDATED_ID_QUAN_HE_DOI_UNG
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeNhanThansByIdQuanHeDoiUngIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedQuanHeNhanThan = quanHeNhanThanRepository.saveAndFlush(quanHeNhanThan);
+
+        // Get all the quanHeNhanThanList where idQuanHeDoiUng in
+        defaultQuanHeNhanThanFiltering(
+            "idQuanHeDoiUng.in=" + DEFAULT_ID_QUAN_HE_DOI_UNG + "," + UPDATED_ID_QUAN_HE_DOI_UNG,
+            "idQuanHeDoiUng.in=" + UPDATED_ID_QUAN_HE_DOI_UNG
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeNhanThansByIdQuanHeDoiUngIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedQuanHeNhanThan = quanHeNhanThanRepository.saveAndFlush(quanHeNhanThan);
+
+        // Get all the quanHeNhanThanList where idQuanHeDoiUng is not null
+        defaultQuanHeNhanThanFiltering("idQuanHeDoiUng.specified=true", "idQuanHeDoiUng.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeNhanThansByIdQuanHeDoiUngIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeNhanThan = quanHeNhanThanRepository.saveAndFlush(quanHeNhanThan);
+
+        // Get all the quanHeNhanThanList where idQuanHeDoiUng is greater than or equal to
+        defaultQuanHeNhanThanFiltering(
+            "idQuanHeDoiUng.greaterThanOrEqual=" + DEFAULT_ID_QUAN_HE_DOI_UNG,
+            "idQuanHeDoiUng.greaterThanOrEqual=" + UPDATED_ID_QUAN_HE_DOI_UNG
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeNhanThansByIdQuanHeDoiUngIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeNhanThan = quanHeNhanThanRepository.saveAndFlush(quanHeNhanThan);
+
+        // Get all the quanHeNhanThanList where idQuanHeDoiUng is less than or equal to
+        defaultQuanHeNhanThanFiltering(
+            "idQuanHeDoiUng.lessThanOrEqual=" + DEFAULT_ID_QUAN_HE_DOI_UNG,
+            "idQuanHeDoiUng.lessThanOrEqual=" + SMALLER_ID_QUAN_HE_DOI_UNG
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeNhanThansByIdQuanHeDoiUngIsLessThanSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeNhanThan = quanHeNhanThanRepository.saveAndFlush(quanHeNhanThan);
+
+        // Get all the quanHeNhanThanList where idQuanHeDoiUng is less than
+        defaultQuanHeNhanThanFiltering(
+            "idQuanHeDoiUng.lessThan=" + UPDATED_ID_QUAN_HE_DOI_UNG,
+            "idQuanHeDoiUng.lessThan=" + DEFAULT_ID_QUAN_HE_DOI_UNG
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllQuanHeNhanThansByIdQuanHeDoiUngIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        insertedQuanHeNhanThan = quanHeNhanThanRepository.saveAndFlush(quanHeNhanThan);
+
+        // Get all the quanHeNhanThanList where idQuanHeDoiUng is greater than
+        defaultQuanHeNhanThanFiltering(
+            "idQuanHeDoiUng.greaterThan=" + SMALLER_ID_QUAN_HE_DOI_UNG,
+            "idQuanHeDoiUng.greaterThan=" + DEFAULT_ID_QUAN_HE_DOI_UNG
+        );
+    }
+
+    private void defaultQuanHeNhanThanFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
+        defaultQuanHeNhanThanShouldBeFound(shouldBeFound);
+        defaultQuanHeNhanThanShouldNotBeFound(shouldNotBeFound);
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultQuanHeNhanThanShouldBeFound(String filter) throws Exception {
+        restQuanHeNhanThanMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=idQuanHe,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].idQuanHe").value(hasItem(quanHeNhanThan.getIdQuanHe().intValue())))
+            .andExpect(jsonPath("$.[*].dienGiai").value(hasItem(DEFAULT_DIEN_GIAI)))
+            .andExpect(jsonPath("$.[*].idQuanHeDoiUng").value(hasItem(DEFAULT_ID_QUAN_HE_DOI_UNG.intValue())));
+
+        // Check, that the count call also returns 1
+        restQuanHeNhanThanMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=idQuanHe,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultQuanHeNhanThanShouldNotBeFound(String filter) throws Exception {
+        restQuanHeNhanThanMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=idQuanHe,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restQuanHeNhanThanMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=idQuanHe,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
     }
 
     @Test
@@ -197,7 +389,7 @@ class QuanHeNhanThanResourceIT {
         QuanHeNhanThan updatedQuanHeNhanThan = quanHeNhanThanRepository.findById(quanHeNhanThan.getIdQuanHe()).orElseThrow();
         // Disconnect from session so that the updates on updatedQuanHeNhanThan are not directly saved in db
         em.detach(updatedQuanHeNhanThan);
-        updatedQuanHeNhanThan.dienGiai(UPDATED_DIEN_GIAI).idQuanHeDoiUng(UPDATED_ID_QUAN_HE_DOI_UNG).gioiTinh(UPDATED_GIOI_TINH);
+        updatedQuanHeNhanThan.dienGiai(UPDATED_DIEN_GIAI).idQuanHeDoiUng(UPDATED_ID_QUAN_HE_DOI_UNG);
         QuanHeNhanThanDTO quanHeNhanThanDTO = quanHeNhanThanMapper.toDto(updatedQuanHeNhanThan);
 
         restQuanHeNhanThanMockMvc
@@ -318,7 +510,7 @@ class QuanHeNhanThanResourceIT {
         QuanHeNhanThan partialUpdatedQuanHeNhanThan = new QuanHeNhanThan();
         partialUpdatedQuanHeNhanThan.setIdQuanHe(quanHeNhanThan.getIdQuanHe());
 
-        partialUpdatedQuanHeNhanThan.dienGiai(UPDATED_DIEN_GIAI).idQuanHeDoiUng(UPDATED_ID_QUAN_HE_DOI_UNG).gioiTinh(UPDATED_GIOI_TINH);
+        partialUpdatedQuanHeNhanThan.dienGiai(UPDATED_DIEN_GIAI).idQuanHeDoiUng(UPDATED_ID_QUAN_HE_DOI_UNG);
 
         restQuanHeNhanThanMockMvc
             .perform(

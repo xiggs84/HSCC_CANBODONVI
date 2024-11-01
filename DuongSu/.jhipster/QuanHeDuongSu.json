@@ -1,6 +1,6 @@
 {
   "annotations": {
-    "changelogDate": "20240902124134"
+    "changelogDate": "20240922093329"
   },
   "applications": "*",
   "clientRootFolder": "DuongSu",
@@ -20,7 +20,8 @@
     },
     {
       "fieldName": "thongTinQuanHe",
-      "fieldType": "String"
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
     },
     {
       "fieldName": "trangThai",
@@ -30,16 +31,19 @@
       "fieldValidateRulesMin": "0"
     }
   ],
+  "jpaMetamodelFiltering": true,
   "microserviceName": "DuongSu",
   "name": "QuanHeDuongSu",
+  "pagination": "pagination",
   "relationships": [
     {
       "otherEntityName": "duongSu",
-      "relationshipName": "idDuongSu",
+      "otherEntityRelationshipName": "quanHeDuongSu",
+      "relationshipName": "duongSu",
       "relationshipSide": "right",
       "relationshipType": "many-to-one"
     }
   ],
   "searchEngine": "no",
-  "service": "serviceClass"
+  "service": "serviceImpl"
 }

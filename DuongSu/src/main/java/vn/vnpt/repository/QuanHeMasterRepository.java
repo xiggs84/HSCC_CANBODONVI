@@ -9,4 +9,4 @@ import vn.vnpt.domain.QuanHeMaster;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface QuanHeMasterRepository extends JpaRepository<QuanHeMaster, Long> {}
+public interface QuanHeMasterRepository extends JpaRepository<QuanHeMaster, Long>, JpaSpecificationExecutor<QuanHeMaster> {}

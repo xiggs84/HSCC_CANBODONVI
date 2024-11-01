@@ -45,7 +45,7 @@ public class DuongSuTrungCmndDTO implements Serializable {
 
     private Long idMasterMax;
 
-    private DuongSuDTO idDuongSu;
+    private DuongSuDTO duongSu;
 
     public Long getId() {
         return id;
@@ -175,12 +175,12 @@ public class DuongSuTrungCmndDTO implements Serializable {
         this.idMasterMax = idMasterMax;
     }
 
-    public DuongSuDTO getIdDuongSu() {
-        return idDuongSu;
+    public DuongSuDTO getDuongSu() {
+        return duongSu;
     }
 
-    public void setIdDuongSu(DuongSuDTO idDuongSu) {
-        this.idDuongSu = idDuongSu;
+    public void setDuongSu(DuongSuDTO duongSu) {
+        this.duongSu = duongSu;
     }
 
     @Override
@@ -224,7 +224,7 @@ public class DuongSuTrungCmndDTO implements Serializable {
             ", idMasterMin=" + getIdMasterMin() +
             ", idDuongSuMax=" + getIdDuongSuMax() +
             ", idMasterMax=" + getIdMasterMax() +
-            ", idDuongSu=" + getIdDuongSu() +
+            ", duongSu=" + getDuongSu() +
             "}";
     }
 }

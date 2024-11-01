@@ -48,7 +48,6 @@ public class DuongSuAsserts {
         assertThat(expected)
             .as("Verify DuongSu relevant properties")
             .satisfies(e -> assertThat(e.getTenDuongSu()).as("check tenDuongSu").isEqualTo(actual.getTenDuongSu()))
-            .satisfies(e -> assertThat(e.getLoaiDuongSu()).as("check loaiDuongSu").isEqualTo(actual.getLoaiDuongSu()))
             .satisfies(e -> assertThat(e.getDiaChi()).as("check diaChi").isEqualTo(actual.getDiaChi()))
             .satisfies(e -> assertThat(e.getSoDienThoai()).as("check soDienThoai").isEqualTo(actual.getSoDienThoai()))
             .satisfies(e -> assertThat(e.getEmail()).as("check email").isEqualTo(actual.getEmail()))
@@ -62,7 +61,6 @@ public class DuongSuAsserts {
             .satisfies(e -> assertThat(e.getIdMaster()).as("check idMaster").isEqualTo(actual.getIdMaster()))
             .satisfies(e -> assertThat(e.getIdDonVi()).as("check idDonVi").isEqualTo(actual.getIdDonVi()))
             .satisfies(e -> assertThat(e.getStrSearch()).as("check strSearch").isEqualTo(actual.getStrSearch()))
-            .satisfies(e -> assertThat(e.getLoaiGiayTo()).as("check loaiGiayTo").isEqualTo(actual.getLoaiGiayTo()))
             .satisfies(e -> assertThat(e.getSoGiayTo()).as("check soGiayTo").isEqualTo(actual.getSoGiayTo()))
             .satisfies(e -> assertThat(e.getGhiChu()).as("check ghiChu").isEqualTo(actual.getGhiChu()))
             .satisfies(e -> assertThat(e.getIdLoaiNganChan()).as("check idLoaiNganChan").isEqualTo(actual.getIdLoaiNganChan()))
@@ -76,6 +74,9 @@ public class DuongSuAsserts {
      * @param actual the actual entity
      */
     public static void assertDuongSuUpdatableRelationshipsEquals(DuongSu expected, DuongSu actual) {
-        // empty method
+        assertThat(expected)
+            .as("Verify DuongSu relationships")
+            .satisfies(e -> assertThat(e.getLoaiDuongSu()).as("check loaiDuongSu").isEqualTo(actual.getLoaiDuongSu()))
+            .satisfies(e -> assertThat(e.getLoaiGiayTo()).as("check loaiGiayTo").isEqualTo(actual.getLoaiGiayTo()));
     }
 }
