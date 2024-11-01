@@ -1,0 +1,29 @@
+{
+  "annotations": {
+    "changelogDate": "20241013181913"
+  },
+  "applications": "*",
+  "clientRootFolder": "HopDong",
+  "databaseType": "mongodb",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "dienGiai",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "idLoaiHopDong",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "idLoaiVaiTro",
+      "fieldType": "String"
+    }
+  ],
+  "microserviceName": "HopDong",
+  "name": "DanhMucVaiTro",
+  "pagination": "pagination",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

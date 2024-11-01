@@ -1,0 +1,33 @@
+{
+  "annotations": {
+    "changelogDate": "20241013181920"
+  },
+  "applications": "*",
+  "clientRootFolder": "HopDong",
+  "databaseType": "mongodb",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "idHopDong",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "idMaster",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "soCc",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "ngayThaoTac",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "microserviceName": "HopDong",
+  "name": "SoCongChungTemp",
+  "pagination": "pagination",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

@@ -1,0 +1,43 @@
+{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "authenticationType": "jwt",
+    "baseName": "HopDong",
+    "buildTool": "gradle",
+    "creationTimestamp": 1728843536897,
+    "databaseType": "mongodb",
+    "entities": [
+      "ChungThuc",
+      "DanhMucLoaiGiayToChungThuc",
+      "DanhMucLoaiHopDong",
+      "DanhMucLoaiSoCongChung",
+      "DanhMucLoaiVanBan",
+      "DanhMucNhomHopDong",
+      "DanhMucVaiTro",
+      "DanhSachChungThuc",
+      "DanhSachHopDong",
+      "HopDongCongChung",
+      "LoaiHopDongCongChung",
+      "PhanLoaiHopDong",
+      "SoCongChung",
+      "SoCongChungTemp",
+      "ThongTinChungHopDong",
+      "DanhMucTuVietTat",
+      "LoaiChungThuc",
+      "SoChungThuc",
+      "LoaiSoChungThuc"
+    ],
+    "jhipsterVersion": "8.7.0",
+    "jwtSecretKey": "ZDVhNzdhNmMxODE1NTdkMzVlZDk2ZjNlNzEwNzBkYzA1NWM3MGU5NjQ3NDJiMzkzZjM2MjkwODQ1MTRiYTllNWI4Y2ZjYWU4OWQ1M2VkNmM1ZDZhYThlYmFkYzY0NmZlMjJmNDI2NDdmNDA4MjgyNDNhMDdjZTg4MzUwOTUzZGY=",
+    "languages": ["en"],
+    "lastLiquibaseTimestamp": 1729241427000,
+    "monorepository": true,
+    "nativeLanguage": "en",
+    "packageFolder": "vn/vnpt",
+    "packageName": "vn.vnpt",
+    "serverPort": "8081",
+    "skipClient": true,
+    "skipCommitHook": true,
+    "skipUserManagement": true
+  }
+}

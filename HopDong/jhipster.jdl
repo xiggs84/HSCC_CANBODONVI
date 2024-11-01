@@ -1,0 +1,11 @@
+application {
+  config {
+    baseName HopDong
+    applicationType microservice
+    serverPort 8081
+    buildTool gradle
+    packageName vn.vnpt
+    authenticationType jwt
+    databaseType mongodb
+  }
+}

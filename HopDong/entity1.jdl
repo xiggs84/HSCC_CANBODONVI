@@ -1,0 +1,50 @@
+entity HopDongCongChung {
+  //    @id
+  //    idHopDong String
+  ngayLapHd LocalDate
+  nguoiLapHd Long
+  thongTinDuongSu TextBlob
+  thongTinTaiSan TextBlob
+  thongTinVanBan TextBlob
+  trangThai Long
+  idLoaiHd String
+  dieuKhoanHd String
+  idDonVi Long
+  ngayThaoTac LocalDate
+  nguoiThaoTac Long
+  idHdGoc String
+  thongTinChuyenNhuong TextBlob
+  maHopDong String
+  srcHopDong String
+  ngayHen LocalDate
+  idSoCongChung String
+  soCongChung String
+  congChungVien Long
+  ngayKyHd LocalDate
+  nguoiRutTrich Long
+  soTienRutTrich Long
+  ngayRutTrich LocalDate
+  hdThuCong Long
+  trangThaiRutTrich Long
+  chuKyNgoaiTruSo Long
+  strSearch String
+  idMaster Long
+  idHdSdHb Long
+  srcDmMaster String
+  repRefUnique Long
+  ngayText String
+  ngayNum Long
+  ngayThaoTacRutTrich LocalDate
+  thuLaoCongChung Long
+  quyenLaiSt String
+  soLaiSt String
+  quyenLaiTl String
+  soLaiTl String
+  srcKySoPdf String
+  srcKySoPdfSigned String
+  syncStatus Long
+  ngayRutTrichText String
+}
+
+use mapstruct, serviceImpl for *
+use pagination for *
