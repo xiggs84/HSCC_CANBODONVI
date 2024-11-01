@@ -52,14 +52,15 @@ public class DanhMucCanBoAsserts {
             .satisfies(e -> assertThat(e.getNamSinh()).as("check namSinh").isEqualTo(actual.getNamSinh()))
             .satisfies(e -> assertThat(e.getEmail()).as("check email").isEqualTo(actual.getEmail()))
             .satisfies(e -> assertThat(e.getSoDienThoai()).as("check soDienThoai").isEqualTo(actual.getSoDienThoai()))
-            .satisfies(e -> assertThat(e.getSoCmnd()).as("check soCmnd").isEqualTo(actual.getSoCmnd()))
+            .satisfies(e -> assertThat(e.getSoGiayToTuyThan()).as("check soGiayToTuyThan").isEqualTo(actual.getSoGiayToTuyThan()))
             .satisfies(e -> assertThat(e.getTenDangNhap()).as("check tenDangNhap").isEqualTo(actual.getTenDangNhap()))
             .satisfies(e -> assertThat(e.getMatKhau()).as("check matKhau").isEqualTo(actual.getMatKhau()))
             .satisfies(e -> assertThat(e.getTrangThai()).as("check trangThai").isEqualTo(actual.getTrangThai()))
             .satisfies(e -> assertThat(e.getClientId()).as("check clientId").isEqualTo(actual.getClientId()))
             .satisfies(e -> assertThat(e.getClientSecret()).as("check clientSecret").isEqualTo(actual.getClientSecret()))
             .satisfies(e -> assertThat(e.getUsernameKyso()).as("check usernameKyso").isEqualTo(actual.getUsernameKyso()))
-            .satisfies(e -> assertThat(e.getPasswordKyso()).as("check passwordKyso").isEqualTo(actual.getPasswordKyso()));
+            .satisfies(e -> assertThat(e.getPasswordKyso()).as("check passwordKyso").isEqualTo(actual.getPasswordKyso()))
+            .satisfies(e -> assertThat(e.getUserLogin()).as("check userLogin").isEqualTo(actual.getUserLogin()));
     }
 
     /**

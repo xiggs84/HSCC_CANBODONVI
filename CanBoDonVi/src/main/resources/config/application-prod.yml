@@ -106,7 +106,7 @@ jhipster:
         # - In the Consul configserver
         # - In a separate `application-prod.yml` file, in the same folder as your executable JAR file
         # - In the `JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET` environment variable
-        base64-secret: MWY0ZjQ0ZDIzOTYzMjJkZDcyMjE2NmIyNjI1ZDY0MmYxODlmMTY2M2NjNDU1ZjNmYTFlODNhYmY1ZGQ0ZDBkOTVlNGZlZDhjZjE0NjNmMDljNGJiMTBhZTU3OGE5NmEwNzRiNTNkZDA5NzUwNzFhYjcxOTdlOGY1NDhmMmI4MGU=
+        base64-secret: M2Y2MDBlNTYyZTJiNzhkOGYxODEzNjU3Yzk3ZGFiMTdmYTI2YmRlMDZhMjYxNTM3MmM4YmNkZTk5MzllNmQ1M2UyY2QyMzM3YzM2M2RmZDM2ZTIxMjBiOGFjM2FmY2M5ZTMxZjZjYTI3NzY2YzVhMzdlY2M5ZWQ4YmFlMjFiNTQ=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000

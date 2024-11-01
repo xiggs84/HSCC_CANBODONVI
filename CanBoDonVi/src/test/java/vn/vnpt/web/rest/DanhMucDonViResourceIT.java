@@ -2202,16 +2202,14 @@ class DanhMucDonViResourceIT {
         partialUpdatedDanhMucDonVi.setIdDonVi(danhMucDonVi.getIdDonVi());
 
         partialUpdatedDanhMucDonVi
+            .diaChi(UPDATED_DIA_CHI)
             .nguoiDaiDien(UPDATED_NGUOI_DAI_DIEN)
-            .soDienThoai(UPDATED_SO_DIEN_THOAI)
-            .ngayKhaiBao(UPDATED_NGAY_KHAI_BAO)
-            .maCoQuanIgate(UPDATED_MA_CO_QUAN_IGATE)
+            .maSoThue(UPDATED_MA_SO_THUE)
+            .kySo(UPDATED_KY_SO)
             .qrScan(UPDATED_QR_SCAN)
-            .isVerifyFace(UPDATED_IS_VERIFY_FACE)
-            .apikeyCccd(UPDATED_APIKEY_CCCD)
+            .isElastic(UPDATED_IS_ELASTIC)
             .apikeyFace(UPDATED_APIKEY_FACE)
-            .usernameElastic(UPDATED_USERNAME_ELASTIC)
-            .idCapQl(UPDATED_ID_CAP_QL);
+            .verifyCodeCccd(UPDATED_VERIFY_CODE_CCCD);
 
         restDanhMucDonViMockMvc
             .perform(

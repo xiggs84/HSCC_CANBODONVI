@@ -166,6 +166,7 @@ dependencies {
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hibernate6"
     implementation "com.fasterxml.jackson.module:jackson-module-jaxb-annotations"
     implementation "com.zaxxer:HikariCP"
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation "org.hibernate.orm:hibernate-core"
     implementation "org.hibernate.validator:hibernate-validator"
     testImplementation "org.testcontainers:jdbc"

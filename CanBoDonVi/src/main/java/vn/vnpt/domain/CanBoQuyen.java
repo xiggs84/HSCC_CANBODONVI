@@ -1,8 +1,8 @@
 package vn.vnpt.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -23,6 +23,10 @@ public class CanBoQuyen implements Serializable {
     @Column(name = "id")
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "canBoQuyens", "capQuanLy", "loaiDonVi", "nhiemVu" }, allowSetters = true)
+    private DanhMucDonVi danhMucDonVi;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -36,6 +40,19 @@ public class CanBoQuyen implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public DanhMucDonVi getDanhMucDonVi() {
+        return this.danhMucDonVi;
+    }
+
+    public void setDanhMucDonVi(DanhMucDonVi danhMucDonVi) {
+        this.danhMucDonVi = danhMucDonVi;
+    }
+
+    public CanBoQuyen danhMucDonVi(DanhMucDonVi danhMucDonVi) {
+        this.setDanhMucDonVi(danhMucDonVi);
+        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -53,7 +70,8 @@ public class CanBoQuyen implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
     }
 
     // prettier-ignore

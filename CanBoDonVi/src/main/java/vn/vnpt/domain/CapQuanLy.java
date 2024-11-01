@@ -33,7 +33,7 @@ public class CapQuanLy implements Serializable, Persistable<String> {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "capQuanLy")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "capQuanLy", "loaiDonVi", "nhiemVu" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "canBoQuyens", "capQuanLy", "loaiDonVi", "nhiemVu" }, allowSetters = true)
     private Set<DanhMucDonVi> idCapQls = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

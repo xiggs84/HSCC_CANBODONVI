@@ -38,8 +38,8 @@ public class DanhMucCanBo implements Serializable {
     @Column(name = "so_dien_thoai")
     private String soDienThoai;
 
-    @Column(name = "so_cmnd")
-    private String soCmnd;
+    @Column(name = "so_giay_to_tuy_than")
+    private String soGiayToTuyThan;
 
     @Column(name = "ten_dang_nhap")
     private String tenDangNhap;
@@ -61,6 +61,9 @@ public class DanhMucCanBo implements Serializable {
 
     @Column(name = "password_kyso")
     private String passwordKyso;
+
+    @Column(name = "user_login")
+    private String userLogin;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -142,17 +145,17 @@ public class DanhMucCanBo implements Serializable {
         this.soDienThoai = soDienThoai;
     }
 
-    public String getSoCmnd() {
-        return this.soCmnd;
+    public String getSoGiayToTuyThan() {
+        return this.soGiayToTuyThan;
     }
 
-    public DanhMucCanBo soCmnd(String soCmnd) {
-        this.setSoCmnd(soCmnd);
+    public DanhMucCanBo soGiayToTuyThan(String soGiayToTuyThan) {
+        this.setSoGiayToTuyThan(soGiayToTuyThan);
         return this;
     }
 
-    public void setSoCmnd(String soCmnd) {
-        this.soCmnd = soCmnd;
+    public void setSoGiayToTuyThan(String soGiayToTuyThan) {
+        this.soGiayToTuyThan = soGiayToTuyThan;
     }
 
     public String getTenDangNhap() {
@@ -246,6 +249,19 @@ public class DanhMucCanBo implements Serializable {
         this.passwordKyso = passwordKyso;
     }
 
+    public String getUserLogin() {
+        return this.userLogin;
+    }
+
+    public DanhMucCanBo userLogin(String userLogin) {
+        this.setUserLogin(userLogin);
+        return this;
+    }
+
+    public void setUserLogin(String userLogin) {
+        this.userLogin = userLogin;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -275,7 +291,7 @@ public class DanhMucCanBo implements Serializable {
             ", namSinh='" + getNamSinh() + "'" +
             ", email='" + getEmail() + "'" +
             ", soDienThoai='" + getSoDienThoai() + "'" +
-            ", soCmnd='" + getSoCmnd() + "'" +
+            ", soGiayToTuyThan='" + getSoGiayToTuyThan() + "'" +
             ", tenDangNhap='" + getTenDangNhap() + "'" +
             ", matKhau='" + getMatKhau() + "'" +
             ", trangThai=" + getTrangThai() +
@@ -283,6 +299,7 @@ public class DanhMucCanBo implements Serializable {
             ", clientSecret='" + getClientSecret() + "'" +
             ", usernameKyso='" + getUsernameKyso() + "'" +
             ", passwordKyso='" + getPasswordKyso() + "'" +
+            ", userLogin='" + getUserLogin() + "'" +
             "}";
     }
 }

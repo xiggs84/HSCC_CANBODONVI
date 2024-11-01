@@ -11,12 +11,22 @@ public class CanBoQuyenDTO implements Serializable {
 
     private Long id;
 
+    private DanhMucDonViDTO danhMucDonVi;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public DanhMucDonViDTO getDanhMucDonVi() {
+        return danhMucDonVi;
+    }
+
+    public void setDanhMucDonVi(DanhMucDonViDTO danhMucDonVi) {
+        this.danhMucDonVi = danhMucDonVi;
     }
 
     @Override
@@ -45,6 +55,7 @@ public class CanBoQuyenDTO implements Serializable {
     public String toString() {
         return "CanBoQuyenDTO{" +
             "id=" + getId() +
+            ", danhMucDonVi=" + getDanhMucDonVi() +
             "}";
     }
 }

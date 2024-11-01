@@ -3,6 +3,7 @@ package vn.vnpt.web.rest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,6 +71,75 @@ public class CanBoQuyenResource {
         return ResponseEntity.created(new URI("/api/can-bo-quyens/" + canBoQuyenDTO.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, canBoQuyenDTO.getId().toString()))
             .body(canBoQuyenDTO);
+    }
+
+    /**
+     * {@code PUT  /can-bo-quyens/:id} : Updates an existing canBoQuyen.
+     *
+     * @param id the id of the canBoQuyenDTO to save.
+     * @param canBoQuyenDTO the canBoQuyenDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated canBoQuyenDTO,
+     * or with status {@code 400 (Bad Request)} if the canBoQuyenDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the canBoQuyenDTO couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<CanBoQuyenDTO> updateCanBoQuyen(
+        @PathVariable(value = "id", required = false) final Long id,
+        @RequestBody CanBoQuyenDTO canBoQuyenDTO
+    ) throws URISyntaxException {
+        LOG.debug("REST request to update CanBoQuyen : {}, {}", id, canBoQuyenDTO);
+        if (canBoQuyenDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, canBoQuyenDTO.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!canBoQuyenRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        canBoQuyenDTO = canBoQuyenService.update(canBoQuyenDTO);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, canBoQuyenDTO.getId().toString()))
+            .body(canBoQuyenDTO);
+    }
+
+    /**
+     * {@code PATCH  /can-bo-quyens/:id} : Partial updates given fields of an existing canBoQuyen, field will ignore if it is null
+     *
+     * @param id the id of the canBoQuyenDTO to save.
+     * @param canBoQuyenDTO the canBoQuyenDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated canBoQuyenDTO,
+     * or with status {@code 400 (Bad Request)} if the canBoQuyenDTO is not valid,
+     * or with status {@code 404 (Not Found)} if the canBoQuyenDTO is not found,
+     * or with status {@code 500 (Internal Server Error)} if the canBoQuyenDTO couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    public ResponseEntity<CanBoQuyenDTO> partialUpdateCanBoQuyen(
+        @PathVariable(value = "id", required = false) final Long id,
+        @RequestBody CanBoQuyenDTO canBoQuyenDTO
+    ) throws URISyntaxException {
+        LOG.debug("REST request to partial update CanBoQuyen partially : {}, {}", id, canBoQuyenDTO);
+        if (canBoQuyenDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, canBoQuyenDTO.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!canBoQuyenRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        Optional<CanBoQuyenDTO> result = canBoQuyenService.partialUpdate(canBoQuyenDTO);
+
+        return ResponseUtil.wrapOrNotFound(
+            result,
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, canBoQuyenDTO.getId().toString())
+        );
     }
 
     /**

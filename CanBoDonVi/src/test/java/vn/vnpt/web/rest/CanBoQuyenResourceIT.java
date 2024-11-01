@@ -5,9 +5,12 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static vn.vnpt.domain.CanBoQuyenAsserts.*;
+import static vn.vnpt.web.rest.TestUtil.createUpdateProxyForBean;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import vn.vnpt.IntegrationTest;
 import vn.vnpt.domain.CanBoQuyen;
+import vn.vnpt.domain.DanhMucDonVi;
 import vn.vnpt.repository.CanBoQuyenRepository;
 import vn.vnpt.service.dto.CanBoQuyenDTO;
 import vn.vnpt.service.mapper.CanBoQuyenMapper;
@@ -33,6 +37,9 @@ class CanBoQuyenResourceIT {
 
     private static final String ENTITY_API_URL = "/api/can-bo-quyens";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
+
+    private static Random random = new Random();
+    private static AtomicLong longCount = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private ObjectMapper om;
@@ -171,6 +178,28 @@ class CanBoQuyenResourceIT {
         defaultCanBoQuyenFiltering("id.lessThanOrEqual=" + id, "id.lessThan=" + id);
     }
 
+    @Test
+    @Transactional
+    void getAllCanBoQuyensByDanhMucDonViIsEqualToSomething() throws Exception {
+        DanhMucDonVi danhMucDonVi;
+        if (TestUtil.findAll(em, DanhMucDonVi.class).isEmpty()) {
+            canBoQuyenRepository.saveAndFlush(canBoQuyen);
+            danhMucDonVi = DanhMucDonViResourceIT.createEntity();
+        } else {
+            danhMucDonVi = TestUtil.findAll(em, DanhMucDonVi.class).get(0);
+        }
+        em.persist(danhMucDonVi);
+        em.flush();
+        canBoQuyen.setDanhMucDonVi(danhMucDonVi);
+        canBoQuyenRepository.saveAndFlush(canBoQuyen);
+        Long danhMucDonViId = danhMucDonVi.getIdDonVi();
+        // Get all the canBoQuyenList where danhMucDonVi equals to danhMucDonViId
+        defaultCanBoQuyenShouldBeFound("danhMucDonViId.equals=" + danhMucDonViId);
+
+        // Get all the canBoQuyenList where danhMucDonVi equals to (danhMucDonViId + 1)
+        defaultCanBoQuyenShouldNotBeFound("danhMucDonViId.equals=" + (danhMucDonViId + 1));
+    }
+
     private void defaultCanBoQuyenFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
         defaultCanBoQuyenShouldBeFound(shouldBeFound);
         defaultCanBoQuyenShouldNotBeFound(shouldNotBeFound);
@@ -218,6 +247,212 @@ class CanBoQuyenResourceIT {
     void getNonExistingCanBoQuyen() throws Exception {
         // Get the canBoQuyen
         restCanBoQuyenMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Transactional
+    void putExistingCanBoQuyen() throws Exception {
+        // Initialize the database
+        insertedCanBoQuyen = canBoQuyenRepository.saveAndFlush(canBoQuyen);
+
+        long databaseSizeBeforeUpdate = getRepositoryCount();
+
+        // Update the canBoQuyen
+        CanBoQuyen updatedCanBoQuyen = canBoQuyenRepository.findById(canBoQuyen.getId()).orElseThrow();
+        // Disconnect from session so that the updates on updatedCanBoQuyen are not directly saved in db
+        em.detach(updatedCanBoQuyen);
+        CanBoQuyenDTO canBoQuyenDTO = canBoQuyenMapper.toDto(updatedCanBoQuyen);
+
+        restCanBoQuyenMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, canBoQuyenDTO.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(om.writeValueAsBytes(canBoQuyenDTO))
+            )
+            .andExpect(status().isOk());
+
+        // Validate the CanBoQuyen in the database
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
+        assertPersistedCanBoQuyenToMatchAllProperties(updatedCanBoQuyen);
+    }
+
+    @Test
+    @Transactional
+    void putNonExistingCanBoQuyen() throws Exception {
+        long databaseSizeBeforeUpdate = getRepositoryCount();
+        canBoQuyen.setId(longCount.incrementAndGet());
+
+        // Create the CanBoQuyen
+        CanBoQuyenDTO canBoQuyenDTO = canBoQuyenMapper.toDto(canBoQuyen);
+
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        restCanBoQuyenMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, canBoQuyenDTO.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(om.writeValueAsBytes(canBoQuyenDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        // Validate the CanBoQuyen in the database
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void putWithIdMismatchCanBoQuyen() throws Exception {
+        long databaseSizeBeforeUpdate = getRepositoryCount();
+        canBoQuyen.setId(longCount.incrementAndGet());
+
+        // Create the CanBoQuyen
+        CanBoQuyenDTO canBoQuyenDTO = canBoQuyenMapper.toDto(canBoQuyen);
+
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restCanBoQuyenMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, longCount.incrementAndGet())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(om.writeValueAsBytes(canBoQuyenDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        // Validate the CanBoQuyen in the database
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void putWithMissingIdPathParamCanBoQuyen() throws Exception {
+        long databaseSizeBeforeUpdate = getRepositoryCount();
+        canBoQuyen.setId(longCount.incrementAndGet());
+
+        // Create the CanBoQuyen
+        CanBoQuyenDTO canBoQuyenDTO = canBoQuyenMapper.toDto(canBoQuyen);
+
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restCanBoQuyenMockMvc
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(canBoQuyenDTO)))
+            .andExpect(status().isMethodNotAllowed());
+
+        // Validate the CanBoQuyen in the database
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void partialUpdateCanBoQuyenWithPatch() throws Exception {
+        // Initialize the database
+        insertedCanBoQuyen = canBoQuyenRepository.saveAndFlush(canBoQuyen);
+
+        long databaseSizeBeforeUpdate = getRepositoryCount();
+
+        // Update the canBoQuyen using partial update
+        CanBoQuyen partialUpdatedCanBoQuyen = new CanBoQuyen();
+        partialUpdatedCanBoQuyen.setId(canBoQuyen.getId());
+
+        restCanBoQuyenMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, partialUpdatedCanBoQuyen.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(om.writeValueAsBytes(partialUpdatedCanBoQuyen))
+            )
+            .andExpect(status().isOk());
+
+        // Validate the CanBoQuyen in the database
+
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
+        assertCanBoQuyenUpdatableFieldsEquals(
+            createUpdateProxyForBean(partialUpdatedCanBoQuyen, canBoQuyen),
+            getPersistedCanBoQuyen(canBoQuyen)
+        );
+    }
+
+    @Test
+    @Transactional
+    void fullUpdateCanBoQuyenWithPatch() throws Exception {
+        // Initialize the database
+        insertedCanBoQuyen = canBoQuyenRepository.saveAndFlush(canBoQuyen);
+
+        long databaseSizeBeforeUpdate = getRepositoryCount();
+
+        // Update the canBoQuyen using partial update
+        CanBoQuyen partialUpdatedCanBoQuyen = new CanBoQuyen();
+        partialUpdatedCanBoQuyen.setId(canBoQuyen.getId());
+
+        restCanBoQuyenMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, partialUpdatedCanBoQuyen.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(om.writeValueAsBytes(partialUpdatedCanBoQuyen))
+            )
+            .andExpect(status().isOk());
+
+        // Validate the CanBoQuyen in the database
+
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
+        assertCanBoQuyenUpdatableFieldsEquals(partialUpdatedCanBoQuyen, getPersistedCanBoQuyen(partialUpdatedCanBoQuyen));
+    }
+
+    @Test
+    @Transactional
+    void patchNonExistingCanBoQuyen() throws Exception {
+        long databaseSizeBeforeUpdate = getRepositoryCount();
+        canBoQuyen.setId(longCount.incrementAndGet());
+
+        // Create the CanBoQuyen
+        CanBoQuyenDTO canBoQuyenDTO = canBoQuyenMapper.toDto(canBoQuyen);
+
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        restCanBoQuyenMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, canBoQuyenDTO.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(om.writeValueAsBytes(canBoQuyenDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        // Validate the CanBoQuyen in the database
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void patchWithIdMismatchCanBoQuyen() throws Exception {
+        long databaseSizeBeforeUpdate = getRepositoryCount();
+        canBoQuyen.setId(longCount.incrementAndGet());
+
+        // Create the CanBoQuyen
+        CanBoQuyenDTO canBoQuyenDTO = canBoQuyenMapper.toDto(canBoQuyen);
+
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restCanBoQuyenMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, longCount.incrementAndGet())
+                    .contentType("application/merge-patch+json")
+                    .content(om.writeValueAsBytes(canBoQuyenDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        // Validate the CanBoQuyen in the database
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void patchWithMissingIdPathParamCanBoQuyen() throws Exception {
+        long databaseSizeBeforeUpdate = getRepositoryCount();
+        canBoQuyen.setId(longCount.incrementAndGet());
+
+        // Create the CanBoQuyen
+        CanBoQuyenDTO canBoQuyenDTO = canBoQuyenMapper.toDto(canBoQuyen);
+
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restCanBoQuyenMockMvc
+            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(om.writeValueAsBytes(canBoQuyenDTO)))
+            .andExpect(status().isMethodNotAllowed());
+
+        // Validate the CanBoQuyen in the database
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
     @Test

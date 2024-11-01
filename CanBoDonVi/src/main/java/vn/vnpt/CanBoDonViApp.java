@@ -13,6 +13,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.core.env.Environment;
 import tech.jhipster.config.DefaultProfileUtil;
 import tech.jhipster.config.JHipsterConstants;
@@ -20,6 +21,7 @@ import vn.vnpt.config.ApplicationProperties;
 import vn.vnpt.config.CRLFLogConverter;
 
 @SpringBootApplication
+@EnableFeignClients
 @EnableConfigurationProperties({ LiquibaseProperties.class, ApplicationProperties.class })
 public class CanBoDonViApp {
 

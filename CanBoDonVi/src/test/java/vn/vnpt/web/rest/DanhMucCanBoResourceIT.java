@@ -52,8 +52,8 @@ class DanhMucCanBoResourceIT {
     private static final String DEFAULT_SO_DIEN_THOAI = "AAAAAAAAAA";
     private static final String UPDATED_SO_DIEN_THOAI = "BBBBBBBBBB";
 
-    private static final String DEFAULT_SO_CMND = "AAAAAAAAAA";
-    private static final String UPDATED_SO_CMND = "BBBBBBBBBB";
+    private static final String DEFAULT_SO_GIAY_TO_TUY_THAN = "AAAAAAAAAA";
+    private static final String UPDATED_SO_GIAY_TO_TUY_THAN = "BBBBBBBBBB";
 
     private static final String DEFAULT_TEN_DANG_NHAP = "AAAAAAAAAA";
     private static final String UPDATED_TEN_DANG_NHAP = "BBBBBBBBBB";
@@ -76,6 +76,9 @@ class DanhMucCanBoResourceIT {
 
     private static final String DEFAULT_PASSWORD_KYSO = "AAAAAAAAAA";
     private static final String UPDATED_PASSWORD_KYSO = "BBBBBBBBBB";
+
+    private static final String DEFAULT_USER_LOGIN = "AAAAAAAAAA";
+    private static final String UPDATED_USER_LOGIN = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/danh-muc-can-bos";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{idCanBo}";
@@ -115,14 +118,15 @@ class DanhMucCanBoResourceIT {
             .namSinh(DEFAULT_NAM_SINH)
             .email(DEFAULT_EMAIL)
             .soDienThoai(DEFAULT_SO_DIEN_THOAI)
-            .soCmnd(DEFAULT_SO_CMND)
+            .soGiayToTuyThan(DEFAULT_SO_GIAY_TO_TUY_THAN)
             .tenDangNhap(DEFAULT_TEN_DANG_NHAP)
             .matKhau(DEFAULT_MAT_KHAU)
             .trangThai(DEFAULT_TRANG_THAI)
             .clientId(DEFAULT_CLIENT_ID)
             .clientSecret(DEFAULT_CLIENT_SECRET)
             .usernameKyso(DEFAULT_USERNAME_KYSO)
-            .passwordKyso(DEFAULT_PASSWORD_KYSO);
+            .passwordKyso(DEFAULT_PASSWORD_KYSO)
+            .userLogin(DEFAULT_USER_LOGIN);
     }
 
     /**
@@ -138,14 +142,15 @@ class DanhMucCanBoResourceIT {
             .namSinh(UPDATED_NAM_SINH)
             .email(UPDATED_EMAIL)
             .soDienThoai(UPDATED_SO_DIEN_THOAI)
-            .soCmnd(UPDATED_SO_CMND)
+            .soGiayToTuyThan(UPDATED_SO_GIAY_TO_TUY_THAN)
             .tenDangNhap(UPDATED_TEN_DANG_NHAP)
             .matKhau(UPDATED_MAT_KHAU)
             .trangThai(UPDATED_TRANG_THAI)
             .clientId(UPDATED_CLIENT_ID)
             .clientSecret(UPDATED_CLIENT_SECRET)
             .usernameKyso(UPDATED_USERNAME_KYSO)
-            .passwordKyso(UPDATED_PASSWORD_KYSO);
+            .passwordKyso(UPDATED_PASSWORD_KYSO)
+            .userLogin(UPDATED_USER_LOGIN);
     }
 
     @BeforeEach
@@ -220,14 +225,15 @@ class DanhMucCanBoResourceIT {
             .andExpect(jsonPath("$.[*].namSinh").value(hasItem(DEFAULT_NAM_SINH.toString())))
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
             .andExpect(jsonPath("$.[*].soDienThoai").value(hasItem(DEFAULT_SO_DIEN_THOAI)))
-            .andExpect(jsonPath("$.[*].soCmnd").value(hasItem(DEFAULT_SO_CMND)))
+            .andExpect(jsonPath("$.[*].soGiayToTuyThan").value(hasItem(DEFAULT_SO_GIAY_TO_TUY_THAN)))
             .andExpect(jsonPath("$.[*].tenDangNhap").value(hasItem(DEFAULT_TEN_DANG_NHAP)))
             .andExpect(jsonPath("$.[*].matKhau").value(hasItem(DEFAULT_MAT_KHAU)))
             .andExpect(jsonPath("$.[*].trangThai").value(hasItem(DEFAULT_TRANG_THAI.intValue())))
             .andExpect(jsonPath("$.[*].clientId").value(hasItem(DEFAULT_CLIENT_ID)))
             .andExpect(jsonPath("$.[*].clientSecret").value(hasItem(DEFAULT_CLIENT_SECRET)))
             .andExpect(jsonPath("$.[*].usernameKyso").value(hasItem(DEFAULT_USERNAME_KYSO)))
-            .andExpect(jsonPath("$.[*].passwordKyso").value(hasItem(DEFAULT_PASSWORD_KYSO)));
+            .andExpect(jsonPath("$.[*].passwordKyso").value(hasItem(DEFAULT_PASSWORD_KYSO)))
+            .andExpect(jsonPath("$.[*].userLogin").value(hasItem(DEFAULT_USER_LOGIN)));
     }
 
     @Test
@@ -247,14 +253,15 @@ class DanhMucCanBoResourceIT {
             .andExpect(jsonPath("$.namSinh").value(DEFAULT_NAM_SINH.toString()))
             .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
             .andExpect(jsonPath("$.soDienThoai").value(DEFAULT_SO_DIEN_THOAI))
-            .andExpect(jsonPath("$.soCmnd").value(DEFAULT_SO_CMND))
+            .andExpect(jsonPath("$.soGiayToTuyThan").value(DEFAULT_SO_GIAY_TO_TUY_THAN))
             .andExpect(jsonPath("$.tenDangNhap").value(DEFAULT_TEN_DANG_NHAP))
             .andExpect(jsonPath("$.matKhau").value(DEFAULT_MAT_KHAU))
             .andExpect(jsonPath("$.trangThai").value(DEFAULT_TRANG_THAI.intValue()))
             .andExpect(jsonPath("$.clientId").value(DEFAULT_CLIENT_ID))
             .andExpect(jsonPath("$.clientSecret").value(DEFAULT_CLIENT_SECRET))
             .andExpect(jsonPath("$.usernameKyso").value(DEFAULT_USERNAME_KYSO))
-            .andExpect(jsonPath("$.passwordKyso").value(DEFAULT_PASSWORD_KYSO));
+            .andExpect(jsonPath("$.passwordKyso").value(DEFAULT_PASSWORD_KYSO))
+            .andExpect(jsonPath("$.userLogin").value(DEFAULT_USER_LOGIN));
     }
 
     @Test
@@ -550,52 +557,64 @@ class DanhMucCanBoResourceIT {
 
     @Test
     @Transactional
-    void getAllDanhMucCanBosBySoCmndIsEqualToSomething() throws Exception {
+    void getAllDanhMucCanBosBySoGiayToTuyThanIsEqualToSomething() throws Exception {
         // Initialize the database
         insertedDanhMucCanBo = danhMucCanBoRepository.saveAndFlush(danhMucCanBo);
 
-        // Get all the danhMucCanBoList where soCmnd equals to
-        defaultDanhMucCanBoFiltering("soCmnd.equals=" + DEFAULT_SO_CMND, "soCmnd.equals=" + UPDATED_SO_CMND);
+        // Get all the danhMucCanBoList where soGiayToTuyThan equals to
+        defaultDanhMucCanBoFiltering(
+            "soGiayToTuyThan.equals=" + DEFAULT_SO_GIAY_TO_TUY_THAN,
+            "soGiayToTuyThan.equals=" + UPDATED_SO_GIAY_TO_TUY_THAN
+        );
     }
 
     @Test
     @Transactional
-    void getAllDanhMucCanBosBySoCmndIsInShouldWork() throws Exception {
+    void getAllDanhMucCanBosBySoGiayToTuyThanIsInShouldWork() throws Exception {
         // Initialize the database
         insertedDanhMucCanBo = danhMucCanBoRepository.saveAndFlush(danhMucCanBo);
 
-        // Get all the danhMucCanBoList where soCmnd in
-        defaultDanhMucCanBoFiltering("soCmnd.in=" + DEFAULT_SO_CMND + "," + UPDATED_SO_CMND, "soCmnd.in=" + UPDATED_SO_CMND);
+        // Get all the danhMucCanBoList where soGiayToTuyThan in
+        defaultDanhMucCanBoFiltering(
+            "soGiayToTuyThan.in=" + DEFAULT_SO_GIAY_TO_TUY_THAN + "," + UPDATED_SO_GIAY_TO_TUY_THAN,
+            "soGiayToTuyThan.in=" + UPDATED_SO_GIAY_TO_TUY_THAN
+        );
     }
 
     @Test
     @Transactional
-    void getAllDanhMucCanBosBySoCmndIsNullOrNotNull() throws Exception {
+    void getAllDanhMucCanBosBySoGiayToTuyThanIsNullOrNotNull() throws Exception {
         // Initialize the database
         insertedDanhMucCanBo = danhMucCanBoRepository.saveAndFlush(danhMucCanBo);
 
-        // Get all the danhMucCanBoList where soCmnd is not null
-        defaultDanhMucCanBoFiltering("soCmnd.specified=true", "soCmnd.specified=false");
+        // Get all the danhMucCanBoList where soGiayToTuyThan is not null
+        defaultDanhMucCanBoFiltering("soGiayToTuyThan.specified=true", "soGiayToTuyThan.specified=false");
     }
 
     @Test
     @Transactional
-    void getAllDanhMucCanBosBySoCmndContainsSomething() throws Exception {
+    void getAllDanhMucCanBosBySoGiayToTuyThanContainsSomething() throws Exception {
         // Initialize the database
         insertedDanhMucCanBo = danhMucCanBoRepository.saveAndFlush(danhMucCanBo);
 
-        // Get all the danhMucCanBoList where soCmnd contains
-        defaultDanhMucCanBoFiltering("soCmnd.contains=" + DEFAULT_SO_CMND, "soCmnd.contains=" + UPDATED_SO_CMND);
+        // Get all the danhMucCanBoList where soGiayToTuyThan contains
+        defaultDanhMucCanBoFiltering(
+            "soGiayToTuyThan.contains=" + DEFAULT_SO_GIAY_TO_TUY_THAN,
+            "soGiayToTuyThan.contains=" + UPDATED_SO_GIAY_TO_TUY_THAN
+        );
     }
 
     @Test
     @Transactional
-    void getAllDanhMucCanBosBySoCmndNotContainsSomething() throws Exception {
+    void getAllDanhMucCanBosBySoGiayToTuyThanNotContainsSomething() throws Exception {
         // Initialize the database
         insertedDanhMucCanBo = danhMucCanBoRepository.saveAndFlush(danhMucCanBo);
 
-        // Get all the danhMucCanBoList where soCmnd does not contain
-        defaultDanhMucCanBoFiltering("soCmnd.doesNotContain=" + UPDATED_SO_CMND, "soCmnd.doesNotContain=" + DEFAULT_SO_CMND);
+        // Get all the danhMucCanBoList where soGiayToTuyThan does not contain
+        defaultDanhMucCanBoFiltering(
+            "soGiayToTuyThan.doesNotContain=" + UPDATED_SO_GIAY_TO_TUY_THAN,
+            "soGiayToTuyThan.doesNotContain=" + DEFAULT_SO_GIAY_TO_TUY_THAN
+        );
     }
 
     @Test
@@ -995,6 +1014,56 @@ class DanhMucCanBoResourceIT {
         );
     }
 
+    @Test
+    @Transactional
+    void getAllDanhMucCanBosByUserLoginIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucCanBo = danhMucCanBoRepository.saveAndFlush(danhMucCanBo);
+
+        // Get all the danhMucCanBoList where userLogin equals to
+        defaultDanhMucCanBoFiltering("userLogin.equals=" + DEFAULT_USER_LOGIN, "userLogin.equals=" + UPDATED_USER_LOGIN);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucCanBosByUserLoginIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedDanhMucCanBo = danhMucCanBoRepository.saveAndFlush(danhMucCanBo);
+
+        // Get all the danhMucCanBoList where userLogin in
+        defaultDanhMucCanBoFiltering("userLogin.in=" + DEFAULT_USER_LOGIN + "," + UPDATED_USER_LOGIN, "userLogin.in=" + UPDATED_USER_LOGIN);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucCanBosByUserLoginIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedDanhMucCanBo = danhMucCanBoRepository.saveAndFlush(danhMucCanBo);
+
+        // Get all the danhMucCanBoList where userLogin is not null
+        defaultDanhMucCanBoFiltering("userLogin.specified=true", "userLogin.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucCanBosByUserLoginContainsSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucCanBo = danhMucCanBoRepository.saveAndFlush(danhMucCanBo);
+
+        // Get all the danhMucCanBoList where userLogin contains
+        defaultDanhMucCanBoFiltering("userLogin.contains=" + DEFAULT_USER_LOGIN, "userLogin.contains=" + UPDATED_USER_LOGIN);
+    }
+
+    @Test
+    @Transactional
+    void getAllDanhMucCanBosByUserLoginNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedDanhMucCanBo = danhMucCanBoRepository.saveAndFlush(danhMucCanBo);
+
+        // Get all the danhMucCanBoList where userLogin does not contain
+        defaultDanhMucCanBoFiltering("userLogin.doesNotContain=" + UPDATED_USER_LOGIN, "userLogin.doesNotContain=" + DEFAULT_USER_LOGIN);
+    }
+
     private void defaultDanhMucCanBoFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
         defaultDanhMucCanBoShouldBeFound(shouldBeFound);
         defaultDanhMucCanBoShouldNotBeFound(shouldNotBeFound);
@@ -1014,14 +1083,15 @@ class DanhMucCanBoResourceIT {
             .andExpect(jsonPath("$.[*].namSinh").value(hasItem(DEFAULT_NAM_SINH.toString())))
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
             .andExpect(jsonPath("$.[*].soDienThoai").value(hasItem(DEFAULT_SO_DIEN_THOAI)))
-            .andExpect(jsonPath("$.[*].soCmnd").value(hasItem(DEFAULT_SO_CMND)))
+            .andExpect(jsonPath("$.[*].soGiayToTuyThan").value(hasItem(DEFAULT_SO_GIAY_TO_TUY_THAN)))
             .andExpect(jsonPath("$.[*].tenDangNhap").value(hasItem(DEFAULT_TEN_DANG_NHAP)))
             .andExpect(jsonPath("$.[*].matKhau").value(hasItem(DEFAULT_MAT_KHAU)))
             .andExpect(jsonPath("$.[*].trangThai").value(hasItem(DEFAULT_TRANG_THAI.intValue())))
             .andExpect(jsonPath("$.[*].clientId").value(hasItem(DEFAULT_CLIENT_ID)))
             .andExpect(jsonPath("$.[*].clientSecret").value(hasItem(DEFAULT_CLIENT_SECRET)))
             .andExpect(jsonPath("$.[*].usernameKyso").value(hasItem(DEFAULT_USERNAME_KYSO)))
-            .andExpect(jsonPath("$.[*].passwordKyso").value(hasItem(DEFAULT_PASSWORD_KYSO)));
+            .andExpect(jsonPath("$.[*].passwordKyso").value(hasItem(DEFAULT_PASSWORD_KYSO)))
+            .andExpect(jsonPath("$.[*].userLogin").value(hasItem(DEFAULT_USER_LOGIN)));
 
         // Check, that the count call also returns 1
         restDanhMucCanBoMockMvc
@@ -1075,14 +1145,15 @@ class DanhMucCanBoResourceIT {
             .namSinh(UPDATED_NAM_SINH)
             .email(UPDATED_EMAIL)
             .soDienThoai(UPDATED_SO_DIEN_THOAI)
-            .soCmnd(UPDATED_SO_CMND)
+            .soGiayToTuyThan(UPDATED_SO_GIAY_TO_TUY_THAN)
             .tenDangNhap(UPDATED_TEN_DANG_NHAP)
             .matKhau(UPDATED_MAT_KHAU)
             .trangThai(UPDATED_TRANG_THAI)
             .clientId(UPDATED_CLIENT_ID)
             .clientSecret(UPDATED_CLIENT_SECRET)
             .usernameKyso(UPDATED_USERNAME_KYSO)
-            .passwordKyso(UPDATED_PASSWORD_KYSO);
+            .passwordKyso(UPDATED_PASSWORD_KYSO)
+            .userLogin(UPDATED_USER_LOGIN);
         DanhMucCanBoDTO danhMucCanBoDTO = danhMucCanBoMapper.toDto(updatedDanhMucCanBo);
 
         restDanhMucCanBoMockMvc
@@ -1179,7 +1250,8 @@ class DanhMucCanBoResourceIT {
             .trangThai(UPDATED_TRANG_THAI)
             .clientId(UPDATED_CLIENT_ID)
             .clientSecret(UPDATED_CLIENT_SECRET)
-            .usernameKyso(UPDATED_USERNAME_KYSO);
+            .usernameKyso(UPDATED_USERNAME_KYSO)
+            .userLogin(UPDATED_USER_LOGIN);
 
         restDanhMucCanBoMockMvc
             .perform(
@@ -1216,14 +1288,15 @@ class DanhMucCanBoResourceIT {
             .namSinh(UPDATED_NAM_SINH)
             .email(UPDATED_EMAIL)
             .soDienThoai(UPDATED_SO_DIEN_THOAI)
-            .soCmnd(UPDATED_SO_CMND)
+            .soGiayToTuyThan(UPDATED_SO_GIAY_TO_TUY_THAN)
             .tenDangNhap(UPDATED_TEN_DANG_NHAP)
             .matKhau(UPDATED_MAT_KHAU)
             .trangThai(UPDATED_TRANG_THAI)
             .clientId(UPDATED_CLIENT_ID)
             .clientSecret(UPDATED_CLIENT_SECRET)
             .usernameKyso(UPDATED_USERNAME_KYSO)
-            .passwordKyso(UPDATED_PASSWORD_KYSO);
+            .passwordKyso(UPDATED_PASSWORD_KYSO)
+            .userLogin(UPDATED_USER_LOGIN);
 
         restDanhMucCanBoMockMvc
             .perform(

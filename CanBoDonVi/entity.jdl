@@ -15,6 +15,7 @@ entity DanhMucCanBo {
     clientSecret String
     usernameKyso String
     passwordKyso String
+    userLogin String
 }
 
 entity CanBoQuyen {
@@ -158,6 +159,7 @@ entity DmNoiCapGpdkx {
     trangThai Long
 }
 
+
 relationship OneToMany {
 //    DanhMucTinh{maTinh} to DanhMucHuyen
 //    DanhMucHuyen{maHuyen} to DanhMucXa
@@ -167,12 +169,12 @@ relationship OneToMany {
 }
 
 //CanBo
-// relationship OneToMany {
-//     DanhMucCanBo to CanBoQuyen{idCanBo}
-//     Quyen to CanBoQuyen{idQuyen}
-//     DanhMucDonVi to CanBoQuyen{idDonVi}
-//     Quyen to MenuQuyen{idQuyen}
-// }
+ relationship OneToMany {
+//     DanhMucCanBo to CanBoQuyen
+//     Quyen to CanBoQuyen
+     DanhMucDonVi to CanBoQuyen
+//     Quyen to MenuQuyen
+ }
 //DonVi
 // relationship OneToMany {
 //     DanhMucTinh{huyens} to DanhMucHuyen{tinh(maTinh)},

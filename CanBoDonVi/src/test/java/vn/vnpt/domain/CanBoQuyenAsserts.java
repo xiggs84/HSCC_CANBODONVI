@@ -56,6 +56,8 @@ public class CanBoQuyenAsserts {
      * @param actual the actual entity
      */
     public static void assertCanBoQuyenUpdatableRelationshipsEquals(CanBoQuyen expected, CanBoQuyen actual) {
-        // empty method
+        assertThat(expected)
+            .as("Verify CanBoQuyen relationships")
+            .satisfies(e -> assertThat(e.getDanhMucDonVi()).as("check danhMucDonVi").isEqualTo(actual.getDanhMucDonVi()));
     }
 }

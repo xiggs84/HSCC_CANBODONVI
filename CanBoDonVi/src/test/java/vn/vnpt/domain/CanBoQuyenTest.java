@@ -2,6 +2,7 @@ package vn.vnpt.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static vn.vnpt.domain.CanBoQuyenTestSamples.*;
+import static vn.vnpt.domain.DanhMucDonViTestSamples.*;
 
 import org.junit.jupiter.api.Test;
 import vn.vnpt.web.rest.TestUtil;
@@ -23,12 +24,14 @@ class CanBoQuyenTest {
     }
 
     @Test
-    void hashCodeVerifier() {
-        CanBoQuyen canBoQuyen = new CanBoQuyen();
-        assertThat(canBoQuyen.hashCode()).isZero();
+    void danhMucDonViTest() {
+        CanBoQuyen canBoQuyen = getCanBoQuyenRandomSampleGenerator();
+        DanhMucDonVi danhMucDonViBack = getDanhMucDonViRandomSampleGenerator();
 
-        CanBoQuyen canBoQuyen1 = getCanBoQuyenSample1();
-        canBoQuyen.setId(canBoQuyen1.getId());
-        assertThat(canBoQuyen).hasSameHashCodeAs(canBoQuyen1);
+        canBoQuyen.setDanhMucDonVi(danhMucDonViBack);
+        assertThat(canBoQuyen.getDanhMucDonVi()).isEqualTo(danhMucDonViBack);
+
+        canBoQuyen.danhMucDonVi(null);
+        assertThat(canBoQuyen.getDanhMucDonVi()).isNull();
     }
 }

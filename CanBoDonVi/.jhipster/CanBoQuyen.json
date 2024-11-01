@@ -1,6 +1,6 @@
 {
   "annotations": {
-    "changelogDate": "20240917100747"
+    "changelogDate": "20241008090614"
   },
   "applications": "*",
   "clientRootFolder": "CanBoDonVi",
@@ -11,7 +11,15 @@
   "microserviceName": "CanBoDonVi",
   "name": "CanBoQuyen",
   "pagination": "pagination",
-  "relationships": [],
+  "relationships": [
+    {
+      "otherEntityName": "danhMucDonVi",
+      "otherEntityRelationshipName": "canBoQuyen",
+      "relationshipName": "danhMucDonVi",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
   "searchEngine": "no",
   "service": "serviceImpl"
 }

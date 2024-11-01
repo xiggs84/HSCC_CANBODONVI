@@ -1,0 +1,54 @@
+//entity LanhDao {
+//  @id
+//  idLanhDao Long
+//  tenLanhDao String
+//  chucDanh String
+//  trangThai Long
+//}
+
+entity CanBoChungThuc {
+  @id
+  idCanBoChungThuc Long
+  tenCanBo String
+  chucDanh String
+  trangThai Long
+}
+
+entity DanhMucDonVi {
+  @id
+  idDonVi Long
+  tenDonVi String
+  diaChi String
+  nguoiDaiDien String
+  soDienThoai String
+  idDonViQl Long
+  ngayKhaiBao LocalDate
+  trangThai Long
+  soNha String
+  maSoThue String
+  hoaDonDt Integer
+  maDonViIgate String
+  maCoQuanIgate String
+  kySo Long
+  qrScan Long
+  verifyIdCard Long
+  isVerifyFace Long
+  isElastic Long
+  apikeyCccd String
+  apikeyFace String
+  verifyCodeCccd String
+  usernameElastic String
+  passwordElastic String
+  idNhiemVu String
+  idLoaiDv String
+  idCapQl String
+}
+
+relationship OneToMany {
+//  DanhMucDonVi to LanhDao
+  DanhMucDonVi to CanBoChungThuc
+}
+
+use mapstruct, serviceImpl for *
+use pagination for *
+filter *

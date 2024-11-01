@@ -1,0 +1,101 @@
+package vn.vnpt.service.criteria;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import org.assertj.core.api.Condition;
+import org.junit.jupiter.api.Test;
+
+class QuyenCriteriaTest {
+
+    @Test
+    void newQuyenCriteriaHasAllFiltersNullTest() {
+        var quyenCriteria = new QuyenCriteria();
+        assertThat(quyenCriteria).is(criteriaFiltersAre(filter -> filter == null));
+    }
+
+    @Test
+    void quyenCriteriaFluentMethodsCreatesFiltersTest() {
+        var quyenCriteria = new QuyenCriteria();
+
+        setAllFilters(quyenCriteria);
+
+        assertThat(quyenCriteria).is(criteriaFiltersAre(filter -> filter != null));
+    }
+
+    @Test
+    void quyenCriteriaCopyCreatesNullFilterTest() {
+        var quyenCriteria = new QuyenCriteria();
+        var copy = quyenCriteria.copy();
+
+        assertThat(quyenCriteria).satisfies(
+            criteria ->
+                assertThat(criteria).is(
+                    copyFiltersAre(copy, (a, b) -> (a == null || a instanceof Boolean) ? a == b : (a != b && a.equals(b)))
+                ),
+            criteria -> assertThat(criteria).isEqualTo(copy),
+            criteria -> assertThat(criteria).hasSameHashCodeAs(copy)
+        );
+
+        assertThat(copy).satisfies(
+            criteria -> assertThat(criteria).is(criteriaFiltersAre(filter -> filter == null)),
+            criteria -> assertThat(criteria).isEqualTo(quyenCriteria)
+        );
+    }
+
+    @Test
+    void quyenCriteriaCopyDuplicatesEveryExistingFilterTest() {
+        var quyenCriteria = new QuyenCriteria();
+        setAllFilters(quyenCriteria);
+
+        var copy = quyenCriteria.copy();
+
+        assertThat(quyenCriteria).satisfies(
+            criteria ->
+                assertThat(criteria).is(
+                    copyFiltersAre(copy, (a, b) -> (a == null || a instanceof Boolean) ? a == b : (a != b && a.equals(b)))
+                ),
+            criteria -> assertThat(criteria).isEqualTo(copy),
+            criteria -> assertThat(criteria).hasSameHashCodeAs(copy)
+        );
+
+        assertThat(copy).satisfies(
+            criteria -> assertThat(criteria).is(criteriaFiltersAre(filter -> filter != null)),
+            criteria -> assertThat(criteria).isEqualTo(quyenCriteria)
+        );
+    }
+
+    @Test
+    void toStringVerifier() {
+        var quyenCriteria = new QuyenCriteria();
+
+        assertThat(quyenCriteria).hasToString("QuyenCriteria{}");
+    }
+
+    private static void setAllFilters(QuyenCriteria quyenCriteria) {
+        quyenCriteria.idQuyen();
+        quyenCriteria.tenQuyen();
+        quyenCriteria.distinct();
+    }
+
+    private static Condition<QuyenCriteria> criteriaFiltersAre(Function<Object, Boolean> condition) {
+        return new Condition<>(
+            criteria ->
+                condition.apply(criteria.getIdQuyen()) &&
+                condition.apply(criteria.getTenQuyen()) &&
+                condition.apply(criteria.getDistinct()),
+            "every filter matches"
+        );
+    }
+
+    private static Condition<QuyenCriteria> copyFiltersAre(QuyenCriteria copy, BiFunction<Object, Object, Boolean> condition) {
+        return new Condition<>(
+            criteria ->
+                condition.apply(criteria.getIdQuyen(), copy.getIdQuyen()) &&
+                condition.apply(criteria.getTenQuyen(), copy.getTenQuyen()) &&
+                condition.apply(criteria.getDistinct(), copy.getDistinct()),
+            "every filter matches"
+        );
+    }
+}

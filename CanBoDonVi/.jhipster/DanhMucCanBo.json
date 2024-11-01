@@ -1,6 +1,6 @@
 {
   "annotations": {
-    "changelogDate": "20240917100749"
+    "changelogDate": "20241008090616"
   },
   "applications": "*",
   "clientRootFolder": "CanBoDonVi",
@@ -35,7 +35,7 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "soCmnd",
+      "fieldName": "soGiayToTuyThan",
       "fieldType": "String"
     },
     {
@@ -64,6 +64,10 @@
     },
     {
       "fieldName": "passwordKyso",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "userLogin",
       "fieldType": "String"
     }
   ],

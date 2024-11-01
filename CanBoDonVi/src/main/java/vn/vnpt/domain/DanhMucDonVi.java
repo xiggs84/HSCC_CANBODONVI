@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -99,6 +101,16 @@ public class DanhMucDonVi implements Serializable {
     @Column(name = "id_cap_ql")
     private String idCapQl;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "danhMucDonVi")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "danhMucDonVi" }, allowSetters = true)
+    private Set<CanBoChungThuc> canBoChungThucs = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "danhMucDonVi")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "danhMucDonVi" }, allowSetters = true)
+    private Set<CanBoQuyen> canBoQuyens = new HashSet<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "idCapQls" }, allowSetters = true)
     private CapQuanLy capQuanLy;
@@ -110,6 +122,11 @@ public class DanhMucDonVi implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "idNhiemVus" }, allowSetters = true)
     private NhiemVu nhiemVu;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "danhMucDonVi")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "danhMucDonVi" }, allowSetters = true)
+    private Set<LanhDao> lanhDaos = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -451,6 +468,68 @@ public class DanhMucDonVi implements Serializable {
         this.idCapQl = idCapQl;
     }
 
+    public Set<CanBoChungThuc> getCanBoChungThucs() {
+        return this.canBoChungThucs;
+    }
+
+    public void setCanBoChungThucs(Set<CanBoChungThuc> canBoChungThucs) {
+        if (this.canBoChungThucs != null) {
+            this.canBoChungThucs.forEach(i -> i.setDanhMucDonVi(null));
+        }
+        if (canBoChungThucs != null) {
+            canBoChungThucs.forEach(i -> i.setDanhMucDonVi(this));
+        }
+        this.canBoChungThucs = canBoChungThucs;
+    }
+
+    public DanhMucDonVi canBoChungThucs(Set<CanBoChungThuc> canBoChungThucs) {
+        this.setCanBoChungThucs(canBoChungThucs);
+        return this;
+    }
+
+    public DanhMucDonVi addCanBoChungThuc(CanBoChungThuc canBoChungThuc) {
+        this.canBoChungThucs.add(canBoChungThuc);
+        canBoChungThuc.setDanhMucDonVi(this);
+        return this;
+    }
+
+    public DanhMucDonVi removeCanBoChungThuc(CanBoChungThuc canBoChungThuc) {
+        this.canBoChungThucs.remove(canBoChungThuc);
+        canBoChungThuc.setDanhMucDonVi(null);
+        return this;
+    }
+
+    public Set<CanBoQuyen> getCanBoQuyens() {
+        return this.canBoQuyens;
+    }
+
+    public void setCanBoQuyens(Set<CanBoQuyen> canBoQuyens) {
+        if (this.canBoQuyens != null) {
+            this.canBoQuyens.forEach(i -> i.setDanhMucDonVi(null));
+        }
+        if (canBoQuyens != null) {
+            canBoQuyens.forEach(i -> i.setDanhMucDonVi(this));
+        }
+        this.canBoQuyens = canBoQuyens;
+    }
+
+    public DanhMucDonVi canBoQuyens(Set<CanBoQuyen> canBoQuyens) {
+        this.setCanBoQuyens(canBoQuyens);
+        return this;
+    }
+
+    public DanhMucDonVi addCanBoQuyen(CanBoQuyen canBoQuyen) {
+        this.canBoQuyens.add(canBoQuyen);
+        canBoQuyen.setDanhMucDonVi(this);
+        return this;
+    }
+
+    public DanhMucDonVi removeCanBoQuyen(CanBoQuyen canBoQuyen) {
+        this.canBoQuyens.remove(canBoQuyen);
+        canBoQuyen.setDanhMucDonVi(null);
+        return this;
+    }
+
     public CapQuanLy getCapQuanLy() {
         return this.capQuanLy;
     }
@@ -487,6 +566,37 @@ public class DanhMucDonVi implements Serializable {
 
     public DanhMucDonVi nhiemVu(NhiemVu nhiemVu) {
         this.setNhiemVu(nhiemVu);
+        return this;
+    }
+
+    public Set<LanhDao> getLanhDaos() {
+        return this.lanhDaos;
+    }
+
+    public void setLanhDaos(Set<LanhDao> lanhDaos) {
+        if (this.lanhDaos != null) {
+            this.lanhDaos.forEach(i -> i.setDanhMucDonVi(null));
+        }
+        if (lanhDaos != null) {
+            lanhDaos.forEach(i -> i.setDanhMucDonVi(this));
+        }
+        this.lanhDaos = lanhDaos;
+    }
+
+    public DanhMucDonVi lanhDaos(Set<LanhDao> lanhDaos) {
+        this.setLanhDaos(lanhDaos);
+        return this;
+    }
+
+    public DanhMucDonVi addLanhDao(LanhDao lanhDao) {
+        this.lanhDaos.add(lanhDao);
+        lanhDao.setDanhMucDonVi(this);
+        return this;
+    }
+
+    public DanhMucDonVi removeLanhDao(LanhDao lanhDao) {
+        this.lanhDaos.remove(lanhDao);
+        lanhDao.setDanhMucDonVi(null);
         return this;
     }
 

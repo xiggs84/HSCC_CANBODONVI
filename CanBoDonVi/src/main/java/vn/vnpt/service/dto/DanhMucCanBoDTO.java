@@ -22,7 +22,7 @@ public class DanhMucCanBoDTO implements Serializable {
 
     private String soDienThoai;
 
-    private String soCmnd;
+    private String soGiayToTuyThan;
 
     private String tenDangNhap;
 
@@ -37,6 +37,8 @@ public class DanhMucCanBoDTO implements Serializable {
     private String usernameKyso;
 
     private String passwordKyso;
+
+    private String userLogin;
 
     public Long getIdCanBo() {
         return idCanBo;
@@ -86,12 +88,12 @@ public class DanhMucCanBoDTO implements Serializable {
         this.soDienThoai = soDienThoai;
     }
 
-    public String getSoCmnd() {
-        return soCmnd;
+    public String getSoGiayToTuyThan() {
+        return soGiayToTuyThan;
     }
 
-    public void setSoCmnd(String soCmnd) {
-        this.soCmnd = soCmnd;
+    public void setSoGiayToTuyThan(String soGiayToTuyThan) {
+        this.soGiayToTuyThan = soGiayToTuyThan;
     }
 
     public String getTenDangNhap() {
@@ -150,6 +152,14 @@ public class DanhMucCanBoDTO implements Serializable {
         this.passwordKyso = passwordKyso;
     }
 
+    public String getUserLogin() {
+        return userLogin;
+    }
+
+    public void setUserLogin(String userLogin) {
+        this.userLogin = userLogin;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -181,7 +191,7 @@ public class DanhMucCanBoDTO implements Serializable {
             ", namSinh='" + getNamSinh() + "'" +
             ", email='" + getEmail() + "'" +
             ", soDienThoai='" + getSoDienThoai() + "'" +
-            ", soCmnd='" + getSoCmnd() + "'" +
+            ", soGiayToTuyThan='" + getSoGiayToTuyThan() + "'" +
             ", tenDangNhap='" + getTenDangNhap() + "'" +
             ", matKhau='" + getMatKhau() + "'" +
             ", trangThai=" + getTrangThai() +
@@ -189,6 +199,7 @@ public class DanhMucCanBoDTO implements Serializable {
             ", clientSecret='" + getClientSecret() + "'" +
             ", usernameKyso='" + getUsernameKyso() + "'" +
             ", passwordKyso='" + getPasswordKyso() + "'" +
+            ", userLogin='" + getUserLogin() + "'" +
             "}";
     }
 }

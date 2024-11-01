@@ -4,7 +4,7 @@
     "authenticationType": "jwt",
     "baseName": "CanBoDonVi",
     "buildTool": "gradle",
-    "creationTimestamp": 1726567659261,
+    "creationTimestamp": 1728378347837,
     "devDatabaseType": "h2Disk",
     "entities": [
       "CanBoQuyen",
@@ -26,12 +26,14 @@
       "MenuQuyen",
       "NhiemVu",
       "NoiCapGttt",
-      "Quyen"
+      "Quyen",
+      "LanhDao",
+      "CanBoChungThuc"
     ],
     "jhipsterVersion": "8.7.0",
-    "jwtSecretKey": "MWY0ZjQ0ZDIzOTYzMjJkZDcyMjE2NmIyNjI1ZDY0MmYxODlmMTY2M2NjNDU1ZjNmYTFlODNhYmY1ZGQ0ZDBkOTVlNGZlZDhjZjE0NjNmMDljNGJiMTBhZTU3OGE5NmEwNzRiNTNkZDA5NzUwNzFhYjcxOTdlOGY1NDhmMmI4MGU=",
+    "jwtSecretKey": "M2Y2MDBlNTYyZTJiNzhkOGYxODEzNjU3Yzk3ZGFiMTdmYTI2YmRlMDZhMjYxNTM3MmM4YmNkZTk5MzllNmQ1M2UyY2QyMzM3YzM2M2RmZDM2ZTIxMjBiOGFjM2FmY2M5ZTMxZjZjYTI3NzY2YzVhMzdlY2M5ZWQ4YmFlMjFiNTQ=",
     "languages": ["en"],
-    "lastLiquibaseTimestamp": 1726567686000,
+    "lastLiquibaseTimestamp": 1729845078000,
     "monorepository": true,
     "nativeLanguage": "en",
     "packageFolder": "vn/vnpt",

@@ -27,6 +27,9 @@ springdoc:
 feign:
   circuitbreaker:
     enabled: true
+    client:
+      gateway:
+        url: http://localhost:8080
   # client:
   #   config:
   #     default:
