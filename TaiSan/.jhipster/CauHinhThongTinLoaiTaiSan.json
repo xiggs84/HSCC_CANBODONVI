@@ -1,0 +1,48 @@
+{
+  "annotations": {
+    "changelogDate": "20240926135959"
+  },
+  "applications": "*",
+  "clientRootFolder": "TaiSan",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "idCauHinh",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "noiDung",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "javascript",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "css",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "idLoaiTs",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "idDonVi",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "trangThai",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "xml",
+      "fieldType": "String"
+    }
+  ],
+  "microserviceName": "TaiSan",
+  "name": "CauHinhThongTinLoaiTaiSan",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

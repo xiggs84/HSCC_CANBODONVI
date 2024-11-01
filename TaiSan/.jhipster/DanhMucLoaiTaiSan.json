@@ -1,0 +1,68 @@
+{
+  "annotations": {
+    "changelogDate": "20240926140000"
+  },
+  "applications": "*",
+  "clientRootFolder": "TaiSan",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "idLoaiTs",
+      "fieldType": "Long",
+      "options": {
+        "id": true
+      }
+    },
+    {
+      "fieldName": "dienGiai",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "trangThai",
+      "fieldType": "Long"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "microserviceName": "TaiSan",
+  "name": "DanhMucLoaiTaiSan",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "taiSan",
+      "relationshipName": "loaiTaiSan",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "danhSachTaiSan",
+      "otherEntityRelationshipName": "danhMucLoaiTaiSan",
+      "relationshipName": "danhSachTaiSan",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "taiSanDgc",
+      "otherEntityRelationshipName": "danhMucLoaiTaiSan",
+      "relationshipName": "taiSanDgc",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "taiSanDatNha",
+      "otherEntityRelationshipName": "danhMucLoaiTaiSan",
+      "relationshipName": "taiSanDatNha",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "thongTinCapNhatTaiSan",
+      "otherEntityRelationshipName": "danhMucLoaiTaiSan",
+      "relationshipName": "thongTinCapNhatTaiSan",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

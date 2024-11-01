@@ -1,0 +1,52 @@
+{
+  "annotations": {
+    "changelogDate": "20240928082928"
+  },
+  "applications": "*",
+  "clientRootFolder": "TaiSan",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "idCapNhat",
+      "fieldType": "Long",
+      "options": {
+        "id": true
+      }
+    },
+    {
+      "fieldName": "tenTaiSan",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "thongTinTaiSan",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "ngayCapNhat",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "microserviceName": "TaiSan",
+  "name": "ThongTinCapNhatTaiSan",
+  "relationships": [
+    {
+      "otherEntityName": "taiSan",
+      "otherEntityRelationshipName": "thongTinCapNhatTaiSan",
+      "relationshipName": "taiSan",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "danhMucLoaiTaiSan",
+      "otherEntityRelationshipName": "thongTinCapNhatTaiSan",
+      "relationshipName": "danhMucLoaiTaiSan",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

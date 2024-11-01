@@ -1,0 +1,48 @@
+{
+  "annotations": {
+    "changelogDate": "20240926140006"
+  },
+  "applications": "*",
+  "clientRootFolder": "TaiSan",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "idDuongSu",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "trangThai",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "ngayThaoTac",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "idHopDong",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "idLoaiHopDong",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "idChungThuc",
+      "fieldType": "Long"
+    }
+  ],
+  "microserviceName": "TaiSan",
+  "name": "TaiSanDuongSu",
+  "relationships": [
+    {
+      "otherEntityName": "taiSan",
+      "otherEntityRelationshipName": "taiSanDuongSu",
+      "relationshipName": "taiSan",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

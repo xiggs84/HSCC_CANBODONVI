@@ -1,0 +1,27 @@
+entity TaiSan {
+    @id
+    idTaiSan Long
+    tenTaiSan String
+    trangThai Long
+    thongTinTs TextBlob
+    //  idLoaiTs Long
+    ghiChu String
+    ngayThaoTac LocalDate
+    nguoiThaoTac Long
+    idDuongSu Long
+    idTsGoc Long
+    maTaiSan String
+    //  idTinhTrang Long
+    idLoaiNganChan Long
+    ngayBdNganChan LocalDate
+    ngayKtNganChan LocalDate
+    idMaster Long
+    strSearch String
+    idDonVi Long
+    soHsCv Long
+    soCc Long
+    soVaoSo Long
+    moTa String
+    loaiNganChan Long
+    syncStatus Long
+}

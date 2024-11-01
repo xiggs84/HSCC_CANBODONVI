@@ -1,0 +1,41 @@
+{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "authenticationType": "jwt",
+    "baseName": "TaiSan",
+    "buildTool": "gradle",
+    "creationTimestamp": 1727359191604,
+    "devDatabaseType": "h2Disk",
+    "entities": [
+      "CauHinhThongTinLoaiTaiSan",
+      "DanhMucLoaiTaiSan",
+      "DanhSachTaiSan",
+      "DmTaiSan",
+      "TaiSan",
+      "TaiSanDatNha",
+      "TaiSanDgc",
+      "TaiSanDuongSu",
+      "Taisannhadatid",
+      "TaisanSaiDgc",
+      "TaisanSaiQsddDgc",
+      "ThuaTach",
+      "TinhTrangTaiSan",
+      "ThongTinCapNhatTaiSan",
+      "ChiTietNganChanTaiSan",
+      "ChiTietNganChan"
+    ],
+    "jhipsterVersion": "8.7.0",
+    "jwtSecretKey": "OWYwYzhiYWVkOGQwZTUwMDJlN2ExZjEzZDJmMmFhNjgyZmJhZmNlYWE1NDA5NWZlYjE5NWJlNzA2MThjZmY1NDFhMmJiOWU4YTEyODI2NWZiNmUyZGQwMGZlYjJjY2M4OTQxNDFiOGJlZjkzOWQwYTUxZjUxN2VhNTdkZjg3Mzg=",
+    "languages": ["en"],
+    "lastLiquibaseTimestamp": 1727598360000,
+    "monorepository": true,
+    "nativeLanguage": "en",
+    "packageFolder": "vn/vnpt",
+    "packageName": "vn.vnpt",
+    "prodDatabaseType": "postgresql",
+    "serverPort": "8084",
+    "skipClient": true,
+    "skipCommitHook": true,
+    "skipUserManagement": true
+  }
+}

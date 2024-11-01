@@ -1,0 +1,80 @@
+{
+  "annotations": {
+    "changelogDate": "20240929081232"
+  },
+  "applications": "*",
+  "clientRootFolder": "TaiSan",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "idNganChan",
+      "fieldType": "Long",
+      "options": {
+        "id": true
+      }
+    },
+    {
+      "fieldName": "ngayThaoTac",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "soHsCv",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "soCc",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "soVaoSo",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "moTa",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "ngayNganChan",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "ngayBdNganChan",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "ngayKtNganChan",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "trangThai",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "nguoiThaoTac",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "loaiNganChan",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "ngayCongVan",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "microserviceName": "TaiSan",
+  "name": "ChiTietNganChanTaiSan",
+  "relationships": [
+    {
+      "otherEntityName": "taiSan",
+      "otherEntityRelationshipName": "chiTietNganChanTaiSan",
+      "relationshipName": "taiSan",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

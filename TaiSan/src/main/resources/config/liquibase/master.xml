@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <property name="now" value="now()" dbms="h2"/>
+    <property name="floatType" value="float4" dbms="h2"/>
+    <property name="uuidType" value="uuid" dbms="h2"/>
+    <property name="datetimeType" value="datetime(6)" dbms="h2"/>
+    <property name="clobType" value="longvarchar" dbms="h2"/>
+    <property name="blobType" value="blob" dbms="h2"/>
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+    <property name="floatType" value="float4" dbms="postgresql"/>
+    <property name="clobType" value="clob" dbms="postgresql"/>
+    <property name="blobType" value="blob" dbms="postgresql"/>
+    <property name="uuidType" value="uuid" dbms="postgresql"/>
+    <property name="datetimeType" value="datetime" dbms="postgresql"/>
+
+    <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240926135959_added_entity_CauHinhThongTinLoaiTaiSan.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240926140000_added_entity_DanhMucLoaiTaiSan.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240926140001_added_entity_DanhSachTaiSan.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240926140002_added_entity_DmTaiSan.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240926140003_added_entity_TaiSan.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240926140004_added_entity_TaiSanDatNha.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240926140005_added_entity_TaiSanDgc.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240926140006_added_entity_TaiSanDuongSu.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240926140007_added_entity_Taisannhadatid.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240926140008_added_entity_TaisanSaiDgc.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240926140009_added_entity_TaisanSaiQsddDgc.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240926140010_added_entity_ThuaTach.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240926140011_added_entity_TinhTrangTaiSan.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240928082928_added_entity_ThongTinCapNhatTaiSan.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240929081232_added_entity_ChiTietNganChanTaiSan.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240929082600_added_entity_ChiTietNganChan.xml" relativeToChangelogFile="false"/>
+    <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20240926140001_added_entity_constraints_DanhSachTaiSan.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240926140003_added_entity_constraints_TaiSan.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240926140004_added_entity_constraints_TaiSanDatNha.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240926140005_added_entity_constraints_TaiSanDgc.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240926140006_added_entity_constraints_TaiSanDuongSu.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240926140010_added_entity_constraints_ThuaTach.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240928082928_added_entity_constraints_ThongTinCapNhatTaiSan.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240929081232_added_entity_constraints_ChiTietNganChanTaiSan.xml" relativeToChangelogFile="false"/>
+    <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+    <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
+</databaseChangeLog>

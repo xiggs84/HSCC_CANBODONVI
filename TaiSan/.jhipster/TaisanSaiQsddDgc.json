@@ -1,0 +1,24 @@
+{
+  "annotations": {
+    "changelogDate": "20240926140009"
+  },
+  "applications": "*",
+  "clientRootFolder": "TaiSan",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "idMaster",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "noiCapQsdd",
+      "fieldType": "String"
+    }
+  ],
+  "microserviceName": "TaiSan",
+  "name": "TaisanSaiQsddDgc",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

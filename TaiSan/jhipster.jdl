@@ -1,0 +1,12 @@
+application {
+  config {
+    baseName TaiSan
+    applicationType microservice
+    serverPort 8084
+    buildTool gradle
+    packageName vn.vnpt
+    authenticationType jwt
+    prodDatabaseType postgresql
+    devDatabaseType h2Disk
+  }
+}
