@@ -69,27 +69,36 @@ public class QuanHeDuongSuQueryService extends QueryService<QuanHeDuongSu> {
      */
     protected Specification<QuanHeDuongSu> createSpecification(QuanHeDuongSuCriteria criteria) {
         Specification<QuanHeDuongSu> specification = Specification.where(null);
+
         if (criteria != null) {
-            // This has to be called first, because the distinct method returns null
+            // Điều kiện distinct (giữ nguyên)
             if (criteria.getDistinct() != null) {
                 specification = specification.and(distinct(criteria.getDistinct()));
             }
+
+            // Các điều kiện khác vẫn dùng AND
             if (criteria.getIdQuanHe() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getIdQuanHe(), QuanHeDuongSu_.idQuanHe));
-            }
-            if (criteria.getIdDuongSuQh() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getIdDuongSuQh(), QuanHeDuongSu_.idDuongSuQh));
             }
             if (criteria.getTrangThai() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getTrangThai(), QuanHeDuongSu_.trangThai));
             }
+
+            // Kết hợp OR giữa getIdDuongSuQh và getDuongSuId
+            Specification<QuanHeDuongSu> orSpecification = Specification.where(null);
+
+            if (criteria.getIdDuongSuQh() != null) {
+                orSpecification = orSpecification.or(buildRangeSpecification(criteria.getIdDuongSuQh(), QuanHeDuongSu_.idDuongSuQh));
+            }
             if (criteria.getDuongSuId() != null) {
-                specification = specification.and(
+                orSpecification = orSpecification.or(
                     buildSpecification(criteria.getDuongSuId(), root ->
                         root.join(QuanHeDuongSu_.duongSu, JoinType.LEFT).get(DuongSu_.idDuongSu)
                     )
                 );
             }
+
+            specification = specification.and(orSpecification);
         }
         return specification;
     }

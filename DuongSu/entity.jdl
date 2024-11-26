@@ -2,7 +2,7 @@ entity TaiSanDuongSu {
   idTaiSan Long
   //  idDuongSu Long
   trangThai Integer min(0) max(1)
-  ngayThaoTac LocalDate
+  ngayThaoTac Instant
   idHopDong Long
   idLoaiHopDong Long
   idChungThuc Long
@@ -18,7 +18,7 @@ entity DuongSu {
   website String
   trangThai Integer min(0) max(1)
   thongTinDs TextBlob
-  ngayThaoTac LocalDate
+  ngayThaoTac Instant
   nguoiThaoTac Long
   idDsGoc Long
   idMaster String
@@ -67,7 +67,7 @@ entity DuongSuTrungCmnd {
   diaChi String
   trangThai Integer min(0) max(1)
   thongTinDs String
-  ngayThaoTac LocalDate
+  ngayThaoTac Instant
   nguoiThaoTac Long
   idDsGoc Long
   //  idTinhTrang Long
@@ -87,7 +87,7 @@ entity DuongSuTrungCmndBak {
   diaChi String
   trangThai Integer min(0) max(1)
   thongTinDs String
-  ngayThaoTac LocalDate
+  ngayThaoTac Instant
   nguoiThaoTac Long
   idDsGoc Long
   //  idTinhTrang Long
@@ -102,7 +102,7 @@ entity DanhSachDuongSu {
   //  idLoaiDs Long
   diaChi String
   trangThai Integer min(0) max(1)
-  ngayThaoTac LocalDate
+  ngayThaoTac Instant
   nguoiThaoTac Long
   idDsGoc Long
   //  idTinhTrang Long
@@ -120,7 +120,7 @@ entity DmDuongSu {
   diaChi String
   trangThai Integer min(0) max(1)
   thongTinDs String
-  ngayThaoTac LocalDate
+  ngayThaoTac Instant
   nguoiThaoTac Long
   idDsGoc Long
   //  idTinhTrang Long
@@ -143,7 +143,7 @@ entity QuanHeMaster {
 
 entity ChiTietNganChan {
   idDoiTuong Long
-  ngayThaoTac LocalDate
+  ngayThaoTac Instant
   loaiDoiTuong Long
   soHsCv String
   soCc String
@@ -164,7 +164,7 @@ entity ThongTinCapNhatDuongSu {
   tenDuongSu String
   soGiayTo String
   thongTinDuongSu TextBlob
-  ngayCapNhat LocalDate
+  ngayCapNhat Instant
 }
 
 relationship OneToMany {
@@ -172,7 +172,7 @@ relationship OneToMany {
   LoaiGiayTo{idLoaiGiayTo} to DuongSu,
   LoaiDuongSu to ThongTinCapNhatDuongSu,
   LoaiGiayTo to ThongTinCapNhatDuongSu,
-  DuongSu{thongTinCapNhat} to ThongTinCapNhatDuongSu
+  DuongSu{thongTinCapNhat} to @OnDelete("CASCADE") ThongTinCapNhatDuongSu
   DuongSu to TaiSanDuongSu,
     DuongSu to @OnDelete("CASCADE") QuanHeDuongSu,
   DuongSu to DanhSachDuongSu,
